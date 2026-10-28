@@ -21,7 +21,7 @@ test('Russian АОСР MVP: demo, quantity checks, XLSX export/reimport and KS2 
   await expect(page.locator('#pto-groups')).toContainText('Расхождение');
   await page.locator('#pto-act-rows tr').nth(2).locator('input[data-col="measuredQty"]').fill('24');
   await expect(page.locator('#pto-groups')).not.toContainText('Расхождение');
-  await page.screenshot({path:'docs/screenshots/07-pto-ru.png',fullPage:true});
+  await page.screenshot({path:'test-results/pto-ru.png',fullPage:true});
 
   const [excel] = await Promise.all([page.waitForEvent('download'),page.locator('#pto-export-xlsx').click()]);
   expect(excel.suggestedFilename()).toMatch(/aosr_ks2_drafts\.xlsx/);
