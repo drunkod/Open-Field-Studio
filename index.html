@@ -242,7 +242,7 @@
                     </div>
                     <div id="ifc-status" style="font-size:0.85rem;color:var(--text-muted, #6b7280);margin-bottom:0.5rem;"></div>
                     <div id="ifc-canvas-container" style="width:100%;height:calc(100vh - 260px);min-height:400px;border-radius:8px;overflow:hidden;background:#1a1a20;"></div>
-                    <p style="margin-top:0.75rem;font-size:0.8rem;color:var(--text-muted, #6b7280);" id="ifc-info-txt">
+                    <p style="margin-top:0.75rem;font-size:0.8rem;color:var(--text-muted, #6b7280);" id="ifc-info-txt" data-i18n="ifc_info">
                         Muis: linksklik+sleep = draaien · scroll = zoomen · rechtsklik+sleep = pannen. Ticket-koppeling op 3D-model volgt in een latere fase.
                     </p>
                 </div>
@@ -476,7 +476,7 @@
                     <div class="inspectie-header">
                         <h2 id="ho-exec-title" data-i18n="nav_oplevering">Oplevering</h2>
                         <div class="inspectie-progress">
-                            <span id="ho-progress-text">0 / 0 beoordeeld</span>
+                            <span id="ho-progress-text">0 / 0 проверено</span>
                             <div class="progress-bar"><div class="progress-fill" id="ho-progress-bar"></div></div>
                         </div>
                     </div>
@@ -633,7 +633,7 @@
             <section id="koppelingen-tab" class="tab-content">
                 <div class="panel">
                     <h2 id="connectors-h2" data-i18n="nav_koppelingen">Koppelingen</h2>
-                    <p id="connectors-intro" style="font-size:0.9rem;color:var(--text-muted,#6b7280);margin-bottom:1rem;">
+                    <p id="connectors-intro" data-i18n="connectors_intro" style="font-size:0.9rem;color:var(--text-muted,#6b7280);margin-bottom:1rem;">
                         Configureer hier de externe systemen waar OFS opleveringen, dossiers of taken naartoe kan sturen — of waaruit klantgegevens en tekeningen opgehaald kunnen worden. Sleutels blijven lokaal op deze computer.
                     </p>
                     <div id="connectors-list" class="handovers-list"></div>
@@ -653,9 +653,9 @@
     <div class="status-bar" id="status-bar">
         <span class="status-bar-item" id="sb-project">—</span>
         <span class="status-bar-sep">|</span>
-        <span class="status-bar-item" id="sb-tickets">0 tickets</span>
+        <span class="status-bar-item" id="sb-tickets">0 замечаний</span>
         <span class="status-bar-sep">|</span>
-        <span class="status-bar-item" id="sb-plans">0 plans</span>
+        <span class="status-bar-item" id="sb-plans">0 чертежей</span>
         <span class="status-bar-right">
             <span class="status-bar-item" id="sb-saved">—</span>
         </span>
@@ -885,7 +885,7 @@
                 </div>
                 <div id="wb-status" style="margin-top:0.5rem;font-size:0.85rem;"></div>
                 <p style="margin-top:0.75rem;font-size:0.8rem;color:var(--text-muted, #6b7280);">
-                    <span id="wb-info-txt">API-sleutel op aanvraag bij Woningborg (partner-portal). Payload-schema is voorlopig; sync met Woningborg's officiële spec bij livegang.</span>
+                    <span id="wb-info-txt" data-i18n="pub_info_wb">API-sleutel op aanvraag bij Woningborg (partner-portal). Payload-schema is voorlopig; sync met Woningborg's officiële spec bij livegang.</span>
                 </p>
             </div>
             <div class="modal-footer">

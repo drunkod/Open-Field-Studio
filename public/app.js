@@ -3696,22 +3696,22 @@ ${this.floorPlans.map(fp => {
 <p style="color:#A1A1AA;margin-bottom:2rem;">${this.hoTypeLabel(ho.type)} · ${ho.date}</p>
 <h2>Projectgegevens</h2>
 <div class="meta-grid">
-<div class="meta-row"><span class="meta-label">Project:</span><span class="meta-val">${this.esc(this.project.name)}</span></div>
-<div class="meta-row"><span class="meta-label">Projectnummer:</span><span class="meta-val">${this.esc(this.project.number)}</span></div>
-<div class="meta-row"><span class="meta-label">Adres:</span><span class="meta-val">${this.esc(this.project.address)}, ${this.esc(this.project.postalCode)} ${this.esc(this.project.city)}</span></div>
+<div class="meta-row"><span class="meta-label">${this.t('sum_project')}:</span><span class="meta-val">${this.esc(this.project.name)}</span></div>
+<div class="meta-row"><span class="meta-label">${this.t('lbl_number')}:</span><span class="meta-val">${this.esc(this.project.number)}</span></div>
+<div class="meta-row"><span class="meta-label">${this.t('lbl_address')}:</span><span class="meta-val">${this.esc(this.project.address)}, ${this.esc(this.project.postalCode)} ${this.esc(this.project.city)}</span></div>
 ${this.project.bagData?.nummeraanduidingId?`<div class="meta-row"><span class="meta-label">BAG-ID:</span><span class="meta-val" style="font-family:monospace;font-size:0.75rem;">${this.esc(this.project.bagData.nummeraanduidingId)}</span></div>`:''}
-<div class="meta-row"><span class="meta-label">Opdrachtgever:</span><span class="meta-val">${this.esc(this.project.client)}</span></div>
-<div class="meta-row"><span class="meta-label">Datum oplevering:</span><span class="meta-val">${ho.date}</span></div>
+<div class="meta-row"><span class="meta-label">${this.t('lbl_client')}:</span><span class="meta-val">${this.esc(this.project.client)}</span></div>
+<div class="meta-row"><span class="meta-label">${this.t('lbl_datum')}:</span><span class="meta-val">${ho.date}</span></div>
 </div>
-<h2>Deelnemers</h2>
-<table><tr><th>Naam</th><th>Rol</th><th>Bedrijf</th></tr>
+<h2>${this.t('h_participants')}</h2>
+<table><tr><th>${this.t('tbl_name')}</th><th>${this.t('tbl_role')}</th><th>${this.t('tbl_company')}</th></tr>
 ${(ho.participants||[]).map(p=>`<tr><td>${this.esc(p.name)}</td><td>${this.esc(p.role)}</td><td>${this.esc(p.company||'')}</td></tr>`).join('')}
 </table>
-<h2>Opleverpunten</h2>
-<table><tr><th>#</th><th>Punt</th><th>Categorie</th><th>Prioriteit</th><th>Oordeel</th></tr>
-${ho.items.map((item,i)=>{const t=this.tickets.find(tk=>tk.id===item.ticketId);if(!t)return'';const vc=item.verdict==='approved'?'verdict-ok':item.verdict==='conditional'?'verdict-cond':'verdict-nok';const vl=item.verdict==='approved'?'Goedgekeurd':item.verdict==='conditional'?'Onder voorbehoud':item.verdict==='rejected'?'Afgekeurd':'Niet beoordeeld';return`<tr><td>${i+1}</td><td>${this.esc(t.label)}</td><td>${t.category||''}</td><td>${this.priorityLabel(t.priority)}</td><td class="${vc}">${vl}</td></tr>`;}).join('')}
+<h2>${this.t('report_items')}</h2>
+<table><tr><th>#</th><th>${this.t('tbl_point')}</th><th>${this.t('tbl_category')}</th><th>${this.t('tbl_priority')}</th><th>${this.t('tbl_verdict')}</th></tr>
+${ho.items.map((item,i)=>{const t=this.tickets.find(tk=>tk.id===item.ticketId);if(!t)return'';const vc=item.verdict==='approved'?'verdict-ok':item.verdict==='conditional'?'verdict-cond':'verdict-nok';const vl=item.verdict==='approved'?this.t('verdict_approved_label'):item.verdict==='conditional'?this.t('verdict_conditional_label'):item.verdict==='rejected'?this.t('verdict_rejected_label'):this.t('verdict_not_assessed');return`<tr><td>${i+1}</td><td>${this.esc(t.label)}</td><td>${t.category||''}</td><td>${this.priorityLabel(t.priority)}</td><td class="${vc}">${vl}</td></tr>`;}).join('')}
 </table>
-<h2>Eindoordeel</h2>
+<h2>${this.t('report_verdict')}</h2>
 <p style="font-size:1.2rem;font-weight:700;color:${ho.verdict==='approved'?'#16A34A':ho.verdict==='conditional'?'#F59E0B':'#DC2626'}">${ho.verdict==='approved'?'GOEDGEKEURD':ho.verdict==='conditional'?'GOEDGEKEURD ONDER VOORBEHOUD':'AFGEKEURD'}</p>
 ${ho.notes?`<p style="margin-top:0.5rem;">${this.esc(ho.notes)}</p>`:''}
 <h2>Handtekeningen</h2>
