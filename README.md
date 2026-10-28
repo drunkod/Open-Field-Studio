@@ -374,3 +374,5 @@ CC BY-SA 4.0
 The `feature/ru-aosr-ks2-prototype` branch includes a Russian-language draft hidden-work inspection act workspace (15 acts, shared project header), CSV import of КС-2 quantity positions, grouped quantity/unit/date checks, JSON backup and printable **DRAFT** HTML documents. It is **not** a certified Russian regulatory checker or an approved AОСР template.
 
 See [implementation plan](docs/DEVELOPMENT_PLAN_RU.md) and [getting started](docs/PTO_MODULE_RU.md). The [MVP release guide](docs/MVP_RELEASE_NOTES_RU.md) covers XLSX/CSV import, 20-sheet Excel export, full RU translation, browser tests, security and remaining limits. Run `npm test`, `npm run build`, `npm run lint`. Only synthetic demo data ships.
+
+Legacy Russian construction AОСР `.xls` (`Шапка`/`Табл`) can now be imported via a dedicated local action. See [legacy workbook import guide](docs/LEGACY_XLS_IMPORT_RU.md). The original project workbook and any personal/company data are **not** committed to this repository.

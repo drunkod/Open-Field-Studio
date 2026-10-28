@@ -13,7 +13,7 @@ test('Russian АОСР MVP: demo, quantity checks, XLSX export/reimport and KS2 
   await expect(page.locator('[data-tab="project"] [data-i18n="nav_project"]')).toHaveText('Проект');
   await expect(page.locator('html')).toHaveAttribute('lang','ru');
   await page.locator('[data-tab="pto"]').click();
-  await expect(page.locator('#pto-act-rows input')).toHaveCount(150);
+  await expect(page.locator('#pto-act-rows [data-col]')).toHaveCount(150);
   await page.locator('#pto-sample').click();
   await expect(page.locator('#pto-results')).toContainText('Заполнено актов: 3 из 15');
   await expect(page.locator('#pto-project-caption')).toContainText('Учебный объект');
@@ -27,9 +27,9 @@ test('Russian АОСР MVP: demo, quantity checks, XLSX export/reimport and KS2 
   expect(excel.suggestedFilename()).toMatch(/aosr_ks2_drafts\.xlsx/);
   const tmp=path.join('test-results','pto-export.xlsx');await fs.mkdir('test-results',{recursive:true});await excel.saveAs(tmp);
   const bytes=await fs.readFile(tmp);expect(bytes.length).toBeGreaterThan(10000);
-  await page.locator('#pto-act-rows tr').first().locator('input[data-col="work"]').fill('ВРЕМЕННО ИЗМЕНЁННАЯ РАБОТА');
+  await page.locator('#pto-act-rows tr').first().locator('[data-col="work"]').fill('ВРЕМЕННО ИЗМЕНЁННАЯ РАБОТА');
   await page.locator('#pto-import-xlsx').setInputFiles({name:'pto-export.xlsx',mimeType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',buffer:bytes});
-  await expect(page.locator('#pto-act-rows tr').first().locator('input[data-col="work"]')).toHaveValue('Гидроизоляция кровли, зона А (демо)');
+  await expect(page.locator('#pto-act-rows tr').first().locator('[data-col="work"]')).toHaveValue('Гидроизоляция кровли, зона А (демо)');
 
   const wb=new ExcelJS.Workbook(),ws=wb.addWorksheet('Позиции КС2');
   ws.getRow(1).values=['№ п/п','Наименование работ и затрат','Ед. изм.','Кол-во'];
@@ -46,6 +46,6 @@ test('Russian АОСР MVP: demo, quantity checks, XLSX export/reimport and KS2 
   expect(htmlDownload.suggestedFilename()).toMatch(/drafts\.html/);
   await page.reload();
   await page.locator('[data-tab="pto"]').click();
-  await expect(page.locator('#pto-act-rows tr').first().locator('input[data-col="work"]')).toHaveValue('Гидроизоляция кровли, зона А (демо)');
+  await expect(page.locator('#pto-act-rows tr').first().locator('[data-col="work"]')).toHaveValue('Гидроизоляция кровли, зона А (демо)');
   expect(errors).toEqual([]);
 });

@@ -38,7 +38,9 @@ const UI = `
 #pto-tab th{background:var(--concrete,#f4f4f5);text-align:left;white-space:nowrap}
 #pto-tab td input{min-width:90px;width:100%;padding:.44rem;border:1px solid var(--border-color,#a1a1aa);border-radius:4px;background:var(--card-bg,#fff);color:var(--text-primary,inherit)}
 #pto-tab td input[data-col="work"]{min-width:250px}
-#pto-tab td input[data-col="qualityDocs"]{min-width:310px}
+#pto-tab td textarea[data-col="qualityDocs"]{min-width:390px;min-height:90px;height:108px}
+#pto-tab td textarea[data-col="work"]{min-width:270px;min-height:55px;height:70px}
+#pto-tab td textarea{box-sizing:border-box;width:100%;resize:vertical; padding:.44rem;border:1px solid var(--border-color,#a1a1aa);border-radius:4px;background:var(--card-bg,#fff);color:var(--text-primary,inherit);font:inherit;line-height:1.4}
 #pto-tab td input[type="date"]{min-width:132px}
 #pto-tab .pto-actions{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin:1rem 0}
 #pto-tab .pto-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.75rem}
@@ -60,6 +62,7 @@ const UI = `
    <button type="button" class="btn btn-primary btn-sm" id="pto-export">Печатные черновики (HTML)</button>
    <button type="button" class="btn btn-primary btn-sm" id="pto-export-xlsx">Экспорт АОСР в Excel (.xlsx)</button>
    <label class="btn btn-secondary btn-sm" for="pto-import-xlsx">Загрузить книгу АОСР (.xlsx)</label><input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="pto-import-xlsx" style="display:none">
+   <label class="btn btn-secondary btn-sm" for="pto-import-legacy">Импорт исходного АОСР (.xls)</label><input type="file" accept=".xls,application/vnd.ms-excel" id="pto-import-legacy" style="display:none">
  </div>
 </div>
 <div class="panel">
@@ -128,7 +131,8 @@ export function mountPtoWorkspace(app) {
     });
   };
   const inputFor = (obj, field, type, aria, action) => {
-    const input = el('input', null, { type, 'aria-label': aria, 'data-col': field });
+    const multiline = field === 'qualityDocs' || field === 'work';
+    const input = multiline ? el('textarea', null, { rows:field === 'qualityDocs'?'4':'3', 'aria-label':aria, 'data-col':field }) : el('input', null, { type, 'aria-label': aria, 'data-col': field });
     input.value = obj[field] ?? '';
     input.addEventListener('input', () => { obj[field] = input.value; persist(); refreshDiagnostics(); });
     if (action) input.addEventListener('change', action);
@@ -255,6 +259,24 @@ export function mountPtoWorkspace(app) {
       Object.assign(app.project,incoming.project);
       app.loadProjectForm();persist();rerender();
     }catch(err){alert(`Ошибка загрузки Excel: ${err.message}`);}
+    finally{e.target.value='';}
+  });
+  byId('pto-import-legacy').addEventListener('change',async e=>{
+    const file=e.target.files?.[0]; if(!file)return;
+    try {
+      if(!/\.xls$/i.test(file.name))throw Error('Выберите файл .xls (Excel 97–2003).');
+      if(file.size>20*1024*1024)throw Error('Максимальный размер файла — 20 МБ.');
+      const {importLegacyAosr}=await import('./legacy-xls.mjs');
+      const imported=await importLegacyAosr(await file.arrayBuffer());
+      const summary=`Найдено ${imported.count} актов на листах «Шапка» и «Табл».\n`+
+        `Существующие АОСР и данные КС-2 в этой вкладке будут заменены.\n\n`+
+        imported.warnings.join('\n')+`\n\nИмпортировать этот комплект как ЧЕРНОВИК?`;
+      if(!confirm(summary))return;
+      data=imported.data;
+      Object.assign(app.project, imported.project);
+      app.loadProjectForm();persist();rerender();
+      alert(`Импортировано актов: ${imported.count}. Уточните даты актов, номера схем, объёмы и КС-2.`);
+    }catch(err){alert(`Ошибка импорта исходного АОСР: ${err.message}`);}
     finally{e.target.value='';}
   });
   byId('pto-sample').addEventListener('click',async()=>{
