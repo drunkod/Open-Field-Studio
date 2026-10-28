@@ -28,7 +28,7 @@ class OpenFieldStudio {
         this.currentHandoverId = null;
         this.activityLog = [];
         this.lang = (window.i18next && window.i18next.language) || localStorage.getItem('ofs_lang') || 'nl';
-        this.init();
+        this._ready = this.init();
     }
 
     async init() {
@@ -62,6 +62,7 @@ class OpenFieldStudio {
 
     setLanguage(lang) {
         this.lang = lang;
+        document.documentElement.lang = lang;
         localStorage.setItem('ofs_lang', lang);
         if (window.i18next) window.i18next.changeLanguage(lang);
         this.applyLanguage();
@@ -3718,7 +3719,7 @@ ${(ho.signatures||[]).map(s=>`<div class="sig-block"><p><strong>${this.esc(s.nam
     // SAVE/LOAD
     // =====================================================
     async saveJSON() {
-        const data = { version:'2.0', exportDate:new Date().toISOString(), project:this.project, contacts:this.contacts, floorPlans:this.floorPlans, tickets:this.tickets, inspections:this.inspections, handovers:this.handovers, checklistTemplates:this.checklistTemplates, activityLog:this.activityLog };
+        const data = { version:'2.0', exportDate:new Date().toISOString(), project:this.project, contacts:this.contacts, floorPlans:this.floorPlans, tickets:this.tickets, inspections:this.inspections, handovers:this.handovers, checklistTemplates:this.checklistTemplates, activityLog:this.activityLog, ptoWorkspace:this.ptoWorkspace || null };
         const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
         const filename = `${this.project.name||'project'}_ofs.json`;
         await this.saveWithPicker(blob, filename, [{ description: 'JSON bestanden', accept: { 'application/json': ['.json'] } }]);
@@ -3764,6 +3765,8 @@ ${(ho.signatures||[]).map(s=>`<div class="sig-block"><p><strong>${this.esc(s.nam
             if (d.handovers) this.handovers = d.handovers;
             if (d.checklistTemplates) this.checklistTemplates = d.checklistTemplates;
             if (d.activityLog) this.activityLog = d.activityLog;
+            this.ptoWorkspace = d.ptoWorkspace || null;
+            window.dispatchEvent(new Event("pto-loaded"));
             this.loadProjectForm(); this.renderContacts(); this.renderFloorPlansList(); this.updateFloorPlanSelector(); this.saveToLocalStorage();
             this.showNotification(this.t('msg_loaded'), 'success');
         } catch(err) { this.showNotification(this.t('msg_load_error'), 'error'); console.error(err); }
@@ -3877,7 +3880,7 @@ ${(ho.signatures||[]).map(s=>`<div class="sig-block"><p><strong>${this.esc(s.nam
         const pending = [];
         const stripped = this._stripBlobs({
             project:this.project, contacts:this.contacts, floorPlans:this.floorPlans, tickets:this.tickets,
-            inspections:this.inspections, handovers:this.handovers, checklistTemplates:this.checklistTemplates, activityLog:this.activityLog
+            inspections:this.inspections, handovers:this.handovers, checklistTemplates:this.checklistTemplates, activityLog:this.activityLog, ptoWorkspace:this.ptoWorkspace || null
         }, pending);
         try {
             localStorage.setItem('openFieldStudio', JSON.stringify(stripped));
@@ -3913,6 +3916,7 @@ ${(ho.signatures||[]).map(s=>`<div class="sig-block"><p><strong>${this.esc(s.nam
                 this.checklistTemplates = [...cleaned, ...newDefaults];
             }
             this.activityLog = d.activityLog || [];
+            this.ptoWorkspace = d.ptoWorkspace || null;
             this.loadProjectForm(); this.renderContacts(); this.renderFloorPlansList(); this.updateFloorPlanSelector();
         } catch(err) { console.error('localStorage load error:', err); localStorage.removeItem('openFieldStudio'); }
     }
@@ -3923,7 +3927,8 @@ ${(ho.signatures||[]).map(s=>`<div class="sig-block"><p><strong>${this.esc(s.nam
         localStorage.removeItem('openFieldStudio');
         try { await this._blobClearAll(); } catch (e) { console.warn('IDB clear failed', e); }
         this.project = { name:'',number:'',client:'',contactPerson:'',address:'',postalCode:'',city:'',surveyDate:'',surveyor:'',description:'',notes:'',bagData:null };
-        this.contacts = []; this.floorPlans = []; this.tickets = []; this.inspections = []; this.handovers = []; this.activityLog = [];
+        this.contacts = []; this.floorPlans = []; this.tickets = []; this.inspections = []; this.handovers = []; this.activityLog = []; this.ptoWorkspace = null;
+        window.dispatchEvent(new Event("pto-loaded"));
         this.activeFloorPlanId = null;
         this.loadProjectForm(); this.renderContacts(); this.renderFloorPlansList(); this.updateFloorPlanSelector(); this.clearCanvas(); this.setDefaultDate();
         this.showNotification(this.t('msg_cleared'), 'success');
