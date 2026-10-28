@@ -371,6 +371,6 @@ CC BY-SA 4.0
 
 ## Experimental Russian AОСР / КС-2 module (fork)
 
-The `eature/ru-aosr-ks2-prototype` branch includes a Russian-language draft hidden-work inspection act workspace (15 acts, shared project header), CSV import of КС-2 quantity positions, grouped quantity/unit/date checks, JSON backup and printable **DRAFT** HTML documents. It is **not** a certified Russian regulatory checker or an approved AОСР template.
+The `feature/ru-aosr-ks2-prototype` branch includes a Russian-language draft hidden-work inspection act workspace (15 acts, shared project header), CSV import of КС-2 quantity positions, grouped quantity/unit/date checks, JSON backup and printable **DRAFT** HTML documents. It is **not** a certified Russian regulatory checker or an approved AОСР template.
 
 See [implementation plan](docs/DEVELOPMENT_PLAN_RU.md) and [getting started](docs/PTO_MODULE_RU.md). Run `npm test`, `npm run build`, `npm run lint`. Only synthetic demo data ships.
