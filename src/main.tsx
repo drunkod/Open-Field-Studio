@@ -63,7 +63,7 @@ function exposeTauriPlugins() {
     ofsWindow.__tauriDialog = { save: dialog.save, open: dialog.open, ask: dialog.ask };
   }).catch(() => {});
   import('@tauri-apps/plugin-fs').then(fs => {
-    ofsWindow.__tauriFs = { writeTextFile: fs.writeTextFile, readTextFile: fs.readTextFile };
+    ofsWindow.__tauriFs = { writeTextFile: fs.writeTextFile, writeFile: fs.writeFile, readTextFile: fs.readTextFile };
   }).catch(() => {});
   // Backend-routed fetch: bypasses webview CORS for connector APIs (ERPNext, AFAS, ...).
   // Guard on the Tauri runtime, not on the module import — the JS module loads fine in a
@@ -92,6 +92,7 @@ function initApp() {
   const detectedLang = i18next.language?.substring(0, 2) || 'nl';
   const supportedLangs = ['nl', 'en', 'de', 'fr', 'ru'];
   const activeLang = supportedLangs.includes(detectedLang) ? detectedLang : 'nl';
+  document.documentElement.lang = activeLang;
 
   if (activeLang !== app.lang) {
     app.setLanguage(activeLang);
@@ -112,7 +113,8 @@ function initApp() {
   };
 
   // Kick off update check — non-blocking, silent-fail.
-  setTimeout(runUpdateCheck, 500);
+  // Opt-in only: avoid unsolicited network traffic when working with customer documents.
+  if (localStorage.getItem('ofs_allow_update_check') === '1') setTimeout(runUpdateCheck, 500);
 
   // Optional deep-link: /#tab=koppelingen[&cfg=erpnext] (used by scripts/screenshot.ps1,
   // handout screenshots and support links). `cfg` opens that connector's config modal.

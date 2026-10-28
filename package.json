@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "tauri": "tauri",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "test:e2e": "playwright test",
+    "check:mvp": "npm run lint && npm test && npm run build && npm run test:e2e"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.10.1",
@@ -18,6 +20,7 @@
     "@tauri-apps/plugin-fs": "^2.4.5",
     "@tauri-apps/plugin-http": "^2.5.9",
     "@thatopen/components": "^3.4.8",
+    "exceljs": "4.4.0",
     "i18next": "^25.10.10",
     "i18next-browser-languagedetector": "^8.2.1",
     "react": "^19.2.4",
@@ -27,6 +30,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@playwright/test": "^1.64.1",
     "@types/node": "^24.12.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -39,5 +43,11 @@
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.57.0",
     "vite": "^8.0.1"
+  },
+  "overrides": {
+    "brace-expansion": "^1.1.21",
+    "exceljs": {
+      "uuid": "^11.1.1"
+    }
   }
 }

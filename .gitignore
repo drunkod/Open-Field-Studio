@@ -21,3 +21,7 @@ temp/
 
 # Logs
 *.log
+
+# Browser integration-test artifacts
+playwright-report/
+test-results/
