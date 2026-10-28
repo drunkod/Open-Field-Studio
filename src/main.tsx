@@ -3,6 +3,7 @@
 
 import i18next from './i18n';
 import { mountPtoWorkspace } from './pto/ui.mjs';
+import ruChecklist from './locales/ru-checklists.json';
 
 // Typed bridge to the legacy browser application in public/app.js.
 // Keeping this boundary explicit avoids spreading untyped globals into new modules.
@@ -22,6 +23,7 @@ type OFSWindow = Window & {
   __tauriDialog?: unknown;
   __tauriFs?: unknown;
   __tauriHttpFetch?: unknown;
+  __ruChecklist?: Record<string, string>;
 };
 const ofsWindow = window as OFSWindow;
 
@@ -30,6 +32,7 @@ declare const __APP_VERSION__: string;
 
 // Expose i18next globally
 ofsWindow.i18next = i18next;
+ofsWindow.__ruChecklist = ruChecklist;
 
 // Keep the title-bar version label in sync with package.json.
 (function syncVersionLabel() {
@@ -109,7 +112,7 @@ function initApp() {
       ofsWindow._setActiveLang(lang);
     }
     // Re-render the update-badge label in the new language
-    runUpdateCheck();
+    if (localStorage.getItem('ofs_allow_update_check') === '1') runUpdateCheck();
   };
 
   // Kick off update check — non-blocking, silent-fail.

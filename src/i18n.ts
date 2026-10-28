@@ -28,12 +28,12 @@ i18next
     },
     ns: ['common'],
     defaultNS: 'common',
-    fallbackLng: 'nl',
+    fallbackLng: 'ru',
     interpolation: {
       escapeValue: false,
     },
     detection: {
-      order: ['localStorage', 'navigator'],
+      order: ['localStorage'],
       lookupLocalStorage: 'ofs_lang',
       caches: ['localStorage'],
     },

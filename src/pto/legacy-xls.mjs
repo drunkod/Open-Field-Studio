@@ -31,6 +31,8 @@ export function extractLegacyAosr(sheetCollection) {
   if (!candidates.length) throw Error('На листе «Табл» не найдены номера актов вида 1.0, 1.1 и т. д.');
   if (candidates.length > 15) throw Error('Найдено более 15 актов. Их нужно разделить на отдельные комплекты.');
   const data = newWorkspace();
+  const actForm = sheets.find(x => /^\d+\.\d+$/.test(x.name));
+  if (actForm) data.legacyLayout = {rows: actForm.rows.map(r => Array.from({length:43},(_,i)=>text(r?.[i])))};
   const warnings = [];
   const project = {
     name: cell(details, 1), // full official project designation; does not infer a separate address
@@ -59,7 +61,7 @@ export function extractLegacyAosr(sheetCollection) {
       start: dateFromCells(row), end: dateFromCells(datesRow),
       actDate: '', // NOT established by the dated work sequence
       schemeNo: '', // NOT inferable from an axes label (e.g. 1-10/А-Д)
-      schemeTitle: description,
+      schemeTitle: '', // dynamically follows work unless explicitly overridden
       qualityDocs: [...new Set(docs)].join('\n'),
       measuredQty: '', unit: '', ks2Id: '', // no measured quantities or KS-2 in this source
       notes: 'Перенесено из исходного АОСР .xls; данные требуют проверки.',

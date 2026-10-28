@@ -3,7 +3,7 @@ import { newWorkspace, safeWorkspace, validateWorkspace, generateDraftHtml, pars
 const FIELDS = [
   ['actNo','№ акта','text'], ['work','Вид работ','text'], ['start','Начало','date'],
   ['end','Окончание','date'], ['actDate','Дата акта','date'],
-  ['schemeNo','№ схемы','text'], ['qualityDocs','Материалы, сертификаты, паспорта','text'],
+  ['schemeNo','№ схемы (подтверждённый)','text'], ['qualityDocs','Материалы, сертификаты, паспорта','text'],
   ['measuredQty','Объём по схеме','text'], ['unit','Ед.','text'],
   ['ks2Id','Позиция КС-2','text'],
 ];
@@ -72,7 +72,7 @@ const UI = `
 </div>
 <div class="panel">
  <h3>Позиции КС-2 (для сопоставления, не заверенные сведения)</h3>
- <p class="pto-hint">Импортируйте Excel (.xlsx) с просмотром сопоставления колонок или CSV с колонками «позиция;наименование;количество;ед.изм.» (разделитель «;»). Файлы .xls/.xlsx пока не поддерживаются — экспортируйте нужные позиции в CSV. Сопоставление подтверждает инженер, а не программа.</p>
+ <p class="pto-hint">Импортируйте Excel (.xlsx) с просмотром сопоставления колонок или CSV с колонками «позиция;наименование;количество;ед.изм.» (разделитель «;»). Файл КС-2 формата .xls предварительно сохраните как .xlsx. Для исходного АОСР .xls есть отдельная кнопка выше. Сопоставление подтверждает инженер, а не программа.</p>
  <div class="pto-actions">
    <label class="btn btn-secondary btn-sm" for="pto-ks2-file">Импорт КС-2 (CSV / XLSX)</label><input type="file" id="pto-ks2-file" accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display:none">
    <button type="button" class="btn btn-secondary btn-sm" id="pto-add-ks2">Добавить позицию вручную</button>
@@ -147,6 +147,7 @@ export function mountPtoWorkspace(app) {
       FIELDS.forEach(([field,title,type]) => {
         const td=el('td');
         td.appendChild(inputFor(act,field,type,`Акт ${i+1}, ${title}`));
+        if(field==='schemeNo')td.appendChild(el('small',`Предложение: ИС-${String(i+1).padStart(2,'0')} (не подтверждено)`));
         tr.appendChild(td);
       });
       body.appendChild(tr);

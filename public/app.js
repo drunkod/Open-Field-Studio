@@ -27,7 +27,7 @@ class OpenFieldStudio {
         this.currentInspectionId = null;
         this.currentHandoverId = null;
         this.activityLog = [];
-        this.lang = (window.i18next && window.i18next.language) || localStorage.getItem('ofs_lang') || 'nl';
+        this.lang = (window.i18next && window.i18next.language) || localStorage.getItem('ofs_lang') || 'ru';
         this._ready = this.init();
     }
 
@@ -71,6 +71,7 @@ class OpenFieldStudio {
     applyLanguage() {
         // data-i18n attributes (nav, headings)
         document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = this.t(el.dataset.i18n); });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {el.placeholder=this.t(el.dataset.i18nPlaceholder);});
 
         // Update active lang button
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === this.lang));
@@ -326,6 +327,11 @@ class OpenFieldStudio {
     priorityLabel(p) { return this.t(PRIORITY_KEYS[p] || 'pri_medium'); }
     severityLabel(s) { return this.t(SEVERITY_KEYS[s] || 'sev_cosmetic'); }
     hoTypeLabel(t) { return this.t(HO_TYPE_KEYS[t] || t); }
+    localizedChecklist(value) {
+        const source=String(value??'');
+        return this.lang === 'ru' ? (window.__ruChecklist?.[source] || source) : source;
+    }
+
     categoryLabel(c) { const idx = CATEGORY_VALUES.indexOf(c); return idx >= 0 ? this.t(CATEGORY_KEYS[idx]) : c; }
 
     // =====================================================
@@ -1630,7 +1636,7 @@ class OpenFieldStudio {
                     this.showNotification('Camera-toegang geweigerd. Tik op het slot-icoon in de adresbalk > Camera > Toestaan, en herlaad de pagina.', 'error');
                 }
             } else if (e.name === 'NotFoundError') {
-                this.showNotification('Geen camera gevonden op dit apparaat.', 'error');
+                this.showNotification(this.t('msg_camera_error'), 'error');
             } else {
                 this.showNotification(this.t('msg_camera_error'), 'error');
             }
@@ -1697,7 +1703,7 @@ class OpenFieldStudio {
         document.getElementById('inspectie-overview').style.display = 'none';
         document.getElementById('inspectie-setup').style.display = 'block';
         document.getElementById('insp-template').innerHTML = `<option value="">${this.t('ph_template')}</option>` +
-            this.checklistTemplates.map(t => `<option value="${t.id}">${this.esc(t.name)}</option>`).join('');
+            this.checklistTemplates.map(t => `<option value="${t.id}">${this.esc(this.localizedChecklist(t.name))}</option>`).join('');
         document.getElementById('insp-inspector').value = this.project.surveyor || '';
     }
 
@@ -1717,7 +1723,7 @@ class OpenFieldStudio {
             document.getElementById('insp-edit-inspector').value = insp.inspector || '';
             document.getElementById('insp-edit-date').value = insp.date || '';
             const floorSelect = document.getElementById('insp-edit-floor');
-            floorSelect.innerHTML = '<option value="">-- Optioneel --</option>' +
+            floorSelect.innerHTML = `<option value="">${this.t('ph_floor')}</option>` +
                 this.floorPlans.map(fp => `<option value="${fp.id}" ${fp.id === insp.floorPlanId ? 'selected' : ''}>${this.esc(fp.name)}</option>`).join('');
             panel.style.display = 'grid';
         } else {
@@ -1787,19 +1793,19 @@ class OpenFieldStudio {
             return `
             <div class="checklist-item" data-idx="${idx}" data-type="${type}">
                 <div style="flex:1">
-                    <div class="checklist-item-question">${this.esc(item.question)}</div>
+                    <div class="checklist-item-question">${this.esc(this.localizedChecklist(item.question))}</div>
                     ${this.renderItemInput(item, idx)}
                     <div class="checklist-item-detail">
-                        <textarea rows="1" placeholder="Notitie..." onchange="app.updateChecklistItem(${idx},'notes',this.value)">${this.esc(item.notes || '')}</textarea>
+                        <textarea rows="1" placeholder="${this.t('lbl_notes')}" onchange="app.updateChecklistItem(${idx},'notes',this.value)">${this.esc(item.notes || '')}</textarea>
                     </div>
                 </div>
                 ${hasRightActions ? `
                 <div class="checklist-item-actions ${type === 'nen2767' ? 'nen-scores' : ''}">
                     ${type === 'nen2767'
                         ? [1,2,3,4,5,6].map(sc => `<button class="checklist-btn nen-score nen-score-${sc} ${item.score==sc?'selected':''}" onclick="app.updateChecklistItem(${idx},'score',${sc})" title="${this.getNENLabel(sc)}">${sc}</button>`).join('')
-                        : `<button class="checklist-btn pass ${item.result==='pass'?'selected':''}" onclick="app.updateChecklistItem(${idx},'result','pass')" title="Goed">&#10003;</button>
-                           <button class="checklist-btn fail ${item.result==='fail'?'selected':''}" onclick="app.updateChecklistItem(${idx},'result','fail')" title="Fout">&#10007;</button>
-                           <button class="checklist-btn na ${item.result==='na'?'selected':''}" onclick="app.updateChecklistItem(${idx},'result','na')" title="N.v.t.">-</button>`
+                        : `<button class="checklist-btn pass ${item.result==='pass'?'selected':''}" onclick="app.updateChecklistItem(${idx},'result','pass')" title="${this.t('nen_1')}">&#10003;</button>
+                           <button class="checklist-btn fail ${item.result==='fail'?'selected':''}" onclick="app.updateChecklistItem(${idx},'result','fail')" title="${this.t('insp_rejected')}">&#10007;</button>
+                           <button class="checklist-btn na ${item.result==='na'?'selected':''}" onclick="app.updateChecklistItem(${idx},'result','na')" title="—">-</button>`
                     }
                 </div>` : ''}
             </div>`;
@@ -1814,14 +1820,14 @@ class OpenFieldStudio {
                 const opts = item.options || [];
                 const val = item.value || '';
                 return `<div class="checklist-choices">${opts.map(opt =>
-                    `<button type="button" class="checklist-choice ${val === opt ? 'selected' : ''}" onclick="app.selectChoice(${idx},'${opt.replace(/'/g,"\\'")}')">${this.esc(opt)}</button>`
+                    `<button type="button" class="checklist-choice ${val === opt ? 'selected' : ''}" onclick="app.selectChoice(${idx},'${opt.replace(/'/g,"\\'")}')">${this.esc(this.localizedChecklist(opt))}</button>`
                 ).join('')}</div>`;
             }
             case 'multi': {
                 const opts = item.options || [];
                 const sel = (item.value || '').split(',').map(s => s.trim()).filter(Boolean);
                 return `<div class="checklist-choices">${opts.map(opt =>
-                    `<button type="button" class="checklist-choice ${sel.includes(opt) ? 'selected' : ''}" onclick="app.toggleMultiChoice(${idx},'${opt.replace(/'/g,"\\'")}')">${this.esc(opt)}</button>`
+                    `<button type="button" class="checklist-choice ${sel.includes(opt) ? 'selected' : ''}" onclick="app.toggleMultiChoice(${idx},'${opt.replace(/'/g,"\\'")}')">${this.esc(this.localizedChecklist(opt))}</button>`
                 ).join('')}</div>`;
             }
             case 'number': {
@@ -1883,7 +1889,7 @@ class OpenFieldStudio {
                 </div>`).join('')}</div>
             <div class="checklist-photo-actions">
                 <button type="button" class="btn btn-sm btn-secondary" onclick="app.openItemCamera(${idx})">&#128247; Foto</button>
-                <label class="btn btn-sm btn-secondary" style="cursor:pointer">&#128206; Upload<input type="file" accept="image/*" multiple hidden onchange="app.uploadItemPhotos(${idx},this.files);this.value='';"></label>
+                <label class="btn btn-sm btn-secondary" style="cursor:pointer">&#128206; ${this.t('btn_select')}<input type="file" accept="image/*" multiple hidden onchange="app.uploadItemPhotos(${idx},this.files);this.value='';"></label>
             </div>
         </div>`;
     }
@@ -3674,7 +3680,7 @@ ${this.floorPlans.map(fp => {
         const cap = meta.length ? `<div class="photo-cap">${this.esc(meta.join(' · '))}</div>` : '';
         return `<figure class="photo-fig"><img src="${ph.data}">${cap}</figure>`;
     }).join('')}</div>`:''}
-    </div>`).join(''):'<p style="color:var(--gray);">Geen tickets</p>'}
+    </div>`).join(''):`<p style="color:var(--gray);">${this.t('empty_tickets')}</p>`}
     </div>`;
 }).join('')}
 </main><footer><p>Gegenereerd met Open Field Studio op ${new Date().toLocaleString('nl-NL')}</p></footer></body></html>`;

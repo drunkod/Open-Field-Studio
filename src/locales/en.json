@@ -412,5 +412,20 @@
   "lbl_datum": "Date",
   "role_aannemer": "Contractor",
   "manual_html": "<h2>Manual</h2>\n<p class=\"manual-intro\">Welcome to Open Field Studio — your tool for inspection, handover and quality assurance in construction projects.</p>\n<div class=\"manual-section\"><h3>1. Project & Contacts</h3><p>The <strong>Project</strong> tab is your starting point. Fill in project details (name, number, address, client). Add <strong>contacts</strong> to assign to tickets and handovers. Data is saved automatically.</p></div>\n<div class=\"manual-section\"><h3>2. Floor Plans</h3><p>Upload floor plans (JPG, PNG, PDF). PDF files are converted page by page. Drag files to the upload zone or click to select.</p></div>\n<div class=\"manual-section\"><h3>3. Survey & Tickets</h3><p>Register defects as <strong>tickets</strong> on the floor plan. Click \"Add Ticket\", click the location, and fill in the form. Each ticket has a label, category, priority, severity, status, assignee, deadline, photos and description. Filter by status, category and priority.</p></div>\n<div class=\"manual-section\"><h3>4. Inspection</h3><p>Perform structured inspections using checklists. Choose from 10 templates: 5 general (pass/fail) and 5 with NEN 2767 scoring (energy label + monument). Complete with a digital signature. Failed items automatically become tickets.</p></div>\n<div class=\"manual-section\"><h3>5. Handover</h3><p>Guide the formal handover process: pre-handover, first handover or re-inspection. Assess each open ticket, upload documents, and digitally sign the certificate with all parties.</p></div>\n<div class=\"manual-section\"><h3>6. Dashboard</h3><p>Real-time overview: total tickets, open, assigned, completed, overdue deadlines, inspections. Charts by status, category and assignee. Activity timeline.</p></div>\n<div class=\"manual-section\"><h3>7. Export & Storage</h3><p>Export as HTML: full report, punch list, inspection report or handover certificate. Save the project as a JSON file or load a previously saved project. All data is also automatically saved in the browser.</p></div>\n<div class=\"manual-section\"><h3>8. Keyboard Shortcuts</h3><ul><li><strong>Ctrl+S</strong> — Save project</li><li><strong>Ctrl+E</strong> — Export as HTML</li><li><strong>Ctrl+O</strong> — Load project</li><li><strong>Ctrl+D</strong> — Toggle theme</li><li><strong>1-8</strong> — Switch tab</li><li><strong>Escape</strong> — Close modals</li></ul></div>\n<div class=\"manual-section manual-footer\"><p><strong>Open Field Studio v0.1.0</strong> · CC BY-SA 4.0</p></div>",
-  "nav_pto": "AOSR / KS-2"
+  "nav_pto": "AOSR / KS-2",
+  "ui_static_01": "Muis: linksklik+sleep = draaien · scroll = zoomen · rechtsklik+sleep = pannen. Ticket-koppeling",
+  "ui_static_02": "&larr; Terug",
+  "ui_static_03": "&#9998; Bewerken",
+  "ui_static_04": "Naam inspectie",
+  "ui_static_05": "&larr; Terug naar overzicht",
+  "ui_static_06": "Nog geen opleveringen aangemaakt",
+  "ui_static_07": "Vul eerst de projectgegevens in en voeg tickets toe.",
+  "ui_static_08": "Configureer hier de externe systemen waar OFS opleveringen, dossiers of taken naartoe kan sturen.",
+  "ui_static_09": "Bestemming",
+  "ui_static_10": "API-endpoint",
+  "ui_static_11": "API-sleutel",
+  "ui_static_12": "Testmodus (alleen payload voorbeeld, geen echte verzending)",
+  "ui_static_13": "Voorbeeld payload",
+  "ui_static_14": "API-sleutel op aanvraag bij Woningborg (partner-portal). Payload-schema is voorlopig; sync met provider.",
+  "ui_static_15": "Huisnummer *"
 }

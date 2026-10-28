@@ -376,3 +376,7 @@ The `feature/ru-aosr-ks2-prototype` branch includes a Russian-language draft hid
 See [implementation plan](docs/DEVELOPMENT_PLAN_RU.md) and [getting started](docs/PTO_MODULE_RU.md). The [MVP release guide](docs/MVP_RELEASE_NOTES_RU.md) covers XLSX/CSV import, 20-sheet Excel export, full RU translation, browser tests, security and remaining limits. Run `npm test`, `npm run build`, `npm run lint`. Only synthetic demo data ships.
 
 Legacy Russian construction AОСР `.xls` (`Шапка`/`Табл`) can now be imported via a dedicated local action. See [legacy workbook import guide](docs/LEGACY_XLS_IMPORT_RU.md). The original project workbook and any personal/company data are **not** committed to this repository.
+
+### Russian-first interface and original-layout AOSR drafts
+
+The fork defaults to Russian and translates the original UI plus 15 built-in inspection checklists. Upload a legacy AOSR `.xls` locally to generate 15 linked AOSR sheets using its 43-column text structure and a shared editable source-details sheet. **Original XLS formatting/merge/page-break fidelity is not guaranteed**; these are draft documents for human review. Full guidance: [RU layout delivery](docs/RU_LAYOUT_DELIVERY.md).

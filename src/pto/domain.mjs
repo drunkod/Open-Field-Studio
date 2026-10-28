@@ -1,6 +1,7 @@
 // Domain logic intentionally independent of DOM, Tauri and locale.
 // A matched KS-2 line is evidence of quantity correlation, NOT legal compliance.
 export const SLOT_COUNT = 15;
+export const suggestedSchemeNumber = index => `ИС-${String(index+1).padStart(2, '0')}`;
 const MAX_MICRO = 1000000000000000n;
 export const isFilled = value => String(value ?? '').trim() !== '';
 export function newWorkspace() {
@@ -12,7 +13,7 @@ export function newWorkspace() {
       schemeNo: '', schemeTitle: '', qualityDocs: '', measuredQty: '',
       unit: '', ks2Id: '', notes: '',
     })),
-    ks2: [],
+    ks2: [], legacyLayout: null,
   };
 }
 export function safeWorkspace(value) {
@@ -24,6 +25,9 @@ export function safeWorkspace(value) {
     version: 1,
     header: Object.fromEntries(Object.keys(empty.header).map(k => [k, String(value.header?.[k] ?? '').slice(0, 1000)])),
     acts: Array.from({ length: SLOT_COUNT }, (_, i) => clean(value.acts?.[i] || empty.acts[i])),
+    legacyLayout: value.legacyLayout && Array.isArray(value.legacyLayout.rows) ? {
+      rows: value.legacyLayout.rows.slice(0,140).map(r => Array.from({length:43}, (_,i)=>String(r?.[i]??'').slice(0,15000)))
+    } : null,
     ks2: Array.isArray(value.ks2) ? value.ks2.slice(0, 2000).map(k => ({
       id: String(k.id ?? '').trim().slice(0, 100),
       description: String(k.description ?? '').slice(0, 1000),

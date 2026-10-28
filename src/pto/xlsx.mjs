@@ -1,7 +1,8 @@
 // Excel I/O is deliberately isolated from validation and the UI.
 // ExcelJS is imported lazily by UI so BIM/inspection startup stays fast.
 import ExcelJS from 'exceljs';
-import { safeWorkspace, validateWorkspace, toMicro, isFilled } from './domain.mjs';
+import { safeWorkspace, validateWorkspace, toMicro, isFilled, suggestedSchemeNumber } from './domain.mjs';
+import { appendOriginalLayout } from './source-layout.mjs';
 
 const clean = v => {
   if (v == null) return '';
@@ -106,20 +107,23 @@ const actCols=[['actNo','№ акта'],['work','Вид работ'],['start','�
  ['schemeNo','№ схемы'],['schemeTitle','Наименование схемы'],['qualityDocs','Материалы и документы качества'],
  ['measuredQty','Объём по схеме'],['unit','Ед.'],['ks2Id','Позиция КС-2'],['notes','Примечание']];
 function writeInput(wb,data){
- const ws=wb.addWorksheet('Ввод_работ');title(ws,'Акты скрытых работ — редактируемая таблица','L');
- ws.mergeCells('A2:L2');ws.getCell('A2').value='Жёлтые ячейки редактируются. Изменения отражаются в листах Акт_01…Акт_15 после пересчёта Excel.';
- header(ws,4,actCols.map(x=>x[1]));
+ const ws=wb.addWorksheet('Ввод_работ');title(ws,'Акты скрытых работ — редактируемая таблица','M');
+ ws.mergeCells('A2:M2');ws.getCell('A2').value='Жёлтые ячейки редактируются. Изменения отражаются в листах Акт_01…Акт_15 после пересчёта Excel.';
+ header(ws,4,[...actCols.map(x=>x[1]),'Предлагаемый № схемы (не подтверждён)']);
  data.acts.forEach((act,i)=>{
    const r=i+5;actCols.forEach(([key],j)=>{
      const c=ws.getCell(r,j+1);
      const value=act[key]||'';
      if(key==='measuredQty'){const v=toMicro(value);c.value=v===null?'':Number(v)/1000000;c.numFmt='#,##0.######';}
+     else if(key==='schemeTitle' && !isFilled(value))c.value=formula(`IF(B${r}="","",B${r})`,act.work||'');
      else c.value=value;
-     fill(c,YELLOW);
-   });ws.getRow(r).height=43;
+     fill(c,key==='schemeTitle' && !isFilled(value)?GREEN:YELLOW);
+   });
+   const suggested=ws.getCell(`M${r}`);suggested.value=formula(`IF(B${r}="","","ИС-"&TEXT(ROW()-4,"00"))`,isFilled(act.work)?suggestedSchemeNumber(i):'');
+   fill(suggested,GREEN);ws.getRow(r).height=43;
  });
- ws.autoFilter={from:'A4',to:'L19'};ws.views=[{state:'frozen',xSplit:2,ySplit:4}];
- widths(ws,[12,45,14,14,14,18,36,65,19,10,17,32]);printable(ws);return ws;
+ ws.autoFilter={from:'A4',to:'M19'};ws.views=[{state:'frozen',xSplit:2,ySplit:4}];
+ widths(ws,[12,45,14,14,14,18,36,65,19,10,17,32,25]);printable(ws);return ws;
 }
 function writeKs2(wb,data){
  const ws=wb.addWorksheet('КС-2');title(ws,'Позиции КС-2 — сопоставление по количеству','G');
@@ -184,7 +188,8 @@ export async function createDraftWorkbook(raw,project={}) {
  wb.creator='Open Field Studio / PTO prototype';wb.subject='Черновики АОСР и техническая сверка КС-2';
  wb.created=new Date();wb.calcProperties.fullCalcOnLoad=true;
  writeDetails(wb,data,project);writeInput(wb,data);writeKs2(wb,data);writeReview(wb,data);
- for(let i=0;i<data.acts.length;i++)writeAct(wb,data,i,project);
+ if(!data.legacyLayout)for(let i=0;i<data.acts.length;i++)writeAct(wb,data,i,project);
+ else appendOriginalLayout(wb,data,project);
  const instr=wb.addWorksheet('Инструкция');title(instr,'Инструкция / ограничения','F');
  ['Редактируйте лист «Реквизиты» и «Ввод_работ».','Листы Акт_01…Акт_15 ссылаются на общие данные и таблицу работ.','Лист «КС-2» содержит числовую сверку; проверяйте единицы измерения.','Лист «Сверка» — моментальный снимок, после правок экспортируйте из приложения заново.','Файл — ЧЕРНОВИК, не является утверждённым документом и не подтверждает соблюдение законодательства.'].forEach((x,i)=>{
    instr.mergeCells(`A${i+3}:F${i+3}`);instr.getCell(`A${i+3}`).value=x;instr.getRow(i+3).height=35;
@@ -215,6 +220,7 @@ export async function importDraftXlsx(input) {
    actCols.forEach(([key],j)=>{
      let value=cellText(entries,row,j+1);
      if(value.startsWith('=') && key==='measuredQty')value='';
+     if(key==='schemeTitle' && typeof entries.getRow(row).getCell(j+1).value === 'object' && entries.getRow(row).getCell(j+1).value?.formula)value='';
      data.acts[i][key]=value;
    });
  }
@@ -222,6 +228,16 @@ export async function importDraftXlsx(input) {
    const id=cellText(estimate,row,1),description=cellText(estimate,row,2);
    if(!id&&!description)continue;
    data.ks2.push({id,description,qty:cellText(estimate,row,3),unit:cellText(estimate,row,4)});
+ }
+ const original=wb.getWorksheet('Постоянные_поля');
+ if(original){
+   const grid=wb.getWorksheet('Исходная_сетка');
+   const count=grid?Math.min(grid.rowCount,140):109;
+   data.legacyLayout={rows:Array.from({length:count},(_,i)=>{
+     const row=Array.from({length:43},(_,j)=>grid?cellText(grid,i+1,j+1):'');
+     if(i!==3&&i!==60)row[0]=cellText(original,i+3,2);
+     return row;
+   })};
  }
  return {data:safeWorkspace(data),project};
 }
