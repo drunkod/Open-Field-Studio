@@ -1,5 +1,7 @@
 import { newWorkspace, safeWorkspace, validateWorkspace, generateDraftHtml, parseKs2Csv } from './domain.mjs';
 import {RECORD_SCHEMAS,emptyRecord,recordDiagnostics} from './records.mjs';
+import {EVIDENCE_KINDS,checkEvidenceBytes,sha256Hex,newEvidenceMeta,cleanEvidence} from './evidence-domain.mjs';
+import {putEvidence,getEvidence,deleteEvidence,evidenceBackup,restoreEvidenceBackup} from './evidence-store.mjs';
 
 const FIELDS = [
   ['actNo','№ акта','text'], ['work','Вид работ','text'], ['start','Начало','date'],
@@ -47,7 +49,7 @@ const UI = `
 #pto-tab .pto-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.75rem}
 #pto-tab .pto-grid label{display:block;font-size:.8rem;font-weight:600;margin-bottom:3px}
 #pto-tab .pto-grid input{width:100%;padding:.5rem;border:1px solid var(--border-color,#bbb);border-radius:5px;background:var(--card-bg,#fff);color:inherit}
-#pto-tab .pto-record-table td input{min-width:130px}
+#pto-tab #pto-evidence-vault select{min-width:155px;max-width:240px;padding:8px;background:var(--card-bg,#fff);color:inherit}\n#pto-tab .pto-record-table td input{min-width:130px}
 #pto-tab .pto-record-table td textarea{min-width:250px;min-height:58px}
 #pto-tab .pto-record-table td select{min-width:130px}
 #pto-tab .pto-summary{padding:12px;border-left:3px solid #b45309;background:var(--concrete,#f5f5f5);margin:12px 0;white-space:pre-wrap}
@@ -99,13 +101,27 @@ const UI = `
  <ul id="pto-issues" class="pto-errors"></ul>
  <p class="pto-hint">ОЖР, реальное исполнение, сроки действия сертификатов, подписи и актуальную форму документа необходимо проверять отдельно. Совпадение сумм — не заключение о соответствии требованиям законодательства.</p>
 </div>
+<div class="panel" id="pto-evidence-vault">
+ <h2>Локальные файлы исполнительной документации</h2>
+ <p class="pto-hint">Паспорта, сертификаты, исполнительные схемы, ОЖР и фотографии сохраняются <strong>в этом браузере</strong> (IndexedDB), а не в облаке. Контрольная сумма SHA-256 показывает совпадение байтов, но НЕ подлинность или юридическую силу. Только черновой архив.</p>
+ <div class="pto-actions">
+ <label for="pto-evidence-act">Акт:</label><select id="pto-evidence-act" aria-label="Привязать файл к акту"></select>
+ <label for="pto-evidence-kind">Документ:</label><select id="pto-evidence-kind" aria-label="Тип документа"></select>
+ <label class="btn btn-secondary btn-sm" for="pto-evidence-file">Добавить локальный файл</label><input id="pto-evidence-file" type="file" accept=".pdf,.png,.jpg,.jpeg,.docx,.xlsx,.xls,.xml,.ifc,.dwg,.dxf,.odt" style="display:none">
+ <button type="button" class="btn btn-secondary btn-sm" id="pto-evidence-backup">Резервная копия файлов (.json)</button>
+ <label class="btn btn-secondary btn-sm" for="pto-evidence-restore">Восстановить файлы (.json)</label><input id="pto-evidence-restore" type="file" accept=".json" style="display:none">
+ </div>
+ <p class="pto-hint">Обычные экспорты АОСР, JSON и XLSX содержат только метаданные: <strong>сами вложения</strong> копируйте отдельно кнопкой «Резервная копия файлов». Один файл до 20 МБ; общий резервный пакет до 40 МБ. Не используйте браузерную очистку данных без резервной копии.</p>
+ <div id="pto-evidence-summary" class="pto-summary" aria-live="polite"></div>
+ <div class="pto-table"><table><thead><tr><th>Акт</th><th>Тип</th><th>Файл / редакция</th><th>Размер</th><th>SHA-256</th><th>Действие</th></tr></thead><tbody id="pto-evidence-rows"></tbody></table></div>
+</div>
 <div class="panel" id="pto-field-registers">
  <h2>Ежедневные документы инженера ПТО</h2>
  <p class="pto-hint">Ниже — отдельные локальные реестры для сверки с первичными документами. Ввод сведений здесь не доказывает выполнение работ, наличие оригинала, подлинность сертификата или утверждение схемы. Связывайте строки по номеру акта.</p>
  <div id="pto-register-sections"></div>
  <h3>Комплектность документов к актам</h3>
  <div id="pto-readiness" class="pto-summary" aria-live="polite"></div>
- <div class="pto-table"><table><thead><tr><th>Акт</th><th>Работа</th><th>ОЖР</th><th>Документы</th><th>Схемы</th><th>Замечания</th></tr></thead><tbody id="pto-readiness-rows"></tbody></table></div>
+ <div class="pto-table"><table><thead><tr><th>Акт</th><th>Работа</th><th>ОЖР</th><th>Документы</th><th>Схемы</th><th>Файлы</th><th>Замечания</th></tr></thead><tbody id="pto-readiness-rows"></tbody></table></div>
  <div class="pto-actions"><button type="button" class="btn btn-secondary btn-sm" id="pto-readiness-export">Скачать замечания (CSV)</button></div>
 </div>`;
 export function mountPtoWorkspace(app) {
@@ -179,6 +195,46 @@ export function mountPtoWorkspace(app) {
       td.appendChild(button);tr.appendChild(td);body.appendChild(tr);
     });
   };
+  const renderEvidence = () => {
+    const act=byId('pto-evidence-act'),selected=act.value;
+    act.replaceChildren();
+    data.acts.forEach((row,i)=>act.appendChild(el('option',row.actNo||('Акт '+(i+1)),{value:row.actNo||''})));
+    if([...act.options].some(option=>option.value===selected))act.value=selected;
+    const type=byId('pto-evidence-kind');
+    if(!type.options.length)Object.entries(EVIDENCE_KINDS).forEach(([key,title])=>type.appendChild(el('option',title,{value:key})));
+    const body=byId('pto-evidence-rows');body.replaceChildren();
+    data.evidence.forEach((record,i)=>{
+      const tr=el('tr');
+      [record.actNo,EVIDENCE_KINDS[record.kind],record.filename+' (ред. '+record.revision+')',
+        Math.ceil(record.size/1024)+' КБ',record.sha256.slice(0,16)+'…'].forEach(value=>tr.appendChild(el('td',value)));
+      const cell=el('td'),get=el('button','Скачать',{type:'button',class:'btn btn-secondary btn-sm'});
+      get.addEventListener('click',async()=>{
+        try{
+          const bytes=await getEvidence(record.id,record.sha256);
+          await download(record.filename,new Uint8Array(bytes),'application/octet-stream');
+        }catch(err){alert('Ошибка чтения вложения: '+err.message);}
+      });
+      const share=el('button','Привязать к акту',{type:'button',class:'btn btn-secondary btn-sm'});
+      share.addEventListener('click',()=>{
+        const target=byId('pto-evidence-act').value;
+        if(!target||target===record.actNo||data.evidence.some(x=>x.id===record.id&&x.actNo===target)){
+          alert('Выберите другой акт, к которому этот файл ещё не прикреплён.');return;
+        }
+        data.evidence.push({...record,actNo:target});persist();renderEvidence();renderReadiness();
+      });
+      const remove=el('button','Удалить',{type:'button',class:'btn btn-secondary btn-sm'});
+      remove.addEventListener('click',async()=>{
+        if(!confirm('Удалить связь с актом и, если она последняя, локальный файл?'))return;
+        try{
+          if(!data.evidence.some((x,j)=>j!==i&&x.id===record.id))await deleteEvidence(record.id);
+          data.evidence.splice(i,1);persist();renderEvidence();renderReadiness();}
+        catch(err){alert('Не удалось удалить: '+err.message);}
+      });
+      cell.append(get,share,remove);tr.appendChild(cell);body.appendChild(tr);
+    });
+    byId('pto-evidence-summary').textContent='Локальных файлов: '+data.evidence.length+
+      '. Файлы только записаны, без проверки оригинала и без юридически значимой подписи.';
+  };
   const renderRecords = () => {
     const sections=byId('pto-register-sections');sections.replaceChildren();
     for(const [kind,schema] of Object.entries(RECORD_SCHEMAS)){
@@ -215,7 +271,7 @@ export function mountPtoWorkspace(app) {
     const body=byId('pto-readiness-rows');body.replaceChildren();
     checked.results.forEach(row=>{
       const tr=el('tr');
-      [row.actNo,row.work,row.counts.journal,row.counts.documents,row.counts.schemes,row.flags.join('; ')||row.status]
+      [row.actNo,row.work,row.counts.journal,row.counts.documents,row.counts.schemes,data.evidence.filter(x=>x.actNo===row.actNo).length,row.flags.join('; ')||row.status]
         .forEach(value=>tr.appendChild(el('td',String(value))));
       body.appendChild(tr);
     });
@@ -238,7 +294,45 @@ export function mountPtoWorkspace(app) {
       list.appendChild(el('li',location+entry.message,{class:`pto-${entry.severity}`}));
     });
   };
-  const rerender = () => {renderHeader();renderActs();renderKs2();renderRecords();showProject();refreshDiagnostics();renderReadiness();};
+  const rerender = () => {renderHeader();renderActs();renderKs2();renderRecords();renderEvidence();showProject();refreshDiagnostics();renderReadiness();};
+  byId('pto-evidence-file').addEventListener('change',async e=>{
+    const file=e.target.files?.[0];if(!file)return;
+    try{
+      const bytes=await file.arrayBuffer(),filename=checkEvidenceBytes(file.name,bytes);
+      const sha256=await sha256Hex(bytes),id=crypto.randomUUID();
+      const meta=newEvidenceMeta({id,actNo:byId('pto-evidence-act').value,
+        kind:byId('pto-evidence-kind').value,filename,bytes,sha256,previous:data.evidence});
+      if(data.evidence.length>=300)throw Error('Достигнут лимит 300 вложений.');
+      if(data.evidence.some(x=>x.sha256===meta.sha256&&x.actNo===meta.actNo&&x.kind===meta.kind)){
+        alert('Такой файл уже связан с этим актом (совпадает SHA-256).');return;
+      }
+      await putEvidence(id,bytes);data.evidence.push(meta);persist();renderEvidence();renderReadiness();
+    }catch(err){alert('Ошибка вложения: '+err.message);}
+    finally{e.target.value='';}
+  });
+  byId('pto-evidence-backup').addEventListener('click',async()=>{
+    try{
+      const archive=await evidenceBackup(data.evidence);
+      await download('pto_evidence_backup.json',JSON.stringify(archive),'application/json;charset=utf-8');
+    }catch(err){alert('Ошибка резервной копии: '+err.message);}
+  });
+  byId('pto-evidence-restore').addEventListener('change',async e=>{
+    const file=e.target.files?.[0];if(!file)return;
+    try{
+      if(file.size>60*1024*1024)throw Error('Архив превышает 60 МБ.');
+      if(!confirm('Восстановить локальные файлы? Прежде чем продолжить, убедитесь, что это ваш доверенный архив.'))return;
+      const bundle=JSON.parse(await file.text()),entries=await restoreEvidenceBackup(bundle,data.evidence);
+      const known=new Map(data.evidence.map(x=>[x.id,x.sha256]));
+      for(const record of entries){
+        if(known.has(record.id)&&known.get(record.id)!==record.sha256)
+          throw Error('Конфликт ID вложения: изменённая контрольная сумма.');
+      }
+      data.evidence=cleanEvidence([...data.evidence,...entries.filter(x=>!known.has(x.id))]);
+      persist();renderEvidence();renderReadiness();
+      alert('Восстановлено файлов: '+entries.length+'. Проверьте связь с актами.');
+    }catch(err){alert('Ошибка восстановления архива: '+err.message);}
+    finally{e.target.value='';}
+  });
   byId('pto-readiness-export').addEventListener('click',async()=>{
     const diagnostics=recordDiagnostics(data);
     const rows=[['Акт','Замечание'],...diagnostics.issues.map(item=>[item.actNo||'',item.message])];

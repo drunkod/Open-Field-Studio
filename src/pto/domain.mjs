@@ -1,4 +1,5 @@
 // Domain logic intentionally independent of DOM, Tauri and locale.
+import {cleanEvidence} from './evidence-domain.mjs';
 // A matched KS-2 line is evidence of quantity correlation, NOT legal compliance.
 export const SLOT_COUNT = 15;
 export const suggestedSchemeNumber = index => `ИС-${String(index+1).padStart(2, '0')}`;
@@ -13,7 +14,7 @@ export function newWorkspace() {
       schemeNo: '', schemeTitle: '', qualityDocs: '', measuredQty: '',
       unit: '', ks2Id: '', notes: '',
     })),
-    ks2: [], journal: [], documents: [], schemes: [], legacyLayout: null,
+    ks2: [], journal: [], documents: [], schemes: [], evidence: [], legacyLayout: null,
   };
 }
 const cleanExtra = (rows, keys) => Array.isArray(rows) ? rows.slice(0,300).map(row =>
@@ -33,6 +34,7 @@ export function safeWorkspace(value) {
     journal: cleanExtra(value.journal, ['date','actNo','description','reference']),
     documents: cleanExtra(value.documents, ['actNo','type','number','material','validUntil','fileName']),
     schemes: cleanExtra(value.schemes, ['actNo','number','title','revision','fileName']),
+    evidence: cleanEvidence(value.evidence),
     ks2: Array.isArray(value.ks2) ? value.ks2.slice(0, 2000).map(k => ({
       id: String(k.id ?? '').trim().slice(0, 100),
       description: String(k.description ?? '').slice(0, 1000),

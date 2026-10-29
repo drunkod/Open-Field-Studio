@@ -140,3 +140,6 @@ A user-acceptance trial should measure actual manual edits, export-to-print time
 4. Local baseline of our fork when research began: commit 327e5f3 on feature/ru-aosr-ks2-prototype; the plan itself does not add product features or legal approvals.
 
 **Decision:** proceed with original JavaScript implementation of the file-evidence and review patterns first; reconsider embedding or independently deploying AGPL components only after a license and architecture assessment.
+
+### Russian-market review and initial implementation (29 October 2026)
+The [Russian-market adaptation study](RUSSIAN_MARKET_ADAPTATION.md) adds 344/пр and 1026/пр document boundaries, current 369/пр format changes, Russian practitioner feedback, domestic software/estimate interoperability and acceptance criteria. **Implementation started:** the optional local evidence vault in `src/pto/evidence-domain.mjs`, `src/pto/evidence-store.mjs` and `src/pto/ui.mjs` stores real file bytes in IndexedDB with SHA-256, revisions, act links, downloads and a file-inclusive backup. It is an M1 prototype, not a certified electronic-executive-document platform; offline/Tauri QA and specialist approval remain.

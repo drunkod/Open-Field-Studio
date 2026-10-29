@@ -383,3 +383,6 @@ The fork defaults to Russian and translates the original UI plus 15 built-in ins
 
 ### Print-only AOSR and Russian localisation audit (iteration 3)
 The fork includes a **sanitised style-only** AOSR spreadsheet template and a separate print-only workbook action that exports populated acts with standalone text values and a supporting-document register. All built-in locale catalogues have matching keys; Russian screens, 15 inspection templates, 273 questions and both HTML report types are covered by automated checks. See [the print and translation audit](docs/RU_TRANSLATION_AND_PRINT_ACCEPTANCE.md). Printouts remain **drafts requiring engineer/customer approval**.
+
+### Russian-market PTO evidence vault (pilot)
+The **АОСР · КС-2** tab now includes a private browser-local evidence vault for material passports, certificates, executive schemes and diary attachments (IndexedDB + SHA-256, act links, revisions and binary-inclusive JSON backup). No file uploads to a server; ordinary project JSON/XLSX backs up *metadata only*. All outputs remain drafts requiring professional review. See [Russian construction-market research](docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md) and [Russian implementation notes](docs/PTO_DAILY_MODULES_RU.md).
