@@ -380,3 +380,6 @@ Legacy Russian construction AОСР `.xls` (`Шапка`/`Табл`) can now be 
 ### Russian-first interface and original-layout AOSR drafts
 
 The fork defaults to Russian and translates the original UI plus 15 built-in inspection checklists. Upload a legacy AOSR `.xls` locally to generate 15 linked AOSR sheets using its 43-column text structure and a shared editable source-details sheet. **Original XLS formatting/merge/page-break fidelity is not guaranteed**; these are draft documents for human review. Full guidance: [RU layout delivery](docs/RU_LAYOUT_DELIVERY.md).
+
+### Print-only AOSR and Russian localisation audit (iteration 3)
+The fork includes a **sanitised style-only** AOSR spreadsheet template and a separate print-only workbook action that exports populated acts with standalone text values and a supporting-document register. All built-in locale catalogues have matching keys; Russian screens, 15 inspection templates, 273 questions and both HTML report types are covered by automated checks. See [the print and translation audit](docs/RU_TRANSLATION_AND_PRINT_ACCEPTANCE.md). Printouts remain **drafts requiring engineer/customer approval**.
