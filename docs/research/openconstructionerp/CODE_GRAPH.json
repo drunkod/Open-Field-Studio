@@ -1,0 +1,381 @@
+{
+  "upstream": "datadrivenconstruction/OpenConstructionERP",
+  "upstream_sha": "6032873c58e930e420af3d7fd483b61ea1b246d3",
+  "method": "Python AST manifest declarations and static cross-module imports; no runtime graph",
+  "scope": "ONLY modules included in the sparse local checkout",
+  "modules": {
+    "boq": {
+      "module_id": "oe_boq",
+      "declared_dependencies": [
+        "oe_projects"
+      ],
+      "observed_cross_module_import_statements": {
+        "projects": 28,
+        "bim_hub": 15,
+        "ai": 15,
+        "costs": 8,
+        "measurement": 8,
+        "takeoff": 6,
+        "i18n_foundation": 6,
+        "finance": 5,
+        "contracts": 5,
+        "costmodel": 4,
+        "design_options": 4,
+        "documents": 4,
+        "price_breakdown": 4,
+        "dwg_takeoff": 3,
+        "price_index": 2,
+        "contacts": 2,
+        "users": 2,
+        "schedule": 1,
+        "subcontractors": 1,
+        "file_versions": 1,
+        "supplier_catalogs": 1,
+        "cad": 1,
+        "validation": 1,
+        "teams": 1
+      },
+      "manifest_source": "backend/app/modules/boq/manifest.py"
+    },
+    "cde": {
+      "module_id": "oe_cde",
+      "declared_dependencies": [
+        "oe_users",
+        "oe_projects",
+        "oe_documents"
+      ],
+      "observed_cross_module_import_statements": {
+        "documents": 3,
+        "file_versions": 3,
+        "approval_routes": 2,
+        "notifications": 2,
+        "transmittals": 1
+      },
+      "manifest_source": "backend/app/modules/cde/manifest.py"
+    },
+    "changeorders": {
+      "module_id": "oe_changeorders",
+      "declared_dependencies": [
+        "oe_projects",
+        "oe_boq"
+      ],
+      "observed_cross_module_import_statements": {
+        "projects": 7,
+        "finance": 5,
+        "variations": 3,
+        "boq": 3,
+        "ai": 3,
+        "costmodel": 2,
+        "rfi": 1,
+        "ncr": 1,
+        "teams": 1
+      },
+      "manifest_source": "backend/app/modules/changeorders/manifest.py"
+    },
+    "daily_diary": {
+      "module_id": "oe_daily_diary",
+      "declared_dependencies": [
+        "oe_users",
+        "oe_projects"
+      ],
+      "observed_cross_module_import_statements": {
+        "projects": 2,
+        "users": 2,
+        "field_time": 1,
+        "punchlist": 1,
+        "project_governance": 1,
+        "documents": 1
+      },
+      "manifest_source": "backend/app/modules/daily_diary/manifest.py"
+    },
+    "documents": {
+      "module_id": "oe_documents",
+      "declared_dependencies": [
+        "oe_projects"
+      ],
+      "observed_cross_module_import_statements": {
+        "projects": 8,
+        "users": 6,
+        "file_versions": 6,
+        "teams": 3,
+        "bim_hub": 3,
+        "cde": 3,
+        "validation": 2,
+        "ai": 2,
+        "takeoff": 2,
+        "project_governance": 2
+      },
+      "manifest_source": "backend/app/modules/documents/manifest.py"
+    },
+    "field_diary": {
+      "module_id": "oe_field_diary",
+      "declared_dependencies": [
+        "oe_projects",
+        "oe_users"
+      ],
+      "observed_cross_module_import_statements": {
+        "schedule": 6,
+        "punchlist": 5,
+        "inspections": 3,
+        "resources": 2,
+        "fieldreports": 1,
+        "users": 1,
+        "documents": 1
+      },
+      "manifest_source": "backend/app/modules/field_diary/manifest.py"
+    },
+    "fieldreports": {
+      "module_id": "oe_fieldreports",
+      "declared_dependencies": [
+        "oe_projects"
+      ],
+      "observed_cross_module_import_statements": {
+        "documents": 2,
+        "projects": 1
+      },
+      "manifest_source": "backend/app/modules/fieldreports/manifest.py"
+    },
+    "file_transmittals": {
+      "module_id": "oe_file_transmittals",
+      "declared_dependencies": [
+        "oe_projects",
+        "oe_users"
+      ],
+      "observed_cross_module_import_statements": {
+        "projects": 1,
+        "users": 1
+      },
+      "manifest_source": "backend/app/modules/file_transmittals/manifest.py"
+    },
+    "inspections": {
+      "module_id": "oe_inspections",
+      "declared_dependencies": [
+        "oe_users",
+        "oe_projects"
+      ],
+      "observed_cross_module_import_statements": {
+        "ncr": 3,
+        "punchlist": 1
+      },
+      "manifest_source": "backend/app/modules/inspections/manifest.py"
+    },
+    "progress": {
+      "module_id": "oe_progress",
+      "declared_dependencies": [
+        "oe_projects",
+        "oe_boq"
+      ],
+      "observed_cross_module_import_statements": {
+        "boq": 5,
+        "field_time": 2,
+        "costmodel": 1,
+        "projects": 1
+      },
+      "manifest_source": "backend/app/modules/progress/manifest.py"
+    },
+    "project_controls": {
+      "module_id": "oe_project_controls",
+      "declared_dependencies": [
+        "oe_projects",
+        "oe_users",
+        "oe_bi_dashboards"
+      ],
+      "observed_cross_module_import_statements": {
+        "bi_dashboards": 2
+      },
+      "manifest_source": "backend/app/modules/project_controls/manifest.py"
+    },
+    "projects": {
+      "module_id": "oe_projects",
+      "declared_dependencies": [
+        "oe_users"
+      ],
+      "observed_cross_module_import_statements": {
+        "documents": 20,
+        "teams": 9,
+        "boq": 8,
+        "contracts": 7,
+        "costs": 5,
+        "tasks": 5,
+        "rfi": 5,
+        "punchlist": 4,
+        "fieldreports": 4,
+        "users": 4,
+        "costmodel": 4,
+        "risk": 3,
+        "takeoff": 3,
+        "procurement": 3,
+        "changeorders": 3,
+        "backup": 2,
+        "meetings": 2,
+        "inspections": 2,
+        "ncr": 2,
+        "bim_hub": 2,
+        "finance": 2,
+        "schedule": 2,
+        "requirements": 2,
+        "tendering": 1,
+        "match_elements": 1,
+        "approval_routes": 1,
+        "resources": 1,
+        "methodology": 1,
+        "i18n_foundation": 1,
+        "dwg_takeoff": 1,
+        "cde": 1,
+        "safety": 1,
+        "transmittals": 1,
+        "submittals": 1,
+        "markups": 1
+      },
+      "manifest_source": "backend/app/modules/projects/manifest.py"
+    },
+    "punchlist": {
+      "module_id": "oe_punchlist",
+      "declared_dependencies": [
+        "oe_projects"
+      ],
+      "observed_cross_module_import_statements": {
+        "bcf": 3,
+        "projects": 2,
+        "property_dev": 2,
+        "contracts": 1,
+        "documents": 1
+      },
+      "manifest_source": "backend/app/modules/punchlist/manifest.py"
+    },
+    "quality_concept": {
+      "module_id": "oe_quality_concept",
+      "declared_dependencies": [
+        "oe_users",
+        "oe_projects",
+        "oe_project_governance",
+        "oe_construction_control",
+        "oe_commissioning",
+        "oe_requirements",
+        "oe_closeout",
+        "oe_defects_liability",
+        "oe_qms"
+      ],
+      "observed_cross_module_import_statements": {
+        "project_governance": 24,
+        "construction_control": 23,
+        "requirements": 15,
+        "commissioning": 14,
+        "closeout": 6,
+        "contacts": 5,
+        "defects_liability": 4,
+        "ncr": 3,
+        "cde": 3,
+        "qms": 3,
+        "daily_diary": 3,
+        "schedule": 2,
+        "users": 2,
+        "submittals": 2,
+        "inspections": 2,
+        "procurement": 2,
+        "teams": 1,
+        "projects": 1,
+        "permits": 1
+      },
+      "manifest_source": "backend/app/modules/quality_concept/manifest.py"
+    },
+    "reporting": {
+      "module_id": "oe_reporting",
+      "declared_dependencies": [
+        "oe_users",
+        "oe_projects",
+        "oe_boq",
+        "oe_bim_hub"
+      ],
+      "observed_cross_module_import_statements": {
+        "projects": 6,
+        "finance": 3,
+        "bim_hub": 2,
+        "progress": 2,
+        "procurement": 1,
+        "ai_agents": 1,
+        "dashboard": 1,
+        "costmodel": 1,
+        "safety": 1,
+        "rfi": 1,
+        "submittals": 1,
+        "schedule": 1,
+        "risk": 1,
+        "portal": 1,
+        "contacts": 1,
+        "users": 1
+      },
+      "manifest_source": "backend/app/modules/reporting/manifest.py"
+    },
+    "requirements": {
+      "module_id": "oe_requirements",
+      "declared_dependencies": [
+        "oe_projects"
+      ],
+      "observed_cross_module_import_statements": {
+        "boq": 3,
+        "validation": 2,
+        "bim_hub": 1,
+        "projects": 1
+      },
+      "manifest_source": "backend/app/modules/requirements/manifest.py"
+    },
+    "rfi": {
+      "module_id": "oe_rfi",
+      "declared_dependencies": [
+        "oe_users",
+        "oe_projects"
+      ],
+      "observed_cross_module_import_statements": {
+        "approval_routes": 6,
+        "projects": 4,
+        "changeorders": 4,
+        "users": 1,
+        "documents": 1
+      },
+      "manifest_source": "backend/app/modules/rfi/manifest.py"
+    },
+    "site_inventory": {
+      "module_id": "oe_site_inventory",
+      "declared_dependencies": [
+        "oe_projects",
+        "oe_boq",
+        "oe_procurement"
+      ],
+      "observed_cross_module_import_statements": {
+        "boq": 4,
+        "procurement": 3,
+        "projects": 2,
+        "price_breakdown": 1,
+        "progress": 1
+      },
+      "manifest_source": "backend/app/modules/site_inventory/manifest.py"
+    },
+    "submittals": {
+      "module_id": "oe_submittals",
+      "declared_dependencies": [
+        "oe_users",
+        "oe_projects"
+      ],
+      "observed_cross_module_import_statements": {
+        "approval_routes": 5,
+        "documents": 2,
+        "users": 1
+      },
+      "manifest_source": "backend/app/modules/submittals/manifest.py"
+    },
+    "transmittals": {
+      "module_id": "oe_transmittals",
+      "declared_dependencies": [
+        "oe_users",
+        "oe_projects",
+        "oe_contacts"
+      ],
+      "observed_cross_module_import_statements": {
+        "project_governance": 2,
+        "projects": 2
+      },
+      "manifest_source": "backend/app/modules/transmittals/manifest.py"
+    }
+  }
+}
