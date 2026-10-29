@@ -2162,7 +2162,7 @@ class OpenFieldStudio {
     renderHandoverExecution() {
         const ho = this.handovers.find(h => h.id === this.currentHandoverId);
         if (!ho) return;
-        document.getElementById('ho-exec-title').textContent = this.hoTypeLabel(ho.type) || 'Oplevering';
+        document.getElementById('ho-exec-title').textContent = this.hoTypeLabel(ho.type) || this.t('report_pv_title');
         const c = document.getElementById('ho-items-list');
         if (!ho.items.length) { c.innerHTML = `<p class="empty-state">${this.t('empty_ho_items')}</p>`; return; }
         c.innerHTML = ho.items.map((item, idx) => {

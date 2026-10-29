@@ -1,4 +1,5 @@
 import { newWorkspace, safeWorkspace, validateWorkspace, generateDraftHtml, parseKs2Csv } from './domain.mjs';
+import {RECORD_SCHEMAS,emptyRecord,recordDiagnostics} from './records.mjs';
 
 const FIELDS = [
   ['actNo','№ акта','text'], ['work','Вид работ','text'], ['start','Начало','date'],
@@ -46,6 +47,9 @@ const UI = `
 #pto-tab .pto-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.75rem}
 #pto-tab .pto-grid label{display:block;font-size:.8rem;font-weight:600;margin-bottom:3px}
 #pto-tab .pto-grid input{width:100%;padding:.5rem;border:1px solid var(--border-color,#bbb);border-radius:5px;background:var(--card-bg,#fff);color:inherit}
+#pto-tab .pto-record-table td input{min-width:130px}
+#pto-tab .pto-record-table td textarea{min-width:250px;min-height:58px}
+#pto-tab .pto-record-table td select{min-width:130px}
 #pto-tab .pto-summary{padding:12px;border-left:3px solid #b45309;background:var(--concrete,#f5f5f5);margin:12px 0;white-space:pre-wrap}
 #pto-tab .pto-errors li{margin-bottom:5px}
 #pto-tab .pto-error{color:#dc2626}#pto-tab .pto-warning{color:#b45309}#pto-tab .pto-info{color:var(--text-muted,#71717a)}
@@ -94,6 +98,15 @@ const UI = `
  <div class="pto-table"><table><thead><tr><th>Позиция КС-2</th><th>Описание</th><th>АОСР (сумма)</th><th>КС-2</th><th>Результат</th></tr></thead><tbody id="pto-groups"></tbody></table></div>
  <ul id="pto-issues" class="pto-errors"></ul>
  <p class="pto-hint">ОЖР, реальное исполнение, сроки действия сертификатов, подписи и актуальную форму документа необходимо проверять отдельно. Совпадение сумм — не заключение о соответствии требованиям законодательства.</p>
+</div>
+<div class="panel" id="pto-field-registers">
+ <h2>Ежедневные документы инженера ПТО</h2>
+ <p class="pto-hint">Ниже — отдельные локальные реестры для сверки с первичными документами. Ввод сведений здесь не доказывает выполнение работ, наличие оригинала, подлинность сертификата или утверждение схемы. Связывайте строки по номеру акта.</p>
+ <div id="pto-register-sections"></div>
+ <h3>Комплектность документов к актам</h3>
+ <div id="pto-readiness" class="pto-summary" aria-live="polite"></div>
+ <div class="pto-table"><table><thead><tr><th>Акт</th><th>Работа</th><th>ОЖР</th><th>Документы</th><th>Схемы</th><th>Замечания</th></tr></thead><tbody id="pto-readiness-rows"></tbody></table></div>
+ <div class="pto-actions"><button type="button" class="btn btn-secondary btn-sm" id="pto-readiness-export">Скачать замечания (CSV)</button></div>
 </div>`;
 export function mountPtoWorkspace(app) {
   const nav = document.querySelector('.tab-strip');
@@ -135,7 +148,7 @@ export function mountPtoWorkspace(app) {
     const multiline = field === 'qualityDocs' || field === 'work';
     const input = multiline ? el('textarea', null, { rows:field === 'qualityDocs'?'4':'3', 'aria-label':aria, 'data-col':field }) : el('input', null, { type, 'aria-label': aria, 'data-col': field });
     input.value = obj[field] ?? '';
-    input.addEventListener('input', () => { obj[field] = input.value; persist(); refreshDiagnostics(); });
+    input.addEventListener('input', () => { obj[field] = input.value; persist(); refreshDiagnostics(); renderReadiness(); });
     if (action) input.addEventListener('change', action);
     return input;
   };
@@ -166,6 +179,47 @@ export function mountPtoWorkspace(app) {
       td.appendChild(button);tr.appendChild(td);body.appendChild(tr);
     });
   };
+  const renderRecords = () => {
+    const sections=byId('pto-register-sections');sections.replaceChildren();
+    for(const [kind,schema] of Object.entries(RECORD_SCHEMAS)){
+      const area=el('section',null,{class:'pto-record-area'}),h=el('h3',schema.title);
+      const wrap=el('div',null,{class:'pto-table pto-record-table'});
+      const table=el('table'),thead=el('thead'),trh=el('tr'),tbody=el('tbody');
+      schema.columns.forEach(([,title])=>trh.appendChild(el('th',title)));
+      trh.appendChild(el('th','Действие'));thead.appendChild(trh);
+      data[kind].forEach((entry,index)=>{
+        const row=el('tr');
+        schema.columns.forEach(([field,title,type])=>{
+          const td=el('td'),control=type==='textarea'?el('textarea',null,{rows:'2'}):el('input',null,{type:type==='date'?'date':'text'});
+          control.setAttribute('aria-label',schema.title+' '+(index+1)+' '+title);
+          control.value=entry[field]??'';
+          control.addEventListener('input',()=>{entry[field]=control.value;persist();renderReadiness();});
+          td.appendChild(control);row.appendChild(td);
+        });
+        const action=el('td'),remove=el('button','Удалить',{type:'button',class:'btn btn-secondary btn-sm'});
+        remove.addEventListener('click',()=>{data[kind].splice(index,1);persist();renderRecords();renderReadiness();});
+        action.appendChild(remove);row.appendChild(action);tbody.appendChild(row);
+      });
+      table.append(thead,tbody);wrap.appendChild(table);area.append(h,wrap);
+      const add=el('button','Добавить запись',{type:'button',class:'btn btn-secondary btn-sm','data-record-add':kind});
+      add.addEventListener('click',()=>{
+        if(data[kind].length>=300){alert('Максимум 300 записей в реестре.');return;}
+        data[kind].push(emptyRecord(kind));persist();renderRecords();renderReadiness();
+      });
+      area.appendChild(add);sections.appendChild(area);
+    }
+  };
+  const renderReadiness = () => {
+    const checked=recordDiagnostics(data);
+    byId('pto-readiness').textContent='Актов с работами: '+checked.results.length+' · замечаний по реестрам: '+checked.issues.length+'. Это контроль связей, не подтверждение подлинности документов.';
+    const body=byId('pto-readiness-rows');body.replaceChildren();
+    checked.results.forEach(row=>{
+      const tr=el('tr');
+      [row.actNo,row.work,row.counts.journal,row.counts.documents,row.counts.schemes,row.flags.join('; ')||row.status]
+        .forEach(value=>tr.appendChild(el('td',String(value))));
+      body.appendChild(tr);
+    });
+  };
   const refreshDiagnostics = () => {
     const checked = validateWorkspace(data);
     byId('pto-results').textContent = `Заполнено актов: ${checked.count} из 15 · ошибок: ${checked.errors} · предупреждений: ${checked.warnings}. Статус: ЧЕРНОВИК / требуется проверка инженера.`;
@@ -184,7 +238,14 @@ export function mountPtoWorkspace(app) {
       list.appendChild(el('li',location+entry.message,{class:`pto-${entry.severity}`}));
     });
   };
-  const rerender = () => {renderHeader();renderActs();renderKs2();showProject();refreshDiagnostics();};
+  const rerender = () => {renderHeader();renderActs();renderKs2();renderRecords();showProject();refreshDiagnostics();renderReadiness();};
+  byId('pto-readiness-export').addEventListener('click',async()=>{
+    const diagnostics=recordDiagnostics(data);
+    const rows=[['Акт','Замечание'],...diagnostics.issues.map(item=>[item.actNo||'',item.message])];
+    const quote=value=>{const source=String(value);const safe=/^[=+@-]/.test(source)?"'"+source:source;return '"'+safe.replaceAll('"','""')+'"';};
+    const csv='\ufeff'+rows.map(row=>row.map(quote).join(';')).join('\r\n')+'\r\n';
+    await download('pto_readiness.csv',csv,'text/csv;charset=utf-8');
+  });
   byId('pto-add-ks2').addEventListener('click',()=>{
     data.ks2.push({id:'',description:'',qty:'',unit:''});persist();renderKs2();refreshDiagnostics();
   });

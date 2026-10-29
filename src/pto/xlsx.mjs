@@ -4,6 +4,7 @@ import ExcelJS from 'exceljs';
 import { safeWorkspace, validateWorkspace, toMicro, isFilled, suggestedSchemeNumber } from './domain.mjs';
 import { appendOriginalLayout } from './source-layout.mjs';
 import { loadAosrStyleTemplate } from './styled-template.mjs';
+import { RECORD_SCHEMAS } from './records.mjs';
 
 const clean = v => {
   if (v == null) return '';
@@ -184,11 +185,44 @@ function writeAct(wb,data,i,project){
  ws.pageSetup={paperSize:9,orientation:'portrait',fitToPage:true,fitToWidth:1,fitToHeight:1};
  ws.pageMargins={left:.4,right:.4,top:.5,bottom:.5,header:.2,footer:.2};ws.printArea='A1:H26';
 }
+const EXTRA_SHEETS={journal:'ОЖР',documents:'Документы_качества',schemes:'Реестр_схем'};
+function writeExtraRegisters(wb,data){
+  for(const [kind,schema] of Object.entries(RECORD_SCHEMAS)){
+    if(!data[kind]?.length)continue;
+    const ws=wb.addWorksheet(EXTRA_SHEETS[kind]);
+    const fields=schema.columns.map(([key])=>key);
+    header(ws,1,schema.columns.map(([,title])=>title));
+    for(const entry of data[kind]){
+      const row=ws.addRow(fields.map(key=>{
+        const value=String(entry[key]??'');
+        // Avoid Excel formula injection from user-entered references.
+        return /^[=+@-]/.test(value)?"'"+value:value;
+      }));
+      row.height=38;
+      row.eachCell(cell=>cell.alignment={vertical:'middle',wrapText:true});
+    }
+    schema.columns.forEach(([key,title],i)=>{ws.getColumn(i+1).width=key==='description'||key==='material'||key==='title'?50:24;});
+    ws.views=[{state:'frozen',ySplit:1}];printable(ws);
+  }
+}
+function readExtraRegisters(wb,data){
+  for(const [kind,schema] of Object.entries(RECORD_SCHEMAS)){
+    const ws=wb.getWorksheet(EXTRA_SHEETS[kind]);if(!ws)continue;
+    const keys=schema.columns.map(([key])=>key);
+    for(let row=2;row<=Math.min(ws.rowCount,301);row++){
+      const obj=Object.fromEntries(keys.map((key,i)=>{
+        const value=cellText(ws,row,i+1);
+        return [key,value.startsWith("'=")||value.startsWith("'+")||value.startsWith("'@")||value.startsWith("'-")?value.slice(1):value];
+      }));
+      if(Object.values(obj).some(isFilled))data[kind].push(obj);
+    }
+  }
+}
 export async function createDraftWorkbook(raw,project={}) {
  const data=safeWorkspace(raw),wb=new ExcelJS.Workbook();
  wb.creator='Open Field Studio / PTO prototype';wb.subject='Черновики АОСР и техническая сверка КС-2';
  wb.created=new Date();wb.calcProperties.fullCalcOnLoad=true;
- writeDetails(wb,data,project);writeInput(wb,data);writeKs2(wb,data);writeReview(wb,data);
+ writeDetails(wb,data,project);writeInput(wb,data);writeKs2(wb,data);writeReview(wb,data);writeExtraRegisters(wb,data);
  if(!data.legacyLayout)for(let i=0;i<data.acts.length;i++)writeAct(wb,data,i,project);
  else appendOriginalLayout(wb,data,project,await loadAosrStyleTemplate());
  const instr=wb.addWorksheet('Инструкция');title(instr,'Инструкция / ограничения','F');
@@ -240,6 +274,7 @@ export async function importDraftXlsx(input) {
      return row;
    })};
  }
+ readExtraRegisters(wb,data);
  return {data:safeWorkspace(data),project};
 }
 

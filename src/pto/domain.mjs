@@ -13,9 +13,11 @@ export function newWorkspace() {
       schemeNo: '', schemeTitle: '', qualityDocs: '', measuredQty: '',
       unit: '', ks2Id: '', notes: '',
     })),
-    ks2: [], legacyLayout: null,
+    ks2: [], journal: [], documents: [], schemes: [], legacyLayout: null,
   };
 }
+const cleanExtra = (rows, keys) => Array.isArray(rows) ? rows.slice(0,300).map(row =>
+  Object.fromEntries(keys.map(key => [key, String(row?.[key] ?? '').slice(0,1500)]))) : [];
 export function safeWorkspace(value) {
   const empty = newWorkspace();
   if (!value || typeof value !== 'object' || value.version !== 1) return empty;
@@ -28,6 +30,9 @@ export function safeWorkspace(value) {
     legacyLayout: value.legacyLayout && Array.isArray(value.legacyLayout.rows) ? {
       rows: value.legacyLayout.rows.slice(0,140).map(r => Array.from({length:43}, (_,i)=>String(r?.[i]??'').slice(0,15000)))
     } : null,
+    journal: cleanExtra(value.journal, ['date','actNo','description','reference']),
+    documents: cleanExtra(value.documents, ['actNo','type','number','material','validUntil','fileName']),
+    schemes: cleanExtra(value.schemes, ['actNo','number','title','revision','fileName']),
     ks2: Array.isArray(value.ks2) ? value.ks2.slice(0, 2000).map(k => ({
       id: String(k.id ?? '').trim().slice(0, 100),
       description: String(k.description ?? '').slice(0, 1000),
