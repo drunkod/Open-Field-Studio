@@ -17,11 +17,11 @@ function specimen(){
 }
 test('original structure becomes 15 formula-linked 43-column act worksheets',async()=>{
  const wb=await readWorkbook(await writeDraftXlsx(specimen(),{name:'Учебный объект'}));
- assert.equal(wb.worksheets.length,22);
+ assert.equal(wb.worksheets.length,23);
  assert.equal(wb.getWorksheet('Акт_01').columnCount,43);
  assert.equal(wb.getWorksheet('Акт_15').columnCount,43);
  assert.equal(wb.getWorksheet('Исходная_сетка').state,'veryHidden');
- assert.equal(wb.getWorksheet('Акт_01').getCell('A58').value.formula,'Ввод_работ!B5');
+ assert.equal(wb.getWorksheet('Акт_01').getCell('A58').value.formula,'IF(Ввод_работ!B5="","",Ввод_работ!B5)');
  assert.match(wb.getWorksheet('Акт_01').getCell('A71').value.formula,/Ввод_работ!G5/);
  assert.equal(wb.getWorksheet('Акт_01').getCell('A95').value.formula,"'Постоянные_поля'!B97");
  assert.equal(wb.getWorksheet('Ввод_работ').getCell('G5').value.formula,'IF(B5="","",B5)');

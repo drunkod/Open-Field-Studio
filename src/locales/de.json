@@ -427,5 +427,19 @@
   "ui_static_12": "Testmodus (alleen payload voorbeeld, geen echte verzending)",
   "ui_static_13": "Voorbeeld payload",
   "ui_static_14": "API-sleutel op aanvraag bij Woningborg (partner-portal). Payload-schema is voorlopig; sync met provider.",
-  "ui_static_15": "Huisnummer *"
+  "ui_static_15": "Huisnummer *",
+  "msg_camera_use_file": "Kamera nicht verfügbar. Nutzen Sie HTTPS oder wählen Sie eine Datei.",
+  "msg_camera_blocked_device": "Kamera gesperrt. Zugriff in Geräteeinstellungen erlauben.",
+  "msg_camera_blocked_browser": "Kamera gesperrt. Zugriff im Browser erlauben und neu laden.",
+  "msg_camera_denied_device": "Kamerazugriff verweigert. In Geräteeinstellungen erlauben.",
+  "msg_camera_denied_browser": "Kamerazugriff verweigert. In der Adressleiste erlauben und neu laden.",
+  "items_count_label": "Punkte",
+  "lbl_person_name": "Name",
+  "ph_full_name": "Vollständiger Name",
+  "lbl_signature_single": "Unterschrift",
+  "report_project_title": "Projektbericht",
+  "report_energy_label": "Energieeffizienzklasse",
+  "report_bag_number": "BAG Adress-ID",
+  "report_bag_property": "Gebäude",
+  "report_survey_record": "Aufnahmedatum"
 }

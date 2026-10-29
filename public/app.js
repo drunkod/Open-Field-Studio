@@ -1463,7 +1463,7 @@ class OpenFieldStudio {
     renderComments(comments) {
         const c = document.getElementById('comments-list');
         c.innerHTML = comments.map(cm => `
-            <div class="comment-item"><div class="comment-meta">${this.esc(cm.author)} - ${new Date(cm.date).toLocaleString('nl-NL')}</div>${this.esc(cm.text)}</div>
+            <div class="comment-item"><div class="comment-meta">${this.esc(cm.author)} - ${new Date(cm.date).toLocaleString(this.lang==='ru'?'ru-RU':'nl-NL')}</div>${this.esc(cm.text)}</div>
         `).join('');
     }
 
@@ -1600,7 +1600,7 @@ class OpenFieldStudio {
     async openCamera() {
         const isApp = !!window.__TAURI_INTERNALS__;
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            this.showNotification('Camera niet beschikbaar. Gebruik HTTPS of open via bestandskeuze.', 'error');
+            this.showNotification(this.t('msg_camera_use_file'), 'error');
             document.getElementById('photo-input')?.click();
             return;
         }
@@ -1611,9 +1611,9 @@ class OpenFieldStudio {
                     const perm = await navigator.permissions.query({ name: 'camera' });
                     if (perm.state === 'denied') {
                         if (isApp) {
-                            this.showNotification('Camera geblokkeerd. Ga naar Android Instellingen > Apps > Open Field Studio > Rechten > Camera > Toestaan.', 'error');
+                            this.showNotification(this.t('msg_camera_blocked_device'), 'error');
                         } else {
-                            this.showNotification('Camera geblokkeerd. Ga naar browser-instellingen > Site-instellingen > Camera > Toestaan, en herlaad de pagina.', 'error');
+                            this.showNotification(this.t('msg_camera_blocked_browser'), 'error');
                         }
                         return;
                     }
@@ -1631,9 +1631,9 @@ class OpenFieldStudio {
             console.error('Camera error:', e);
             if (e.name === 'NotAllowedError') {
                 if (isApp) {
-                    this.showNotification('Camera-toegang geweigerd. Ga naar Android Instellingen > Apps > Open Field Studio > Rechten > Camera > Toestaan.', 'error');
+                    this.showNotification(this.t('msg_camera_denied_device'), 'error');
                 } else {
-                    this.showNotification('Camera-toegang geweigerd. Tik op het slot-icoon in de adresbalk > Camera > Toestaan, en herlaad de pagina.', 'error');
+                    this.showNotification(this.t('msg_camera_denied_browser'), 'error');
                 }
             } else if (e.name === 'NotFoundError') {
                 this.showNotification(this.t('msg_camera_error'), 'error');
@@ -1888,7 +1888,7 @@ class OpenFieldStudio {
                     <button class="remove-photo" onclick="event.stopPropagation();app.removeItemPhoto(${idx},${pi})">&times;</button>
                 </div>`).join('')}</div>
             <div class="checklist-photo-actions">
-                <button type="button" class="btn btn-sm btn-secondary" onclick="app.openItemCamera(${idx})">&#128247; Foto</button>
+                <button type="button" class="btn btn-sm btn-secondary" onclick="app.openItemCamera(${idx})">&#128247; ${this.t("lbl_photos")}</button>
                 <label class="btn btn-sm btn-secondary" style="cursor:pointer">&#128206; ${this.t('btn_select')}<input type="file" accept="image/*" multiple hidden onchange="app.uploadItemPhotos(${idx},this.files);this.value='';"></label>
             </div>
         </div>`;
@@ -2069,7 +2069,7 @@ class OpenFieldStudio {
             }
             const catLabel = insp.scoring === 'nen2767' ? ' · NEN 2767' : '';
             return `<div class="inspection-card" onclick="app.viewInspection('${insp.id}')">
-                <div class="inspection-card-info"><h4>${this.esc(insp.name)}</h4><p>${insp.date} · ${insp.inspector||''}${catLabel} · ${done}/${insp.items.length} items${extra}</p></div>
+                <div class="inspection-card-info"><h4>${this.esc(insp.name)}</h4><p>${insp.date} · ${insp.inspector||''}${catLabel} · ${done}/${insp.items.length} ${this.t("items_count_label")}${extra}</p></div>
                 <span class="status-badge status-${insp.status==='signed'?'verified':'assigned'}">${insp.status==='signed'?this.t('insp_signed'):this.t('insp_in_progress')}</span>
             </div>`;
         }).join('');
@@ -2228,10 +2228,10 @@ class OpenFieldStudio {
         const idx = area.children.length;
         const div = document.createElement('div');
         div.className = 'ho-signature-block';
-        div.innerHTML = `<label>Naam</label><input type="text" class="ho-sig-name" value="${this.esc(name)}" placeholder="Volledige naam">
-            <label>Rol</label><input type="text" class="ho-sig-role" value="${this.esc(role)}" placeholder="Rol">
-            <label>Handtekening</label><canvas class="ho-sig-canvas" width="400" height="150"></canvas>
-            <button class="btn btn-secondary" onclick="this.previousElementSibling.getContext('2d').clearRect(0,0,400,150)" style="margin-top:0.5rem;padding:4px 12px;font-size:0.8rem;">Wissen</button>`;
+        div.innerHTML = `<label>${this.t("lbl_person_name")}</label><input type="text" class="ho-sig-name" value="${this.esc(name)}" placeholder="${this.t("ph_full_name")}">
+            <label>${this.t("lbl_role")}</label><input type="text" class="ho-sig-role" value="${this.esc(role)}" placeholder="${this.t("lbl_role")}">
+            <label>${this.t("lbl_signature_single")}</label><canvas class="ho-sig-canvas" width="400" height="150"></canvas>
+            <button class="btn btn-secondary" onclick="this.previousElementSibling.getContext('2d').clearRect(0,0,400,150)" style="margin-top:0.5rem;padding:4px 12px;font-size:0.8rem;">${this.t("btn_clear")}</button>`;
         area.appendChild(div);
         this.initSignatureCanvas2(div.querySelector('canvas'));
     }
@@ -3651,18 +3651,18 @@ class OpenFieldStudio {
         const byFloor = {};
         this.tickets.forEach(t => { if (!byFloor[t.floorPlanId]) byFloor[t.floorPlanId] = []; byFloor[t.floorPlanId].push(t); });
 
-        return `<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>${this.esc(this.project.name||'Rapport')} - Open Field Studio</title>
+        return `<!DOCTYPE html><html lang="${this.lang}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>${this.esc(this.project.name||this.t('report_project_title'))} - Open Field Studio</title>
 <style>:root{--amber:#D97706;--night:#2A2A32;--bg:#FAFAF9;--surface:#fff;--border:#E7E5E4;--gray:#A1A1AA;--font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI Variable','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;--font-display:'Space Grotesk','Segoe UI Variable Display','Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,sans-serif;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:var(--font-body);background:var(--bg);color:var(--night);line-height:1.6;}.container{max-width:1100px;margin:0 auto;padding:2rem;}header{background:var(--night);padding:1.5rem 0;}header .container{display:flex;align-items:center;justify-content:space-between;}header h1{font-family:var(--font-display);color:#fff;font-size:1.5rem;}header span{color:var(--gray);}.section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2rem;margin-bottom:2rem;}.section h3{font-family:var(--font-display);font-size:1.5rem;margin-bottom:1rem;border-bottom:2px solid var(--border);padding-bottom:0.5rem;}.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;}.meta-item{padding:0.75rem;background:var(--bg);border-radius:8px;}.meta-item label{display:block;font-size:0.75rem;color:var(--gray);}.meta-item span{font-weight:500;}.ticket-card{border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1rem;}.ticket-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;}.ticket-badge{padding:0.15em 0.5em;border-radius:999px;font-size:0.7rem;font-weight:600;}.tb-open{background:rgba(217,119,6,0.15);color:#B45309;}.tb-assigned{background:rgba(37,99,235,0.15);color:#1D4ED8;}.tb-completed{background:rgba(22,163,74,0.15);color:#15803D;}.tb-verified{background:rgba(161,161,170,0.15);color:#71717A;}.photos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.5rem;margin-top:0.5rem;}.photo-fig{margin:0;display:flex;flex-direction:column;}.photos-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;border:1px solid var(--border);}.photo-cap{font-size:0.65rem;color:var(--gray);font-family:monospace;margin-top:0.15rem;word-break:break-all;line-height:1.2;}footer{text-align:center;padding:2rem;color:var(--gray);font-size:0.8rem;}@page{size:A4;margin:15mm;}@media print{html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}header{background:#2A2A32 !important;padding:0.75rem 0;}.container{max-width:none;padding:0;}main.container{padding:0;}.section{background:#fff;border:1px solid #E7E5E4;border-radius:8px;padding:1rem;margin-bottom:0.75rem;break-inside:avoid;page-break-inside:avoid;box-shadow:none;}.section h2,.section h3{font-size:1.1rem;margin-bottom:0.4rem;padding-bottom:0.25rem;}.ticket-card{padding:0.5rem;margin-bottom:0.5rem;break-inside:avoid;page-break-inside:avoid;}.photos-grid{grid-template-columns:repeat(4,1fr);gap:0.25rem;}.photos-grid img{max-height:80px;object-fit:cover;}.meta{gap:0.5rem;}.meta-item{padding:0.4rem;}footer{padding:0.5rem;font-size:0.7rem;}}</style></head><body>
-<header><div class="container"><h1>Open Field Studio</h1><span>${new Date().toLocaleDateString('nl-NL')}</span></div></header>
-<main class="container"><div class="section"><h2 style="font-family:'Space Grotesk';font-size:2rem;margin-bottom:1rem;">${this.esc(this.project.name||'Projectrapport')}</h2><div class="meta">
-${this.project.number?`<div class="meta-item"><label>Projectnummer</label><span>${this.esc(this.project.number)}</span></div>`:''}
-<div class="meta-item"><label>Adres</label><span>${this.esc(this.project.address)}, ${this.esc(this.project.postalCode)} ${this.esc(this.project.city)}</span></div>
-${this.project.bagData?.nummeraanduidingId?`<div class="meta-item"><label>BAG-geverifieerd</label><span style="font-family:monospace;font-size:0.8rem;">Nr.aand.: ${this.esc(this.project.bagData.nummeraanduidingId)}${this.project.bagData.pandId?'<br>Pand: '+this.esc(this.project.bagData.pandId):''}</span></div>`:''}
-${this.project.energyLabel?.label?`<div class="meta-item"><label>Energielabel</label><span style="font-weight:700;font-size:1.1rem;">${this.esc(this.project.energyLabel.label)}</span>${this.project.energyLabel.opnamedatum?`<br><span style="font-size:0.75rem;color:var(--gray);">opname ${this.esc(this.project.energyLabel.opnamedatum)}</span>`:''}</div>`:''}
-${this.project.client?`<div class="meta-item"><label>Opdrachtgever</label><span>${this.esc(this.project.client)}</span></div>`:''}
-${this.project.surveyDate?`<div class="meta-item"><label>Opnamedatum</label><span>${this.esc(this.project.surveyDate)}</span></div>`:''}
-${this.project.surveyor?`<div class="meta-item"><label>Opgenomen door</label><span>${this.esc(this.project.surveyor)}</span></div>`:''}
+<header><div class="container"><h1>Open Field Studio</h1><span>${new Date().toLocaleDateString(this.lang==='ru'?'ru-RU':'nl-NL')}</span></div></header>
+<main class="container"><div class="section"><h2 style="font-family:'Space Grotesk';font-size:2rem;margin-bottom:1rem;">${this.esc(this.project.name||this.t('report_project_title'))}</h2><div class="meta">
+${this.project.number?`<div class="meta-item"><label>${this.t("lbl_number")}</label><span>${this.esc(this.project.number)}</span></div>`:''}
+<div class="meta-item"><label>${this.t("lbl_address")}</label><span>${this.esc(this.project.address)}, ${this.esc(this.project.postalCode)} ${this.esc(this.project.city)}</span></div>
+${this.project.bagData?.nummeraanduidingId?`<div class="meta-item"><label>${this.t("bag_verified")}</label><span style="font-family:monospace;font-size:0.8rem;">${this.t("report_bag_number")}: ${this.esc(this.project.bagData.nummeraanduidingId)}${this.project.bagData.pandId?'<br>'+this.t('report_bag_property')+': '+this.esc(this.project.bagData.pandId):''}</span></div>`:''}
+${this.project.energyLabel?.label?`<div class="meta-item"><label>${this.t("report_energy_label")}</label><span style="font-weight:700;font-size:1.1rem;">${this.esc(this.project.energyLabel.label)}</span>${this.project.energyLabel.opnamedatum?`<br><span style="font-size:0.75rem;color:var(--gray);">${this.t("report_survey_record")}: ${this.esc(this.project.energyLabel.opnamedatum)}</span>`:''}</div>`:''}
+${this.project.client?`<div class="meta-item"><label>${this.t("lbl_client")}</label><span>${this.esc(this.project.client)}</span></div>`:''}
+${this.project.surveyDate?`<div class="meta-item"><label>${this.t("lbl_date")}</label><span>${this.esc(this.project.surveyDate)}</span></div>`:''}
+${this.project.surveyor?`<div class="meta-item"><label>${this.t("lbl_surveyor")}</label><span>${this.esc(this.project.surveyor)}</span></div>`:''}
 </div>${this.project.description?`<p style="margin-top:1rem;color:var(--gray);">${this.esc(this.project.description)}</p>`:''}</div>
 ${this.floorPlans.map(fp => {
     const pts = byFloor[fp.id] || [];
@@ -3671,11 +3671,11 @@ ${this.floorPlans.map(fp => {
     ${pts.map((p,i)=>`<div style="position:absolute;left:${p.x}%;top:${p.y}%;width:24px;height:24px;transform:translate(-50%,-100%);"><svg viewBox="0 0 24 24" fill="${{open:'#D97706',assigned:'#2563EB',completed:'#16A34A',verified:'#71717A'}[p.status]||'#D97706'}"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg></div>`).join('')}
     </div>`:''}
     ${pts.length?pts.map((p,i)=>`<div class="ticket-card"><div class="ticket-header"><strong>${i+1}. ${this.esc(p.label)}</strong><span class="ticket-badge tb-${p.status}">${this.statusLabel(p.status)}</span></div>
-    <p style="font-size:0.8rem;color:var(--gray);">${p.category||''} · ${this.priorityLabel(p.priority)} · ${this.severityLabel(p.severity)}${p.assignedTo?' · '+this.esc(p.assignedTo):''}${p.deadline?' · Deadline: '+p.deadline:''}</p>
+    <p style="font-size:0.8rem;color:var(--gray);">${p.category||''} · ${this.priorityLabel(p.priority)} · ${this.severityLabel(p.severity)}${p.assignedTo?' · '+this.esc(p.assignedTo):''}${p.deadline?' · '+this.t('lbl_deadline')+': '+p.deadline:''}</p>
     ${p.description?`<p style="margin-top:0.5rem;">${this.esc(p.description)}</p>`:''}
     ${incPhotos&&p.photos?.length?`<div class="photos-grid">${p.photos.map(ph=>{
         const meta = [];
-        if (ph.capturedAt) { const d = new Date(ph.capturedAt); if (!isNaN(d.getTime())) meta.push(d.toLocaleString('nl-NL')); }
+        if (ph.capturedAt) { const d = new Date(ph.capturedAt); if (!isNaN(d.getTime())) meta.push(d.toLocaleString(this.lang==='ru'?'ru-RU':'nl-NL')); }
         if (ph.gps) meta.push(`${ph.gps.lat.toFixed(5)}, ${ph.gps.lon.toFixed(5)}`);
         const cap = meta.length ? `<div class="photo-cap">${this.esc(meta.join(' · '))}</div>` : '';
         return `<figure class="photo-fig"><img src="${ph.data}">${cap}</figure>`;
@@ -3683,18 +3683,18 @@ ${this.floorPlans.map(fp => {
     </div>`).join(''):`<p style="color:var(--gray);">${this.t('empty_tickets')}</p>`}
     </div>`;
 }).join('')}
-</main><footer><p>Gegenereerd met Open Field Studio op ${new Date().toLocaleString('nl-NL')}</p></footer></body></html>`;
+</main><footer><p>${this.t('report_generated')}: ${new Date().toLocaleString(this.lang==='ru'?'ru-RU':'nl-NL')}</p></footer></body></html>`;
     }
 
     generateHandoverReport(hoId) {
         const ho = this.handovers.find(h => h.id === hoId);
         if (!ho) return this.generateFullReport();
-        return `<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Proces-Verbaal van Oplevering - ${this.esc(this.project.name)}</title>
+        return `<!DOCTYPE html><html lang="${this.lang}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>${this.t("report_pv_title")} - ${this.esc(this.project.name)}</title>
 <style>:root{--font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI Variable','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;--font-display:'Space Grotesk','Segoe UI Variable Display','Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,sans-serif;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:var(--font-body);color:#36363E;line-height:1.6;padding:2rem;max-width:900px;margin:0 auto;}h1{font-family:var(--font-display);font-size:1.8rem;margin-bottom:0.5rem;}h2{font-family:var(--font-display);font-size:1.3rem;margin:1.5rem 0 0.75rem;border-bottom:2px solid #E7E5E4;padding-bottom:0.5rem;}.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:1.5rem;}.meta-row{display:flex;gap:0.5rem;}.meta-label{font-weight:600;min-width:140px;font-size:0.85rem;color:#A1A1AA;}.meta-val{font-size:0.85rem;}table{width:100%;border-collapse:collapse;margin:1rem 0;}th,td{border:1px solid #E7E5E4;padding:0.5rem 0.75rem;text-align:left;font-size:0.85rem;}th{background:#F5F5F4;font-weight:600;}.verdict-ok{color:#16A34A;font-weight:600;}.verdict-cond{color:#F59E0B;font-weight:600;}.verdict-nok{color:#DC2626;font-weight:600;}.sig-block{display:inline-block;width:45%;margin:1rem 2%;vertical-align:top;}.sig-block img{max-width:100%;border:1px solid #E7E5E4;border-radius:4px;}@page{size:A4;margin:15mm;}@media print{html,body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:0;}body{padding:0;max-width:none;}h2{margin:0.75rem 0 0.4rem;font-size:1.05rem;}table{page-break-inside:avoid;}.sig-block{page-break-inside:avoid;}}</style></head><body>
-<h1>Proces-Verbaal van Oplevering</h1>
+<h1>${this.t("report_pv_title")}</h1>
 <p style="color:#A1A1AA;margin-bottom:2rem;">${this.hoTypeLabel(ho.type)} · ${ho.date}</p>
-<h2>Projectgegevens</h2>
+<h2>${this.t("report_project_data")}</h2>
 <div class="meta-grid">
 <div class="meta-row"><span class="meta-label">${this.t('sum_project')}:</span><span class="meta-val">${this.esc(this.project.name)}</span></div>
 <div class="meta-row"><span class="meta-label">${this.t('lbl_number')}:</span><span class="meta-val">${this.esc(this.project.number)}</span></div>
@@ -3712,12 +3712,12 @@ ${(ho.participants||[]).map(p=>`<tr><td>${this.esc(p.name)}</td><td>${this.esc(p
 ${ho.items.map((item,i)=>{const t=this.tickets.find(tk=>tk.id===item.ticketId);if(!t)return'';const vc=item.verdict==='approved'?'verdict-ok':item.verdict==='conditional'?'verdict-cond':'verdict-nok';const vl=item.verdict==='approved'?this.t('verdict_approved_label'):item.verdict==='conditional'?this.t('verdict_conditional_label'):item.verdict==='rejected'?this.t('verdict_rejected_label'):this.t('verdict_not_assessed');return`<tr><td>${i+1}</td><td>${this.esc(t.label)}</td><td>${t.category||''}</td><td>${this.priorityLabel(t.priority)}</td><td class="${vc}">${vl}</td></tr>`;}).join('')}
 </table>
 <h2>${this.t('report_verdict')}</h2>
-<p style="font-size:1.2rem;font-weight:700;color:${ho.verdict==='approved'?'#16A34A':ho.verdict==='conditional'?'#F59E0B':'#DC2626'}">${ho.verdict==='approved'?'GOEDGEKEURD':ho.verdict==='conditional'?'GOEDGEKEURD ONDER VOORBEHOUD':'AFGEKEURD'}</p>
+<p style="font-size:1.2rem;font-weight:700;color:${ho.verdict==='approved'?'#16A34A':ho.verdict==='conditional'?'#F59E0B':'#DC2626'}">${ho.verdict==='approved'?this.t('verdict_approved_label'):ho.verdict==='conditional'?this.t('verdict_conditional_label'):this.t('verdict_rejected_label')}</p>
 ${ho.notes?`<p style="margin-top:0.5rem;">${this.esc(ho.notes)}</p>`:''}
-<h2>Handtekeningen</h2>
-${(ho.signatures||[]).map(s=>`<div class="sig-block"><p><strong>${this.esc(s.name)}</strong> (${this.esc(s.role)})</p><p style="font-size:0.8rem;color:#A1A1AA;">${new Date(s.date).toLocaleString('nl-NL')}</p><img src="${s.data}" alt="Handtekening"></div>`).join('')}
+<h2>${this.t("report_signatures")}</h2>
+${(ho.signatures||[]).map(s=>`<div class="sig-block"><p><strong>${this.esc(s.name)}</strong> (${this.esc(s.role)})</p><p style="font-size:0.8rem;color:#A1A1AA;">${new Date(s.date).toLocaleString(this.lang==='ru'?'ru-RU':'nl-NL')}</p><img src="${s.data}" alt="${this.t("lbl_signature_single")}"></div>`).join('')}
 <hr style="margin:2rem 0;border:none;border-top:1px solid #E7E5E4;">
-<p style="text-align:center;font-size:0.75rem;color:#A1A1AA;">Gegenereerd met Open Field Studio op ${new Date().toLocaleString('nl-NL')}</p>
+<p style="text-align:center;font-size:0.75rem;color:#A1A1AA;">${this.t('report_generated')}: ${new Date().toLocaleString(this.lang==='ru'?'ru-RU':'nl-NL')}</p>
 </body></html>`;
     }
 

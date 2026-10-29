@@ -61,6 +61,7 @@ const UI = `
    <label class="btn btn-secondary btn-sm" for="pto-load-json">Загрузить JSON</label><input type="file" accept=".json,application/json" id="pto-load-json" style="display:none">
    <button type="button" class="btn btn-primary btn-sm" id="pto-export">Печатные черновики (HTML)</button>
    <button type="button" class="btn btn-primary btn-sm" id="pto-export-xlsx">Экспорт АОСР в Excel (.xlsx)</button>
+   <button type="button" class="btn btn-primary btn-sm" id="pto-print-xlsx">Комплект актов для печати (.xlsx)</button>
    <label class="btn btn-secondary btn-sm" for="pto-import-xlsx">Загрузить книгу АОСР (.xlsx)</label><input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="pto-import-xlsx" style="display:none">
    <label class="btn btn-secondary btn-sm" for="pto-import-legacy">Импорт исходного АОСР (.xls)</label><input type="file" accept=".xls,application/vnd.ms-excel" id="pto-import-legacy" style="display:none">
  </div>
@@ -248,6 +249,12 @@ export function mountPtoWorkspace(app) {
       const bytes=await writeDraftXlsx(data,app.project||{});
       await download('aosr_ks2_drafts.xlsx',bytes,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     }catch(err){alert(`Ошибка экспорта Excel: ${err.message}`);}
+  });
+  byId('pto-print-xlsx').addEventListener('click',async()=>{
+    try{const {writePrintPackXlsx}=await import('./xlsx.mjs');
+      const bytes=await writePrintPackXlsx(data,app.project||{});
+      await download('aosr_print_drafts.xlsx',bytes,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    }catch(err){alert(`Ошибка формирования печатного комплекта: ${err.message}`);}
   });
   byId('pto-import-xlsx').addEventListener('change',async e=>{
     const file=e.target.files?.[0];if(!file)return;

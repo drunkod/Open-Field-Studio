@@ -47,6 +47,11 @@ export function extractLegacyAosr(sheetCollection) {
   candidates.forEach((source, i) => {
     const next = i + 1 < candidates.length ? candidates[i + 1].index : input.rows.length;
     const row = source.row || [];
+    const sourceAct=sheets.find(sh=>sh.name===source.id);
+    const actDateCells=sourceAct?.rows?.[29]||[];
+    const sourcedDate=dateFromCells([null,actDateCells[20],actDateCells[23],actDateCells[32]]);
+    const drawingLine=sourceAct?.rows?.map(r=>text(r?.[0])).find(v=>/Исполнительная схема\s*№/i.test(v))||'';
+    const sourcedScheme=(/Исполнительная схема\s*№\s*([0-9]+(?:\.[0-9]+)*)/i.exec(drawingLine)||[])[1]||'';
     const description = [text(row[4]), text(row[5])].filter(Boolean).join(' ');
     const docs = [];
     for (let j = source.index; j < next; j++) {
@@ -59,8 +64,8 @@ export function extractLegacyAosr(sheetCollection) {
     data.acts[i] = {
       ...data.acts[i], actNo: source.id, work: description,
       start: dateFromCells(row), end: dateFromCells(datesRow),
-      actDate: '', // NOT established by the dated work sequence
-      schemeNo: '', // NOT inferable from an axes label (e.g. 1-10/А-Д)
+      actDate: sourcedDate, // independently read from the dated source act itself
+      schemeNo: sourcedScheme, // only from the real cited scheme label in the act
       schemeTitle: '', // dynamically follows work unless explicitly overridden
       qualityDocs: [...new Set(docs)].join('\n'),
       measuredQty: '', unit: '', ks2Id: '', // no measured quantities or KS-2 in this source
@@ -71,7 +76,7 @@ export function extractLegacyAosr(sheetCollection) {
   });
   if (!project.name) warnings.push('Название объекта не найдено на листе «Шапка».');
   warnings.push('В исходном файле отсутствует отдельная таблица КС-2; сопоставление объёмов требует загрузки КС-2 и проверки инженером.');
-  warnings.push('Номера схем, фактические объёмы и дата подписания актов не подтверждены исходной таблицей и оставлены пустыми.');
+  warnings.push('Даты актов и номера схем извлечены только там, где указаны в исходных листах актов; подлинность подписей, фактические объёмы и КС-2 требуется проверить отдельно.');
   return { data: safeWorkspace(data), project, count: candidates.length, warnings };
 }
 export async function importLegacyAosr(bytes) {

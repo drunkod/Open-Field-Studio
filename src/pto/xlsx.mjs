@@ -3,6 +3,7 @@
 import ExcelJS from 'exceljs';
 import { safeWorkspace, validateWorkspace, toMicro, isFilled, suggestedSchemeNumber } from './domain.mjs';
 import { appendOriginalLayout } from './source-layout.mjs';
+import { loadAosrStyleTemplate } from './styled-template.mjs';
 
 const clean = v => {
   if (v == null) return '';
@@ -189,7 +190,7 @@ export async function createDraftWorkbook(raw,project={}) {
  wb.created=new Date();wb.calcProperties.fullCalcOnLoad=true;
  writeDetails(wb,data,project);writeInput(wb,data);writeKs2(wb,data);writeReview(wb,data);
  if(!data.legacyLayout)for(let i=0;i<data.acts.length;i++)writeAct(wb,data,i,project);
- else appendOriginalLayout(wb,data,project);
+ else appendOriginalLayout(wb,data,project,await loadAosrStyleTemplate());
  const instr=wb.addWorksheet('Инструкция');title(instr,'Инструкция / ограничения','F');
  ['Редактируйте лист «Реквизиты» и «Ввод_работ».','Листы Акт_01…Акт_15 ссылаются на общие данные и таблицу работ.','Лист «КС-2» содержит числовую сверку; проверяйте единицы измерения.','Лист «Сверка» — моментальный снимок, после правок экспортируйте из приложения заново.','Файл — ЧЕРНОВИК, не является утверждённым документом и не подтверждает соблюдение законодательства.'].forEach((x,i)=>{
    instr.mergeCells(`A${i+3}:F${i+3}`);instr.getCell(`A${i+3}`).value=x;instr.getRow(i+3).height=35;
@@ -240,4 +241,64 @@ export async function importDraftXlsx(input) {
    })};
  }
  return {data:safeWorkspace(data),project};
+}
+
+// Print-only copy: freezes cached display values (no links to input sheets),
+// retains original cell styles, exact merges and manual two-page AOSR breaks.
+function copyPrintableSheet(out,src) {
+ const target=out.addWorksheet(src.name);
+ target.pageSetup={...src.pageSetup};
+ target.headerFooter={...src.headerFooter};
+ target.views=[{showGridLines:false}];
+ for(let c=1;c<=Math.min(src.columnCount,43);c++){
+   target.getColumn(c).width=src.getColumn(c).width;
+   target.getColumn(c).hidden=src.getColumn(c).hidden;
+ }
+ for(let r=1;r<=src.rowCount;r++){
+   const from=src.getRow(r),to=target.getRow(r);
+   if(from.height!==undefined)to.height=from.height;
+   for(let c=1;c<=Math.min(src.columnCount,43);c++){
+     const cell=from.getCell(c);
+     if(cell.isMerged && cell.master?.address!==cell.address)continue;
+     if(cell.value==null && !Object.keys(cell.style||{}).length)continue;
+     const dest=to.getCell(c);
+     if(Object.keys(cell.style||{}).length)dest.style=JSON.parse(JSON.stringify(cell.style));
+     const sourceValue=cell.value;
+     dest.value=sourceValue && typeof sourceValue==='object' && 'formula' in sourceValue ? (sourceValue.result??'') : sourceValue;
+   }
+ }
+ for(const merge of Object.values(src._merges)) {
+   const v=merge.model;
+   if(v.right<=43)target.mergeCells(v.top,v.left,v.bottom,v.right);
+ }
+ for(const br of src.rowBreaks||[])target.getRow(br.id).addPageBreak();
+ return target;
+}
+export async function writePrintPackXlsx(raw,project={}) {
+ const data=safeWorkspace(raw);
+ if(!data.acts.some(a=>isFilled(a.work)))throw Error('Нет заполненных актов для печати.');
+ const source=await createDraftWorkbook(data,project);
+ const out=new ExcelJS.Workbook();
+ out.creator='Open Field Studio — printed draft package';
+ out.subject='ЧЕРНОВИК — печатные формы АОСР. Проверить перед подписанием.';
+ for(let i=0;i<data.acts.length;i++){
+   if(!isFilled(data.acts[i].work))continue;
+   copyPrintableSheet(out,source.getWorksheet(`Акт_${String(i+1).padStart(2,'0')}`));
+ }
+ if(data.acts.some(a=>isFilled(a.qualityDocs))){
+   const registry=source.getWorksheet('Реестр_качества');
+   if(registry)copyPrintableSheet(out,registry);
+   else {
+     const annex=out.addWorksheet('Реестр_качества');
+     annex.columns=[{header:'№ акта',width:16},{header:'Документы качества и паспорта (проверить)',width:110}];
+     annex.getRow(1).font={bold:true};
+     for(let i=0;i<data.acts.length;i++)if(isFilled(data.acts[i].work)&&isFilled(data.acts[i].qualityDocs)){
+       const row=annex.addRow([data.acts[i].actNo,data.acts[i].qualityDocs]);
+       row.getCell(2).alignment={wrapText:true,vertical:'middle'};
+       row.height=Math.min(260,Math.max(28,Math.ceil(data.acts[i].qualityDocs.length/95)*17));
+     }
+     annex.pageSetup={paperSize:9,orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0};
+   }
+ }
+ return out.xlsx.writeBuffer();
 }
