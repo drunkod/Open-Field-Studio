@@ -1,6 +1,7 @@
 import { newWorkspace, safeWorkspace, validateWorkspace, generateDraftHtml, parseKs2Csv } from './domain.mjs';
 import {RECORD_SCHEMAS,emptyRecord,recordDiagnostics} from './records.mjs';
 import {mountOjrImport} from './ojr-ui.mjs';
+import {mountQuickEntry} from './quick-entry.mjs';
 import {EVIDENCE_KINDS,checkEvidenceBytes,sha256Hex,newEvidenceMeta,cleanEvidence} from './evidence-domain.mjs';
 import {putEvidence,getEvidence,deleteEvidence,evidenceBackup,restoreEvidenceBackup} from './evidence-store.mjs';
 
@@ -36,6 +37,18 @@ async function download(filename, content, mime) {
 const UI = `
 <style>
 #pto-tab .pto-hint{color:var(--text-muted,#6b7280);font-size:.87rem;line-height:1.6}
+#pto-tab .pto-view-toggle{display:flex;gap:.5rem;flex-wrap:wrap;margin:.75rem 0}
+#pto-tab .pto-quick-card{border:1px solid var(--border-color,#d4d4d8);border-radius:6px;margin:.45rem 0;background:var(--card-bg,#fff)}
+#pto-tab .pto-quick-card summary{cursor:pointer;padding:.75rem 1rem;font-weight:600;line-height:1.5}
+#pto-tab .pto-quick-card[open] summary{border-bottom:1px solid var(--border-color,#d4d4d8)}
+#pto-tab .pto-quick-fields{padding:1rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+#pto-tab .pto-quick-group{display:grid;gap:.55rem;align-content:start}
+#pto-tab .pto-quick-group fieldset{border:0;padding:0;margin:0;display:grid;gap:.55rem}
+#pto-tab .pto-quick-group legend{font-weight:700;font-size:.95rem;margin-bottom:.3rem}
+#pto-tab .pto-quick-group label{display:grid;gap:.25rem;font-size:.84rem}
+#pto-tab .pto-quick-group input,#pto-tab .pto-quick-group textarea{width:100%;box-sizing:border-box;padding:.55rem;border:1px solid var(--border-color,#aaa);border-radius:4px;background:var(--card-bg,#fff);color:inherit;font:inherit}
+#pto-tab .pto-quick-group textarea{resize:vertical;min-height:4.5rem}
+#pto-tab .pto-view-toggle button[aria-pressed="true"]{font-weight:700;outline:2px solid var(--text-muted,#64748b);outline-offset:1px}
 #pto-tab .pto-table{overflow:auto;max-width:100%}
 #pto-tab table{border-collapse:collapse;width:100%;font-size:.82rem}
 #pto-tab th,#pto-tab td{border:1px solid var(--border-color,#d4d4d8);padding:.35rem}
@@ -77,7 +90,13 @@ const UI = `
 <div class="panel">
  <h3>Акты скрытых работ — 15 строк</h3>
  <p class="pto-hint">Название исполнительной схемы формируется из вида работ, если не указано отдельно. Единицы измерения для КС-2 и АОСР должны совпадать. Если одна позиция КС-2 относится к нескольким актам, укажите один и тот же ID позиции во всех строках.</p>
- <div class="pto-table"><table><thead><tr id="pto-act-head"></tr></thead><tbody id="pto-act-rows"></tbody></table></div>
+ <div class="pto-view-toggle" role="group" aria-label="Режим ввода АОСР">
+   <button type="button" id="pto-quick-mode" class="btn btn-secondary btn-sm" aria-pressed="true">Краткий ввод — 3 группы</button>
+   <button type="button" id="pto-full-mode" class="btn btn-secondary btn-sm" aria-pressed="false">Все графы — подробный режим</button>
+ </div>
+ <p class="pto-hint" id="pto-mode-explanation">Укажите работу, даты и документы для акта. Номер схемы подтверждается по оригиналу; объёмы и КС-2 доступны в подробном режиме.</p>
+ <div id="pto-quick-editor" aria-label="Краткий ввод актов"><div id="pto-quick-acts"></div></div>
+ <div class="pto-table" id="pto-full-editor" hidden><table><thead><tr id="pto-act-head"></tr></thead><tbody id="pto-act-rows"></tbody></table></div>
 </div>
 <div class="panel">
  <h3>Позиции КС-2 (для сопоставления, не заверенные сведения)</h3>
@@ -200,6 +219,22 @@ export function mountPtoWorkspace(app) {
       body.appendChild(tr);
     });
   };
+  const quick = mountQuickEntry({root:byId('pto-quick-acts'),getActs:()=>data.acts,
+    onEdit:()=>{persist();refreshDiagnostics();renderReadiness();}});
+  let quickMode = true;
+  const setActMode = compact => {
+    quickMode = compact;
+    if(compact)quick.render();else renderActs();
+    byId('pto-quick-editor').hidden=!compact;
+    byId('pto-full-editor').hidden=compact;
+    byId('pto-quick-mode').setAttribute('aria-pressed',String(compact));
+    byId('pto-full-mode').setAttribute('aria-pressed',String(!compact));
+    byId('pto-mode-explanation').textContent=compact
+      ? 'Работа, даты, схема и паспорта. Номер схемы проверяется по оригиналу; объёмы и КС-2 — в подробном режиме.'
+      : 'Все графы АОСР. Изменения сохраняются в тех же 15 актах и попадают в Excel.';
+  };
+  byId('pto-quick-mode').addEventListener('click',()=>setActMode(true));
+  byId('pto-full-mode').addEventListener('click',()=>setActMode(false));
   const renderKs2 = () => {
     const body=byId('pto-ks2-rows'); body.replaceChildren();
     data.ks2.forEach((line,i) => {
@@ -311,7 +346,7 @@ export function mountPtoWorkspace(app) {
       list.appendChild(el('li',location+entry.message,{class:`pto-${entry.severity}`}));
     });
   };
-  const rerender = () => {ojrImport.reset();renderHeader();renderActs();renderKs2();renderRecords();renderEvidence();showProject();refreshDiagnostics();renderReadiness();};
+  const rerender = () => {ojrImport.reset();renderHeader();renderActs();quick.render();setActMode(quickMode);renderKs2();renderRecords();renderEvidence();showProject();refreshDiagnostics();renderReadiness();};
   byId('pto-evidence-file').addEventListener('change',async e=>{
     const file=e.target.files?.[0];if(!file)return;
     try{
@@ -504,7 +539,7 @@ export function mountPtoWorkspace(app) {
     await download('aosr-ks2-drafts.html',html,'text/html;charset=utf-8');
   });
   const ojrImport=mountOjrImport({getData:()=>data,persist,download,
-    afterCommit:()=>{renderRecords();renderActs();renderReadiness();refreshDiagnostics();}});
+    afterCommit:()=>{renderRecords();renderActs();quick.render();renderReadiness();refreshDiagnostics();}});
   rerender();
   // The parent app imports / clears its own JSON. Re-read the module state after those actions.
   window.addEventListener('pto-loaded', () => {

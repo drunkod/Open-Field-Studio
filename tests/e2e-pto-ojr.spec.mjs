@@ -5,6 +5,7 @@ test('Russian ОЖР CSV imports with preview and fills only missing АОСР da
  await page.goto('http://127.0.0.1:3042/');
  await page.locator('[data-tab="pto"]').click();
  await page.locator('#pto-sample').click();
+ await page.locator('#pto-full-mode').click();
  const first=page.locator('#pto-act-rows tr').first();
  const start=first.locator('input[data-col="start"]');
  const end=first.locator('input[data-col="end"]');

@@ -4,7 +4,7 @@ Actual Playwright Chromium screenshots from 2026-10-30T04:59:10.561Z. Screen lab
 
 Navigation: Проект, Чертежи, 3D BIM, Обследование, Инспекции, Сдача объекта, Панель управления, АОСР · КС-2, Экспорт, Интеграции, Справка.
 
-Screenshots captured: 32. JavaScript page errors: 0.
+Screenshots captured: 34. JavaScript page errors: 0.
 
 
 ## 01 — Проект и общие реквизиты
@@ -265,3 +265,15 @@ Screenshots captured: 32. JavaScript page errors: 0.
 **Purpose:** In Russian mode, the interface explicitly states that inherited international provider connections are not validated integrations with 1С, Exon or ГРАНД-Смета. Existing configuration options remain available for organisations knowingly using those providers.
 
 ![Предупреждение о неподтвержденных интеграциях](screenshots/32-connectors-ru-warning.png)
+
+## 33 — АОСР: все графы
+
+**Purpose:** the original ten-column act editor remains available through **«Все графы — подробный режим»**. It edits quantities, units, КС-2 links and all the original act fields; values are shared with compact input.
+
+![Подробная форма АОСР](screenshots/33-pto-full-acts.png)
+
+## 34 — АОСР: краткий ввод акта
+
+**Purpose:** default **«Краткий ввод — 3 группы»** covers work, dates, confirmed scheme number and material passports. Suggested ИС-01 is NOT a verified scheme and is not automatically assigned.
+
+![Краткая форма АОСР](screenshots/34-pto-quick-act.png)

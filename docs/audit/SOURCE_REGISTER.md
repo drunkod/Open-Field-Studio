@@ -146,3 +146,9 @@ Each row shows where a source appears in the public research; presence does NOT 
 - [ФИАС official public search](https://fias-file.nalog.ru/) — **manual reference link** displayed in the Russian Project screen; not connected as an API.
 - [FIАS API guidance](https://www.consultant.ru/document/cons_doc_LAW_531681/ff850d27514bc742e55aa77db5c6ac1998f0a75e/) — reference for future adapter research only; not implemented.
 - [Specific remediation plan and test results](RU_MARKET_UI_REMEDIATION_2026-10-30.md).
+
+## Further prototype evidence — compact АОСР entry
+
+- The **private** engineer interview requires changing only 3–4 categories per act. [Implementation plan](../research/RU_PTO_QUICK_ENTRY_IMPLEMENTATION.md) records the non-confidential interpretation.
+- [АЛТИУС](https://www.altius.ru/program/ispolnitelnaya-dokumentaciya/) and [Smeta.RU partner overview](https://smeta.ru/partner-products/altius) describe one-time entry/reuse. They are vendor context, **not** copied code or measured adoption statistics.
+- Implementation is original JavaScript in `src/pto/quick-entry.mjs`, reusing existing domain, XLSX and JSON storage.

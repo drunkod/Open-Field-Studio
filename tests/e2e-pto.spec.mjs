@@ -13,6 +13,7 @@ test('Russian АОСР MVP: demo, quantity checks, XLSX export/reimport and KS2 
   await expect(page.locator('[data-tab="project"] [data-i18n="nav_project"]')).toHaveText('Проект');
   await expect(page.locator('html')).toHaveAttribute('lang','ru');
   await page.locator('[data-tab="pto"]').click();
+  await page.locator('#pto-full-mode').click();
   await expect(page.locator('#pto-act-rows [data-col]')).toHaveCount(150);
   await page.locator('#pto-sample').click();
   await expect(page.locator('#pto-results')).toContainText('Заполнено актов: 3 из 15');

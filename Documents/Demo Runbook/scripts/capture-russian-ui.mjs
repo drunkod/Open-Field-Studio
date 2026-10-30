@@ -51,7 +51,11 @@ await snap('31-project-fias-ru','Российская проверка адре�
 await page.locator('[data-tab="koppelingen"]').click();
 await snap('32-connectors-ru-warning','Российское предупреждение об иностранных интеграциях','#koppelingen-tab');
 await page.locator('[data-tab="pto"]').click();
-await snap('12-pto-acts','АОСР: 15 строк работ и даты','#pto-tab > .panel:nth-of-type(2)');
+await snap('12-pto-acts','АОСР: краткий ввод и 15 актов','#pto-tab > .panel:nth-of-type(2)');
+await snap('34-pto-quick-act','Краткий ввод: работа, даты, схема и паспорта','#pto-quick-acts details:first-child');
+await page.locator('#pto-full-mode').click();
+await snap('33-pto-full-acts','Подробный ввод: все графы АОСР','#pto-tab > .panel:nth-of-type(2)');
+await page.locator('#pto-quick-mode').click();
 await snap('13-pto-ks2','КС-2: позиции и количества','#pto-tab > .panel:nth-of-type(3)');
 await snap('14-pto-validation','Контроль расхождений и предупреждения','#pto-tab > .panel:nth-of-type(4)');
 await page.locator('#pto-evidence-kind').selectOption('passport');
