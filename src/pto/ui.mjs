@@ -1,5 +1,6 @@
 import { newWorkspace, safeWorkspace, validateWorkspace, generateDraftHtml, parseKs2Csv } from './domain.mjs';
 import {RECORD_SCHEMAS,emptyRecord,recordDiagnostics} from './records.mjs';
+import {mountOjrImport} from './ojr-ui.mjs';
 import {EVIDENCE_KINDS,checkEvidenceBytes,sha256Hex,newEvidenceMeta,cleanEvidence} from './evidence-domain.mjs';
 import {putEvidence,getEvidence,deleteEvidence,evidenceBackup,restoreEvidenceBackup} from './evidence-store.mjs';
 
@@ -119,6 +120,21 @@ const UI = `
 <div class="panel" id="pto-field-registers">
  <h2>Ежедневные документы инженера ПТО</h2>
  <p class="pto-hint">Ниже — отдельные локальные реестры для сверки с первичными документами. Ввод сведений здесь не доказывает выполнение работ, наличие оригинала, подлинность сертификата или утверждение схемы. Связывайте строки по номеру акта.</p>
+ <details id="pto-ojr-import" style="margin:1rem 0">
+ <summary style="cursor:pointer;font-weight:600">Импорт записей ОЖР из CSV / XLSX (проверка дат АОСР)</summary>
+ <p class="pto-hint">Загрузите выгрузку из отдельно ведущегося ОЖР. Код работы должен точно соответствовать № заполненного акта, иначе запись отклоняется. Источник и сопоставление подтвердит инженер; импорт не создаёт официального ОЖР.</p>
+ <div class="pto-actions"><label class="btn btn-secondary btn-sm" for="pto-ojr-file">Выбрать файл ОЖР (.csv/.xlsx)</label><input type="file" id="pto-ojr-file" accept=".csv,.xlsx" style="display:none">
+ <button id="pto-ojr-template" type="button" class="btn btn-secondary btn-sm">Скачать образец CSV</button></div>
+ <div id="pto-ojr-map-panel" hidden>
+ <label for="pto-ojr-sheet">Лист источника</label><select id="pto-ojr-sheet" aria-label="Лист источника ОЖР"></select>
+ <div class="pto-grid" id="pto-ojr-map-controls"></div>
+ <pre id="pto-ojr-source-preview" style="white-space:pre-wrap;max-height:160px;overflow:auto"></pre>
+ <div class="pto-actions"><button id="pto-ojr-preview-btn" type="button" class="btn btn-secondary btn-sm">Проверить строки ОЖР</button></div>
+ <div id="pto-ojr-preview-summary" class="pto-summary" aria-live="polite"></div>
+ <label><input id="pto-ojr-fill-blanks" type="checkbox"> Предложить даты по ОЖР только в пустые поля начала и окончания актов (не перезаписывать существующие)</label>
+ <div class="pto-actions"><button id="pto-ojr-confirm" type="button" class="btn btn-primary btn-sm" disabled>Импортировать проверенные записи</button>
+ <button id="pto-ojr-cancel" type="button" class="btn btn-secondary btn-sm">Отмена</button></div>
+ </div></details>
  <div id="pto-register-sections"></div>
  <h3>Комплектность документов к актам</h3>
  <div id="pto-readiness" class="pto-summary" aria-live="polite"></div>
@@ -295,7 +311,7 @@ export function mountPtoWorkspace(app) {
       list.appendChild(el('li',location+entry.message,{class:`pto-${entry.severity}`}));
     });
   };
-  const rerender = () => {renderHeader();renderActs();renderKs2();renderRecords();renderEvidence();showProject();refreshDiagnostics();renderReadiness();};
+  const rerender = () => {ojrImport.reset();renderHeader();renderActs();renderKs2();renderRecords();renderEvidence();showProject();refreshDiagnostics();renderReadiness();};
   byId('pto-evidence-file').addEventListener('change',async e=>{
     const file=e.target.files?.[0];if(!file)return;
     try{
@@ -487,6 +503,8 @@ export function mountPtoWorkspace(app) {
     const html=generateDraftHtml(data,app.project);
     await download('aosr-ks2-drafts.html',html,'text/html;charset=utf-8');
   });
+  const ojrImport=mountOjrImport({getData:()=>data,persist,download,
+    afterCommit:()=>{renderRecords();renderActs();renderReadiness();refreshDiagnostics();}});
   rerender();
   // The parent app imports / clears its own JSON. Re-read the module state after those actions.
   window.addEventListener('pto-loaded', () => {

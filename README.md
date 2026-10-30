@@ -389,3 +389,6 @@ The **АОСР · КС-2** tab now includes a private browser-local evidence vau
 
 ### Russian PTO one-click dossier ZIP (draft)
 The Russian **АОСР · КС-2** screen now assembles populated draft acts and linked private local attachments into one ZIP, with a register, supporting-document inventory, warning CSV and SHA-256 manifest. Missing or corrupted local evidence blocks export. [Source-backed implementation plan](docs/research/RU_PTO_ONE_CLICK_DOSSIER_PLAN.md). This is not officially accepted executive documentation or a legally signed electronic document.
+
+### Russian OЖР → АОСР import and chronology preview
+The existing **АОСР · КС-2** screen now has an optional Russian OЖР CSV/XLSX import with explicit worksheet/column mapping, preview of rejected rows, strict dates and duplicate detection. Suggested act start/end dates are **never silently applied**; a separate checkbox fills only previously empty fields. Exports and the existing 15-act workbook are unchanged. [Research and acceptance plan](docs/research/RU_PTO_OJR_IMPORT_PLAN.md). This does not produce, authenticate or register a statutory general works journal.
