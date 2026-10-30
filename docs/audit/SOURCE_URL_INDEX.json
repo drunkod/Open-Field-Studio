@@ -1,0 +1,510 @@
+[
+  {
+    "url": "https://autoloading.ru/articles/kak-podgotovit-excel-ozhr/",
+    "category": "Russian-market vendor and user guidance",
+    "in_docs": [
+      "docs/research/RU_PTO_OJR_IMPORT_PLAN.md:10"
+    ]
+  },
+  {
+    "url": "https://autoloading.ru/requirements/works/",
+    "category": "Russian-market vendor and user guidance",
+    "in_docs": [
+      "docs/research/RU_PTO_OJR_IMPORT_PLAN.md:11"
+    ]
+  },
+  {
+    "url": "https://base.garant.ru/406064781/",
+    "category": "Russian laws and technical regulations",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:6"
+    ]
+  },
+  {
+    "url": "https://base.garant.ru/412265818/",
+    "category": "Russian laws and technical regulations",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:9"
+    ]
+  },
+  {
+    "url": "https://base.garant.ru/412373476/53f89421bbdaf741eb2d1ecc4ddb4c33/",
+    "category": "Russian laws and technical regulations",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:5"
+    ]
+  },
+  {
+    "url": "https://exon.visgis.usedocs.com/article/83531",
+    "category": "Russian-market vendor and user guidance",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:9"
+    ]
+  },
+  {
+    "url": "https://github.com/FolderITDev/mobile-field-inspections",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/PTO_DAILY_MODULES_RU.md:22"
+    ]
+  },
+  {
+    "url": "https://github.com/OpenAEC-Foundation",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "README.md:370"
+    ]
+  },
+  {
+    "url": "https://github.com/OpenAEC-Foundation/Open-Field-Studio",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "README.md:368",
+      "docs/DEVELOPMENT_PLAN_RU.md:3"
+    ]
+  },
+  {
+    "url": "https://github.com/OpenAEC-Foundation/Open-Field-Studio.git",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "README.md:79"
+    ]
+  },
+  {
+    "url": "https://github.com/OpenAEC-Foundation/Open-Field-Studio/issues",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "README.md:369"
+    ]
+  },
+  {
+    "url": "https://github.com/Sereban-glitch/proakt-build-bot",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/PTO_DAILY_MODULES_RU.md:24"
+    ]
+  },
+  {
+    "url": "https://github.com/Stuk/jszip",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/research/RU_PTO_ONE_CLICK_DOSSIER_PLAN.md:16"
+    ]
+  },
+  {
+    "url": "https://github.com/ThatOpen/engine_web-ifc",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "README.md:204"
+    ]
+  },
+  {
+    "url": "https://github.com/chelslava/rpaforge",
+    "category": "Additional local source clone",
+    "in_docs": [
+      "docs/audit/OSS_CLONE_REFERENCES.md"
+    ]
+  },
+  {
+    "url": "https://github.com/constructelligence-lab/construction-project-records",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/PTO_DAILY_MODULES_RU.md:21"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/LICENSE",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/CODE_GRAPH.md:90"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/boq/manifest.py",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:35"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/cde/manifest.py",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:31"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/cde/service.py#L293-L350",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:31"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/changeorders/manifest.py",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:33"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/changeorders/service.py",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:33"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/daily_diary/service.py#L227-L270",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:27"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/documents/service.py#L621-L730",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:25"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/documents/service.py#L889-L1025",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:25"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/field_diary/schemas.py#L34-L112",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:27"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/inspections/service.py#L65-L180",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:30"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/progress/manifest.py",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:28"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/progress/quantity_variance.py#L133-L235",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:28"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/quality_concept/fsm.py#L14-L96",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:34"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/quality_concept/links.py#L243-L378",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:34"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/rfi/schemas.py#L62-L170",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:29"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/rfi/service.py#L141-L315",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:29"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/submittals/schemas.py#L105-L175",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:26"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/submittals/tracking.py#L148-L263",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:26"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/submittals/validators.py#L113-L250",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:26"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/transmittals/logic.py#L78-L216",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:32"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/transmittals/service.py#L380-L548",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:32"
+    ]
+  },
+  {
+    "url": "https://github.com/drunkod/Open-Field-Studio",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/DEVELOPMENT_PLAN_RU.md:2"
+    ]
+  },
+  {
+    "url": "https://github.com/eli-reid/fieldjig",
+    "category": "Additional local source clone",
+    "in_docs": [
+      "docs/audit/OSS_CLONE_REFERENCES.md"
+    ]
+  },
+  {
+    "url": "https://github.com/exceljs/exceljs",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/research/RU_PTO_OJR_IMPORT_PLAN.md:12"
+    ]
+  },
+  {
+    "url": "https://github.com/gba-mep/daily-construction-log",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/PTO_DAILY_MODULES_RU.md:20"
+    ]
+  },
+  {
+    "url": "https://github.com/gba-mep/excel-template-filler",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/PTO_DAILY_MODULES_RU.md:23"
+    ]
+  },
+  {
+    "url": "https://github.com/gba-mep/python-docx-photo-grid",
+    "category": "Additional local source clone",
+    "in_docs": [
+      "docs/audit/OSS_CLONE_REFERENCES.md"
+    ]
+  },
+  {
+    "url": "https://github.com/opensource-construction/osc-directory",
+    "category": "Additional local source clone",
+    "in_docs": [
+      "docs/audit/OSS_CLONE_REFERENCES.md"
+    ]
+  },
+  {
+    "url": "https://gitverse.ru/aleaivanov/agent-ks2",
+    "category": "Additional local source clone",
+    "in_docs": [
+      "docs/audit/OSS_CLONE_REFERENCES.md"
+    ]
+  },
+  {
+    "url": "https://gk-adept.ru/programmy/adeptispolnitelnaya_dokumentaciya/",
+    "category": "Russian-market vendor and user guidance",
+    "in_docs": [
+      "docs/research/RU_PTO_OJR_IMPORT_PLAN.md:9",
+      "docs/research/RU_PTO_ONE_CLICK_DOSSIER_PLAN.md:9",
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:9"
+    ]
+  },
+  {
+    "url": "https://habr.com/ru/companies/pik_digital/articles/1071154/",
+    "category": "Practitioner communities and deployment case studies",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:8"
+    ]
+  },
+  {
+    "url": "https://habr.com/ru/companies/sminex_developer/articles/1021940/",
+    "category": "Practitioner communities and deployment case studies",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:8"
+    ]
+  },
+  {
+    "url": "https://hardroller.ru/",
+    "category": "Russian-market vendor and user guidance",
+    "in_docs": [
+      "docs/research/RU_PTO_ONE_CLICK_DOSSIER_PLAN.md:10",
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:9"
+    ]
+  },
+  {
+    "url": "https://help.grandsmeta.ru/ob-ekty-i-smety/eksport-smet-v-razlichnye-formaty/eksport-v-format-xml",
+    "category": "Russian estimating systems",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:10"
+    ]
+  },
+  {
+    "url": "https://img.shields.io/badge/built%20with-Tauri%20v2-orange",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:8"
+    ]
+  },
+  {
+    "url": "https://img.shields.io/badge/i18n-i18next-green",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:9"
+    ]
+  },
+  {
+    "url": "https://img.shields.io/badge/license-CC%20BY--SA%204.0-blue",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:7"
+    ]
+  },
+  {
+    "url": "https://kodeks.ru/news/read/vstupili-v-deistvie-xml-sxemy-dlia-etapa-stroitelstva",
+    "category": "Russian laws and technical regulations",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:6"
+    ]
+  },
+  {
+    "url": "https://master-smeta.ru/help-smetaru-9/vypolnenie-rabot/akty-priemki-vypolnennykh-rabot-ks-2/eksport-i-import-aktov-ks-2/193-eksport-akta-ks-2-v-formate-xml.html",
+    "category": "Russian estimating systems",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:10"
+    ]
+  },
+  {
+    "url": "https://mozilla.github.io/pdf.js/",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:203"
+    ]
+  },
+  {
+    "url": "https://nodejs.org/",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:71"
+    ]
+  },
+  {
+    "url": "https://pto-app.ru/instructions-app.pdf",
+    "category": "Russian-market vendor and user guidance",
+    "in_docs": [
+      "docs/research/RU_PTO_ONE_CLICK_DOSSIER_PLAN.md:11"
+    ]
+  },
+  {
+    "url": "https://qna.habr.com/q/409732",
+    "category": "Practitioner communities and deployment case studies",
+    "in_docs": [
+      "docs/research/RU_PTO_OJR_IMPORT_PLAN.md:8"
+    ]
+  },
+  {
+    "url": "https://shop.grandsmeta.ru/whatisthenewversion",
+    "category": "Russian estimating systems",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:10"
+    ]
+  },
+  {
+    "url": "https://sudact.ru/law/prikaz-minstroia-rossii-ot-16052023-n-344pr/",
+    "category": "Russian laws and technical regulations",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:5"
+    ]
+  },
+  {
+    "url": "https://threejs.org/",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:204"
+    ]
+  },
+  {
+    "url": "https://v2.tauri.app/",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:200"
+    ]
+  },
+  {
+    "url": "https://vite.dev/",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:201"
+    ]
+  },
+  {
+    "url": "https://www.altius.ru/program/ispolnitelnaya-dokumentaciya/",
+    "category": "Russian-market vendor and user guidance",
+    "in_docs": [
+      "docs/research/RU_PTO_ONE_CLICK_DOSSIER_PLAN.md:8"
+    ]
+  },
+  {
+    "url": "https://www.consultant.ru/document/cons_doc_LAW_26273/",
+    "category": "Russian laws and technical regulations",
+    "in_docs": [
+      "docs/DEVELOPMENT_PLAN_RU.md:7"
+    ]
+  },
+  {
+    "url": "https://www.consultant.ru/document/cons_doc_LAW_516777/",
+    "category": "Russian laws and technical regulations",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:5"
+    ]
+  },
+  {
+    "url": "https://www.excelworld.ru/forum/3-21585-1",
+    "category": "Practitioner communities and deployment case studies",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:7"
+    ]
+  },
+  {
+    "url": "https://www.i18next.com/",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:202"
+    ]
+  },
+  {
+    "url": "https://www.reddit.com/r/ru_linux/comments/1xcnoka/",
+    "category": "Practitioner communities and deployment case studies",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:7"
+    ]
+  },
+  {
+    "url": "https://www.rust-lang.org/tools/install",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:72"
+    ]
+  }
+]
