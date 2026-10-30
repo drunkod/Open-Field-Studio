@@ -1,0 +1,52 @@
+import { test, expect } from '@playwright/test';
+import ExcelJS from 'exceljs';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
+test('Russian АОСР MVP: demo, quantity checks, XLSX export/reimport and KS2 mapping',async({page})=>{
+  const errors=[];
+  page.on('pageerror',err=>errors.push(err.message));
+  page.on('dialog',dialog=>dialog.accept());
+  await page.addInitScript(()=>{localStorage.setItem('ofs_lang','ru');if(!sessionStorage.getItem('pto-initialized')){localStorage.removeItem('openFieldStudio');sessionStorage.setItem('pto-initialized','1');}});
+  await page.goto('http://127.0.0.1:3042/');
+  await expect(page.locator('[data-tab="pto"]')).toBeVisible({timeout:15000});
+  await expect(page.locator('[data-tab="project"] [data-i18n="nav_project"]')).toHaveText('Проект');
+  await expect(page.locator('html')).toHaveAttribute('lang','ru');
+  await page.locator('[data-tab="pto"]').click();
+  await page.locator('#pto-full-mode').click();
+  await expect(page.locator('#pto-act-rows [data-col]')).toHaveCount(150);
+  await page.locator('#pto-sample').click();
+  await expect(page.locator('#pto-results')).toContainText('Заполнено актов: 3 из 15');
+  await expect(page.locator('#pto-project-caption')).toContainText('Учебный объект');
+  await expect(page.locator('#pto-groups')).toContainText('Количество совпадает');
+  await expect(page.locator('#pto-groups')).toContainText('Расхождение');
+  await page.locator('#pto-act-rows tr').nth(2).locator('input[data-col="measuredQty"]').fill('24');
+  await expect(page.locator('#pto-groups')).not.toContainText('Расхождение');
+  await page.screenshot({path:'test-results/pto-ru.png',fullPage:true});
+
+  const [excel] = await Promise.all([page.waitForEvent('download'),page.locator('#pto-export-xlsx').click()]);
+  expect(excel.suggestedFilename()).toMatch(/aosr_ks2_drafts\.xlsx/);
+  const tmp=path.join('test-results','pto-export.xlsx');await fs.mkdir('test-results',{recursive:true});await excel.saveAs(tmp);
+  const bytes=await fs.readFile(tmp);expect(bytes.length).toBeGreaterThan(10000);
+  await page.locator('#pto-act-rows tr').first().locator('[data-col="work"]').fill('ВРЕМЕННО ИЗМЕНЁННАЯ РАБОТА');
+  await page.locator('#pto-import-xlsx').setInputFiles({name:'pto-export.xlsx',mimeType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',buffer:bytes});
+  await expect(page.locator('#pto-act-rows tr').first().locator('[data-col="work"]')).toHaveValue('Гидроизоляция кровли, зона А (демо)');
+
+  const wb=new ExcelJS.Workbook(),ws=wb.addWorksheet('Позиции КС2');
+  ws.getRow(1).values=['№ п/п','Наименование работ и затрат','Ед. изм.','Кол-во'];
+  ws.getRow(2).values=['ТЕСТ-1','Вымышленная гидроизоляция','м²',15.25];
+  await page.locator('#pto-ks2-file').setInputFiles({name:'ks2-demo.xlsx',mimeType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',buffer:Buffer.from(await wb.xlsx.writeBuffer())});
+  await expect(page.locator('#pto-xlsx-map')).toBeVisible();
+  await expect(page.locator('#pto-xlsx-preview')).toContainText('Вымышленная гидроизоляция');
+  await page.locator('#pto-ks2-confirm').click();
+  await expect(page.locator('#pto-ks2-rows')).toContainText('Удалить');
+  await expect(page.locator('#pto-ks2-rows input').first()).toHaveValue('ТЕСТ-1');
+  const [jsonDownload]=await Promise.all([page.waitForEvent('download'),page.locator('#pto-save-json').click()]);
+  expect(jsonDownload.suggestedFilename()).toMatch(/draft\.json/);
+  const [htmlDownload]=await Promise.all([page.waitForEvent('download'),page.locator('#pto-export').click()]);
+  expect(htmlDownload.suggestedFilename()).toMatch(/drafts\.html/);
+  await page.reload();
+  await page.locator('[data-tab="pto"]').click();
+  await expect(page.locator('#pto-act-rows tr').first().locator('[data-col="work"]')).toHaveValue('Гидроизоляция кровли, зона А (демо)');
+  expect(errors).toEqual([]);
+});

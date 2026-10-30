@@ -1,0 +1,1278 @@
+[
+  {
+    "url": "https://1exon.ru",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/02_Сравнение_12_инструментов.md"
+    ]
+  },
+  {
+    "url": "https://aosr-service.ru/index.html",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/02_Сравнение_12_инструментов.md"
+    ]
+  },
+  {
+    "url": "https://aosr.stroi.etos-pro.ru",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/02_Сравнение_12_инструментов.md"
+    ]
+  },
+  {
+    "url": "https://autoloading.ru/articles/kak-podgotovit-excel-ozhr/",
+    "category": "Russian-market vendor and user guidance",
+    "in_docs": [
+      "docs/research/RU_PTO_OJR_IMPORT_PLAN.md:10"
+    ]
+  },
+  {
+    "url": "https://autoloading.ru/requirements/works/",
+    "category": "Russian-market vendor and user guidance",
+    "in_docs": [
+      "docs/research/RU_PTO_OJR_IMPORT_PLAN.md:11"
+    ]
+  },
+  {
+    "url": "https://base.garant.ru/406064781/",
+    "category": "Russian laws and technical regulations",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:6"
+    ]
+  },
+  {
+    "url": "https://base.garant.ru/406969808",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/03_План_онлайн_исследования_и_источники.md"
+    ]
+  },
+  {
+    "url": "https://base.garant.ru/412265818/",
+    "category": "Russian laws and technical regulations",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:9"
+    ]
+  },
+  {
+    "url": "https://base.garant.ru/412373476/53f89421bbdaf741eb2d1ecc4ddb4c33/",
+    "category": "Russian laws and technical regulations",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:5"
+    ]
+  },
+  {
+    "url": "https://builddocs.ru/tutorial",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/02_Сравнение_12_инструментов.md",
+      "docs/03_План_онлайн_исследования_и_источники.md"
+    ]
+  },
+  {
+    "url": "https://community.openproject.org/projects/openproject",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/11_Русскоязычные_примеры.md",
+      "docs/11_Русскоязычные_примеры_и_форумы.md"
+    ]
+  },
+  {
+    "url": "https://community.osarch.org",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/EXAMPLES.md"
+    ]
+  },
+  {
+    "url": "https://docs.frappe.io/legal/others/license-and-trademark",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://docs.getodk.org/collect-intro",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://docs.github.com/en/rest/repos/repos#get-a-repository",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://docs.paperless-ngx.com/usage",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/09_Архитектура_открытой_системы.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md",
+      "docs/09_Архитектура_и_план_открытой_системы.md"
+    ]
+  },
+  {
+    "url": "https://docxtpl.readthedocs.io",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://exon.usedocs.com",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/03_План_онлайн_исследования_и_источники.md"
+    ]
+  },
+  {
+    "url": "https://exon.visgis.usedocs.com/article/83531",
+    "category": "Russian-market vendor and user guidance",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:9"
+    ]
+  },
+  {
+    "url": "https://fias-file.nalog.ru/",
+    "category": "RU address register official/technical",
+    "in_docs": [
+      "docs/audit/RU_MARKET_UI_REMEDIATION_2026-10-30.md"
+    ]
+  },
+  {
+    "url": "https://forum.getodk.org",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/11_Русскоязычные_примеры.md",
+      "docs/11_Русскоязычные_примеры_и_форумы.md"
+    ]
+  },
+  {
+    "url": "https://forum.mayan-edms.com",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/11_Русскоязычные_примеры.md",
+      "docs/11_Русскоязычные_примеры_и_форумы.md"
+    ]
+  },
+  {
+    "url": "https://github.com/BuildSuite-io/buildsuite_core",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/09_Архитектура_открытой_системы.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md",
+      "docs/09_Архитектура_и_план_открытой_системы.md"
+    ]
+  },
+  {
+    "url": "https://github.com/David-CB666/material-approval-pipeline",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/David-CB666/material-submittal-generator",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/FolderITDev/mobile-field-inspections",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/PTO_DAILY_MODULES_RU.md:22"
+    ]
+  },
+  {
+    "url": "https://github.com/FolderITDev/mobile-field-inspections/blob/main/src/data/sqlite-repository.ts",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/FreeCAD/FreeCAD",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/IfcOpenShell/IfcOpenShell",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/04_GitHub_репозитории_для_доработки.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/Kentucky-ai/opentakeoff",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/LibreCAD/LibreCAD",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/04_GitHub_репозитории_для_доработки.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/MatthiasValvekens/pyHanko",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/OpenAEC-Foundation",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "README.md:370"
+    ]
+  },
+  {
+    "url": "https://github.com/OpenAEC-Foundation/Open-Field-Studio",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "README.md:368",
+      "docs/DEVELOPMENT_PLAN_RU.md:3"
+    ]
+  },
+  {
+    "url": "https://github.com/OpenAEC-Foundation/Open-Field-Studio.git",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "README.md:79"
+    ]
+  },
+  {
+    "url": "https://github.com/OpenAEC-Foundation/Open-Field-Studio/blob/main/src/main.tsx",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/OpenAEC-Foundation/Open-Field-Studio/issues",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "README.md:369"
+    ]
+  },
+  {
+    "url": "https://github.com/OpenSignLabs/OpenSign",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/OpenSourceBIM/BIMserver",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/Sereban-glitch/proakt-build-bot",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/PTO_DAILY_MODULES_RU.md:24"
+    ]
+  },
+  {
+    "url": "https://github.com/Sereban-glitch/proakt-build-bot/blob/main/internal/xlsx/act.go",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/Stirling-Tools/Stirling-PDF",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/Stirling-Tools/Stirling-PDF/blob/main/LICENSE",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/Stuk/jszip",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/research/RU_PTO_ONE_CLICK_DOSSIER_PLAN.md:16"
+    ]
+  },
+  {
+    "url": "https://github.com/ThatOpen/engine_components",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/ThatOpen/engine_web-ifc",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "README.md:204"
+    ]
+  },
+  {
+    "url": "https://github.com/ViranjPatel/construction-issue-tracker",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/braedonsaunders/beaconhs",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/cepho/construction_management_suite",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/chelslava/rpaforge",
+    "category": "Additional local source clone",
+    "in_docs": [
+      "docs/audit/OSS_CLONE_REFERENCES.md"
+    ]
+  },
+  {
+    "url": "https://github.com/constructelligence-lab/construction-project-records",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/PTO_DAILY_MODULES_RU.md:21"
+    ]
+  },
+  {
+    "url": "https://github.com/constructelligence-lab/construction-project-records/blob/main/cpr/checks.py",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/constructelligence-lab/construction-project-records/blob/main/schema/fields.csv",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/constructelligence-lab/open-source-construction-tools",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/LICENSE",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/CODE_GRAPH.md:90"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/boq/manifest.py",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:35"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/cde/manifest.py",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:31"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/cde/service.py#L293-L350",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:31"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/changeorders/manifest.py",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:33"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/changeorders/service.py",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:33"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/daily_diary/service.py#L227-L270",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:27"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/documents/service.py#L621-L730",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:25"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/documents/service.py#L889-L1025",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:25"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/field_diary/schemas.py#L34-L112",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:27"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/inspections/service.py#L65-L180",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:30"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/progress/manifest.py",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:28"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/progress/quantity_variance.py#L133-L235",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:28"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/quality_concept/fsm.py#L14-L96",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:34"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/quality_concept/links.py#L243-L378",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:34"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/rfi/schemas.py#L62-L170",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:29"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/rfi/service.py#L141-L315",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:29"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/submittals/schemas.py#L105-L175",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:26"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/submittals/tracking.py#L148-L263",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:26"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/submittals/validators.py#L113-L250",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:26"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/transmittals/logic.py#L78-L216",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:32"
+    ]
+  },
+  {
+    "url": "https://github.com/datadrivenconstruction/OpenConstructionERP/blob/6032873c58e930e420af3d7fd483b61ea1b246d3/backend/app/modules/transmittals/service.py#L380-L548",
+    "category": "OpenConstructionERP pinned AGPL source",
+    "in_docs": [
+      "docs/research/openconstructionerp/INTEGRATION_PLAN.md:32"
+    ]
+  },
+  {
+    "url": "https://github.com/documenso/documenso",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/documenso/documenso/blob/main/apps/docs/content/docs/policies/licenses.mdx",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/drunkod/Open-Field-Studio",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/DEVELOPMENT_PLAN_RU.md:2"
+    ]
+  },
+  {
+    "url": "https://github.com/drunkod/Open-Field-Studio/pull/1",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/README.md",
+      "docs/README_РЕЗУЛЬТАТ.md"
+    ]
+  },
+  {
+    "url": "https://github.com/drunkod/Open-Field-Studio/tree/feature/ru-aosr-ks2-prototype",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/README.md",
+      "docs/README_РЕЗУЛЬТАТ.md"
+    ]
+  },
+  {
+    "url": "https://github.com/elapouya/python-docx-template",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/09_Архитектура_открытой_системы.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md",
+      "docs/09_Архитектура_и_план_открытой_системы.md"
+    ]
+  },
+  {
+    "url": "https://github.com/eli-reid/fieldjig",
+    "category": "Additional local source clone",
+    "in_docs": [
+      "docs/audit/OSS_CLONE_REFERENCES.md"
+    ]
+  },
+  {
+    "url": "https://github.com/eli-reid/fieldjig/blob/main/app/Domains/Dailies/Services/DailyReportLifecycleService.php",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/eli-reid/fieldjig/blob/main/app/Domains/Documents/Services/ProjectDocumentLibrary.php",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/exceljs/exceljs",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/research/RU_PTO_OJR_IMPORT_PLAN.md:12"
+    ]
+  },
+  {
+    "url": "https://github.com/frappe/erpnext",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/freitasts365/construction-daily-report-app",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/gba-mep/daily-construction-log",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/PTO_DAILY_MODULES_RU.md:20"
+    ]
+  },
+  {
+    "url": "https://github.com/gba-mep/daily-construction-log/blob/main/scripts/generate_daily_log.py",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/gba-mep/excel-template-filler",
+    "category": "Open-source repositories and libraries",
+    "in_docs": [
+      "docs/PTO_DAILY_MODULES_RU.md:23"
+    ]
+  },
+  {
+    "url": "https://github.com/gba-mep/excel-template-filler/blob/main/src/engines/zip_engine.py",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/gba-mep/excel-template-filler/blob/main/src/template_filler.py",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/gba-mep/officecli-workflow",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/gba-mep/python-docx-photo-grid",
+    "category": "Additional local source clone",
+    "in_docs": [
+      "docs/audit/OSS_CLONE_REFERENCES.md"
+    ]
+  },
+  {
+    "url": "https://github.com/gba-mep/python-docx-photo-grid/blob/main/scripts/adaptive_photo_grid.py",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/getodk/central",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/09_Архитектура_открытой_системы.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md",
+      "docs/09_Архитектура_и_план_открытой_системы.md"
+    ]
+  },
+  {
+    "url": "https://github.com/getodk/collect",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/ibuilder/SheetForge",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/ibuilder/massing",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/jigonyoo/field-inspection-report",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/jmcnamara/XlsxWriter",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/09_Архитектура_открытой_системы.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md",
+      "docs/09_Архитектура_и_план_открытой_системы.md"
+    ]
+  },
+  {
+    "url": "https://github.com/jmcnamara/xlsxwriter",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/04_GitHub_репозитории_для_доработки.md"
+    ]
+  },
+  {
+    "url": "https://github.com/jperalta24/ConstructDaily",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/11_Русскоязычные_примеры.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md",
+      "docs/11_Русскоязычные_примеры_и_форумы.md"
+    ]
+  },
+  {
+    "url": "https://github.com/mozman/ezdxf",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/02_Сравнение_12_инструментов.md",
+      "docs/04_GitHub_репозитории_для_доработки.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/nextcloud/server",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/ocrmypdf/OCRmyPDF",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/04_GitHub_репозитории_для_доработки.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/opensource-construction/osc-directory",
+    "category": "Additional local source clone",
+    "in_docs": [
+      "docs/audit/OSS_CLONE_REFERENCES.md"
+    ]
+  },
+  {
+    "url": "https://github.com/opensourceBIM/BIMserver",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://github.com/opf/openproject",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/09_Архитектура_открытой_системы.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md",
+      "docs/09_Архитектура_и_план_открытой_системы.md"
+    ]
+  },
+  {
+    "url": "https://github.com/paperless-ngx/paperless-ngx",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/paperless-ngx/paperless-ngx/discussions/13148",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/11_Русскоязычные_примеры.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md",
+      "docs/11_Русскоязычные_примеры_и_форумы.md"
+    ]
+  },
+  {
+    "url": "https://github.com/paperless-ngx/paperless-ngx/discussions/8113",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/11_Русскоязычные_примеры.md",
+      "docs/11_Русскоязычные_примеры_и_форумы.md"
+    ]
+  },
+  {
+    "url": "https://github.com/paperless-ngx/paperless-ngx/issues/13387",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/11_Русскоязычные_примеры.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md",
+      "docs/11_Русскоязычные_примеры_и_форумы.md"
+    ]
+  },
+  {
+    "url": "https://github.com/pyexcel/pyexcel-xls",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/pymupdf/PyMuPDF",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "docs/04_GitHub_репозитории_для_доработки.md"
+    ]
+  },
+  {
+    "url": "https://github.com/python-openxml/python-docx",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://github.com/tesseract-ocr/tesseract",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://gitlab.com/mayan-edms/mayan-edms",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://gitverse.ru/aleaivanov/agent-ks2",
+    "category": "Additional local source clone",
+    "in_docs": [
+      "docs/audit/OSS_CLONE_REFERENCES.md"
+    ]
+  },
+  {
+    "url": "https://gk-adept.ru/programmy/adeptispolnitelnaya_dokumentaciya",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/02_Сравнение_12_инструментов.md"
+    ]
+  },
+  {
+    "url": "https://gk-adept.ru/programmy/adeptispolnitelnaya_dokumentaciya/",
+    "category": "Russian-market vendor and user guidance",
+    "in_docs": [
+      "docs/research/RU_PTO_OJR_IMPORT_PLAN.md:9",
+      "docs/research/RU_PTO_ONE_CLICK_DOSSIER_PLAN.md:9",
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:9"
+    ]
+  },
+  {
+    "url": "https://habr.com/ru/companies/pik_digital/articles/1071154/",
+    "category": "Practitioner communities and deployment case studies",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:8"
+    ]
+  },
+  {
+    "url": "https://habr.com/ru/companies/sminex_developer/articles/1021940/",
+    "category": "Practitioner communities and deployment case studies",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:8"
+    ]
+  },
+  {
+    "url": "https://hardroller.ru",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/02_Сравнение_12_инструментов.md"
+    ]
+  },
+  {
+    "url": "https://hardroller.ru/",
+    "category": "Russian-market vendor and user guidance",
+    "in_docs": [
+      "docs/research/RU_PTO_ONE_CLICK_DOSSIER_PLAN.md:10",
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:9"
+    ]
+  },
+  {
+    "url": "https://help.grandsmeta.ru/ob-ekty-i-smety/eksport-smet-v-razlichnye-formaty/eksport-v-format-xml",
+    "category": "Russian estimating systems",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:10"
+    ]
+  },
+  {
+    "url": "https://help.sodislab.com/виды-технической-документации-в-sodis-building-cm",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/02_Сравнение_12_инструментов.md"
+    ]
+  },
+  {
+    "url": "https://img.shields.io/badge/built%20with-Tauri%20v2-orange",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:8"
+    ]
+  },
+  {
+    "url": "https://img.shields.io/badge/i18n-i18next-green",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:9"
+    ]
+  },
+  {
+    "url": "https://img.shields.io/badge/license-CC%20BY--SA%204.0-blue",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:7"
+    ]
+  },
+  {
+    "url": "https://itp.cavoren.net/itp-builder",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://kodeks.ru/news/read/vstupili-v-deistvie-xml-sxemy-dlia-etapa-stroitelstva",
+    "category": "Russian laws and technical regulations",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:6"
+    ]
+  },
+  {
+    "url": "https://librecad.org",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/02_Сравнение_12_инструментов.md"
+    ]
+  },
+  {
+    "url": "https://master-smeta.ru/help-smetaru-9/vypolnenie-rabot/akty-priemki-vypolnennykh-rabot-ks-2/eksport-i-import-aktov-ks-2/193-eksport-akta-ks-2-v-formate-xml.html",
+    "category": "Russian estimating systems",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:10"
+    ]
+  },
+  {
+    "url": "https://minjust.consultant.ru/documents/47785",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/03_План_онлайн_исследования_и_источники.md"
+    ]
+  },
+  {
+    "url": "https://mozilla.github.io/pdf.js/",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:203"
+    ]
+  },
+  {
+    "url": "https://nodejs.org/",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:71"
+    ]
+  },
+  {
+    "url": "https://propto.pro",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/02_Сравнение_12_инструментов.md"
+    ]
+  },
+  {
+    "url": "https://protect.gost.ru/gost/details/23f0a882-4624-475d-86c0-e4ae8f262177",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/03_План_онлайн_исследования_и_источники.md"
+    ]
+  },
+  {
+    "url": "https://protect.gost.ru/sp/details/844352c5-dda6-4006-acd8-b6875d1ed6a8",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/03_План_онлайн_исследования_и_источники.md"
+    ]
+  },
+  {
+    "url": "https://pto-app.ru/instructions-app.pdf",
+    "category": "Russian-market vendor and user guidance",
+    "in_docs": [
+      "docs/research/RU_PTO_ONE_CLICK_DOSSIER_PLAN.md:11"
+    ]
+  },
+  {
+    "url": "https://pto.gostdoc.ru",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/EXAMPLES.md",
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/11_Русскоязычные_примеры.md",
+      "docs/11_Русскоязычные_примеры_и_форумы.md"
+    ]
+  },
+  {
+    "url": "https://qna.habr.com/q/409732",
+    "category": "Practitioner communities and deployment case studies",
+    "in_docs": [
+      "docs/research/RU_PTO_OJR_IMPORT_PLAN.md:8"
+    ]
+  },
+  {
+    "url": "https://shop.grandsmeta.ru/whatisthenewversion",
+    "category": "Russian estimating systems",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:10"
+    ]
+  },
+  {
+    "url": "https://sudact.ru/law/prikaz-minstroia-rossii-ot-16052023-n-344pr/",
+    "category": "Russian laws and technical regulations",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:5"
+    ]
+  },
+  {
+    "url": "https://t.me/pro_pto",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/EXAMPLES.md"
+    ]
+  },
+  {
+    "url": "https://taskrox.com/itp",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/INTERNATIONAL_ANALOGUES_AOSR.md"
+    ]
+  },
+  {
+    "url": "https://threejs.org/",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:204"
+    ]
+  },
+  {
+    "url": "https://tsus.ru",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/02_Сравнение_12_инструментов.md",
+      "docs/03_План_онлайн_исследования_и_источники.md"
+    ]
+  },
+  {
+    "url": "https://v2.tauri.app/",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:200"
+    ]
+  },
+  {
+    "url": "https://vite.dev/",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:201"
+    ]
+  },
+  {
+    "url": "https://www.altius.ru/program/ispolnitelnaya-dokumentaciya/",
+    "category": "Russian-market vendor and user guidance",
+    "in_docs": [
+      "docs/research/RU_PTO_ONE_CLICK_DOSSIER_PLAN.md:8"
+    ]
+  },
+  {
+    "url": "https://www.consultant.ru/document/cons_doc_LAW_26273/",
+    "category": "Russian laws and technical regulations",
+    "in_docs": [
+      "docs/DEVELOPMENT_PLAN_RU.md:7"
+    ]
+  },
+  {
+    "url": "https://www.consultant.ru/document/cons_doc_LAW_516777",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/03_План_онлайн_исследования_и_источники.md"
+    ]
+  },
+  {
+    "url": "https://www.consultant.ru/document/cons_doc_LAW_516777/",
+    "category": "Russian laws and technical regulations",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:5"
+    ]
+  },
+  {
+    "url": "https://www.consultant.ru/document/cons_doc_LAW_531681/ff850d27514bc742e55aa77db5c6ac1998f0a75e/",
+    "category": "RU address register official/technical",
+    "in_docs": [
+      "docs/audit/RU_MARKET_UI_REMEDIATION_2026-10-30.md"
+    ]
+  },
+  {
+    "url": "https://www.consultant.ru/law/podborki/ispolnitelnaya_dokumentaciya_v_stroitelstve",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/03_План_онлайн_исследования_и_источники.md"
+    ]
+  },
+  {
+    "url": "https://www.excelworld.ru/forum/3-21585-1",
+    "category": "Practitioner communities and deployment case studies",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:7"
+    ]
+  },
+  {
+    "url": "https://www.i18next.com/",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:202"
+    ]
+  },
+  {
+    "url": "https://www.nalog.gov.ru/rn77/service/fias/",
+    "category": "RU address register official/technical",
+    "in_docs": [
+      "docs/audit/RU_MARKET_UI_REMEDIATION_2026-10-30.md"
+    ]
+  },
+  {
+    "url": "https://www.openproject.org/community-edition",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://www.openproject.org/docs/faq",
+    "category": "Historical background research",
+    "in_docs": [
+      "Documents/Examples-and-References/PREVIOUS_RESEARCH/07_Open_Source_замены_12_систем.md",
+      "docs/07_Исследование_Open_Source_замен_12_систем.md"
+    ]
+  },
+  {
+    "url": "https://www.reddit.com/r/ru_linux/comments/1xcnoka/",
+    "category": "Practitioner communities and deployment case studies",
+    "in_docs": [
+      "docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md:7"
+    ]
+  },
+  {
+    "url": "https://www.rust-lang.org/tools/install",
+    "category": "Other technical references",
+    "in_docs": [
+      "README.md:72"
+    ]
+  },
+  {
+    "url": "https://xlsxwriter.readthedocs.io",
+    "category": "Historical background research",
+    "in_docs": [
+      "docs/02_Сравнение_12_инструментов.md"
+    ]
+  }
+]

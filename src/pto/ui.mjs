@@ -1,0 +1,550 @@
+import { newWorkspace, safeWorkspace, validateWorkspace, generateDraftHtml, parseKs2Csv } from './domain.mjs';
+import {RECORD_SCHEMAS,emptyRecord,recordDiagnostics} from './records.mjs';
+import {mountOjrImport} from './ojr-ui.mjs';
+import {mountQuickEntry} from './quick-entry.mjs';
+import {EVIDENCE_KINDS,checkEvidenceBytes,sha256Hex,newEvidenceMeta,cleanEvidence} from './evidence-domain.mjs';
+import {putEvidence,getEvidence,deleteEvidence,evidenceBackup,restoreEvidenceBackup} from './evidence-store.mjs';
+
+const FIELDS = [
+  ['actNo','№ акта','text'], ['work','Вид работ','text'], ['start','Начало','date'],
+  ['end','Окончание','date'], ['actDate','Дата акта','date'],
+  ['schemeNo','№ схемы (подтверждённый)','text'], ['qualityDocs','Материалы, сертификаты, паспорта','text'],
+  ['measuredQty','Объём по схеме','text'], ['unit','Ед.','text'],
+  ['ks2Id','Позиция КС-2','text'],
+];
+function el(tag, text, attrs = {}) {
+  const node = document.createElement(tag);
+  if (text != null) node.textContent = text;
+  for (const [name, value] of Object.entries(attrs)) node.setAttribute(name, value);
+  return node;
+}
+async function download(filename, content, mime) {
+  const blob = new Blob([content], { type: mime });
+  // Tauri desktop does not reliably handle object-URL browser downloads.
+  // Use binary-safe writeFile (not writeTextFile, which corrupts XLSX).
+  if ('__TAURI_INTERNALS__' in window && window.__tauriDialog?.save && window.__tauriFs?.writeFile) {
+    const ext = filename.split('.').pop();
+    const dest = await window.__tauriDialog.save({ defaultPath: filename,
+      filters: [{name: ext.toUpperCase(), extensions: [ext]}] });
+    if(!dest) return;
+    await window.__tauriFs.writeFile(dest, new Uint8Array(await blob.arrayBuffer()));
+    return;
+  }
+  const url = URL.createObjectURL(blob), link = el('a', null, { download: filename, href: url });
+  document.body.appendChild(link); link.click(); link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+const UI = `
+<style>
+#pto-tab .pto-hint{color:var(--text-muted,#6b7280);font-size:.87rem;line-height:1.6}
+#pto-tab .pto-view-toggle{display:flex;gap:.5rem;flex-wrap:wrap;margin:.75rem 0}
+#pto-tab .pto-quick-card{border:1px solid var(--border-color,#d4d4d8);border-radius:6px;margin:.45rem 0;background:var(--card-bg,#fff)}
+#pto-tab .pto-quick-card summary{cursor:pointer;padding:.75rem 1rem;font-weight:600;line-height:1.5}
+#pto-tab .pto-quick-card[open] summary{border-bottom:1px solid var(--border-color,#d4d4d8)}
+#pto-tab .pto-quick-fields{padding:1rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+#pto-tab .pto-quick-group{display:grid;gap:.55rem;align-content:start}
+#pto-tab .pto-quick-group fieldset{border:0;padding:0;margin:0;display:grid;gap:.55rem}
+#pto-tab .pto-quick-group legend{font-weight:700;font-size:.95rem;margin-bottom:.3rem}
+#pto-tab .pto-quick-group label{display:grid;gap:.25rem;font-size:.84rem}
+#pto-tab .pto-quick-group input,#pto-tab .pto-quick-group textarea{width:100%;box-sizing:border-box;padding:.55rem;border:1px solid var(--border-color,#aaa);border-radius:4px;background:var(--card-bg,#fff);color:inherit;font:inherit}
+#pto-tab .pto-quick-group textarea{resize:vertical;min-height:4.5rem}
+#pto-tab .pto-view-toggle button[aria-pressed="true"]{font-weight:700;outline:2px solid var(--text-muted,#64748b);outline-offset:1px}
+#pto-tab .pto-table{overflow:auto;max-width:100%}
+#pto-tab table{border-collapse:collapse;width:100%;font-size:.82rem}
+#pto-tab th,#pto-tab td{border:1px solid var(--border-color,#d4d4d8);padding:.35rem}
+#pto-tab th{background:var(--concrete,#f4f4f5);text-align:left;white-space:nowrap}
+#pto-tab td input{min-width:90px;width:100%;padding:.44rem;border:1px solid var(--border-color,#a1a1aa);border-radius:4px;background:var(--card-bg,#fff);color:var(--text-primary,inherit)}
+#pto-tab td input[data-col="work"]{min-width:250px}
+#pto-tab td textarea[data-col="qualityDocs"]{min-width:390px;min-height:90px;height:108px}
+#pto-tab td textarea[data-col="work"]{min-width:270px;min-height:55px;height:70px}
+#pto-tab td textarea{box-sizing:border-box;width:100%;resize:vertical; padding:.44rem;border:1px solid var(--border-color,#a1a1aa);border-radius:4px;background:var(--card-bg,#fff);color:var(--text-primary,inherit);font:inherit;line-height:1.4}
+#pto-tab td input[type="date"]{min-width:132px}
+#pto-tab .pto-actions{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin:1rem 0}
+#pto-tab .pto-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.75rem}
+#pto-tab .pto-grid label{display:block;font-size:.8rem;font-weight:600;margin-bottom:3px}
+#pto-tab .pto-grid input{width:100%;padding:.5rem;border:1px solid var(--border-color,#bbb);border-radius:5px;background:var(--card-bg,#fff);color:inherit}
+#pto-tab #pto-evidence-vault select{min-width:155px;max-width:240px;padding:8px;background:var(--card-bg,#fff);color:inherit}\n#pto-tab .pto-record-table td input{min-width:130px}
+#pto-tab .pto-record-table td textarea{min-width:250px;min-height:58px}
+#pto-tab .pto-record-table td select{min-width:130px}
+#pto-tab .pto-summary{padding:12px;border-left:3px solid #b45309;background:var(--concrete,#f5f5f5);margin:12px 0;white-space:pre-wrap}
+#pto-tab .pto-errors li{margin-bottom:5px}
+#pto-tab .pto-error{color:#dc2626}#pto-tab .pto-warning{color:#b45309}#pto-tab .pto-info{color:var(--text-muted,#71717a)}
+</style>
+<div class="panel">
+ <h2 data-i18n="nav_pto">АОСР · сверка с КС-2</h2>
+ <p class="pto-hint">Экспериментальная локальная форма инженера ПТО: 15 актов, один набор реквизитов и отдельные позиции КС-2. Проверяется только согласованность введённых данных, не юридическое соответствие. Печатный вывод всегда «ЧЕРНОВИК».</p>
+ <div id="pto-project-caption" class="pto-summary">Объект: не указан (укажите его на вкладке «Проект»).</div>
+ <h3>Общие реквизиты (один раз для всех актов)</h3><div class="pto-grid" id="pto-header"></div>
+ <div class="pto-actions">
+   <button type="button" class="btn btn-secondary btn-sm" id="pto-sample">Загрузить вымышленный пример</button>
+   <button type="button" class="btn btn-secondary btn-sm" id="pto-save-json">Сохранить JSON</button>
+   <label class="btn btn-secondary btn-sm" for="pto-load-json">Загрузить JSON</label><input type="file" accept=".json,application/json" id="pto-load-json" style="display:none">
+   <button type="button" class="btn btn-primary btn-sm" id="pto-export">Печатные черновики (HTML)</button>
+   <button type="button" class="btn btn-primary btn-sm" id="pto-export-xlsx">Экспорт АОСР в Excel (.xlsx)</button>
+   <button type="button" class="btn btn-primary btn-sm" id="pto-print-xlsx">Комплект актов для печати (.xlsx)</button>
+   <button type="button" class="btn btn-primary btn-sm" id="pto-dossier-zip">Собрать комплект ИД с приложениями (.zip)</button>
+   <label class="btn btn-secondary btn-sm" for="pto-import-xlsx">Загрузить книгу АОСР (.xlsx)</label><input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="pto-import-xlsx" style="display:none">
+   <label class="btn btn-secondary btn-sm" for="pto-import-legacy">Импорт исходного АОСР (.xls)</label><input type="file" accept=".xls,application/vnd.ms-excel" id="pto-import-legacy" style="display:none">
+ </div>
+</div>
+<div class="panel">
+ <h3>Акты скрытых работ — 15 строк</h3>
+ <p class="pto-hint">Название исполнительной схемы формируется из вида работ, если не указано отдельно. Единицы измерения для КС-2 и АОСР должны совпадать. Если одна позиция КС-2 относится к нескольким актам, укажите один и тот же ID позиции во всех строках.</p>
+ <div class="pto-view-toggle" role="group" aria-label="Режим ввода АОСР">
+   <button type="button" id="pto-quick-mode" class="btn btn-secondary btn-sm" aria-pressed="true">Краткий ввод — 3 группы</button>
+   <button type="button" id="pto-full-mode" class="btn btn-secondary btn-sm" aria-pressed="false">Все графы — подробный режим</button>
+ </div>
+ <p class="pto-hint" id="pto-mode-explanation">Укажите работу, даты и документы для акта. Номер схемы подтверждается по оригиналу; объёмы и КС-2 доступны в подробном режиме.</p>
+ <div id="pto-quick-editor" aria-label="Краткий ввод актов"><div id="pto-quick-acts"></div></div>
+ <div class="pto-table" id="pto-full-editor" hidden><table><thead><tr id="pto-act-head"></tr></thead><tbody id="pto-act-rows"></tbody></table></div>
+</div>
+<div class="panel">
+ <h3>Позиции КС-2 (для сопоставления, не заверенные сведения)</h3>
+ <p class="pto-hint">Импортируйте Excel (.xlsx) с просмотром сопоставления колонок или CSV с колонками «позиция;наименование;количество;ед.изм.» (разделитель «;»). Файл КС-2 формата .xls предварительно сохраните как .xlsx. Для исходного АОСР .xls есть отдельная кнопка выше. Сопоставление подтверждает инженер, а не программа.</p>
+ <div class="pto-actions">
+   <label class="btn btn-secondary btn-sm" for="pto-ks2-file">Импорт КС-2 (CSV / XLSX)</label><input type="file" id="pto-ks2-file" accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display:none">
+   <button type="button" class="btn btn-secondary btn-sm" id="pto-add-ks2">Добавить позицию вручную</button>
+   <button type="button" class="btn btn-secondary btn-sm" id="pto-ks2-template">Скачать образец CSV</button>
+ </div>
+ <div class="pto-summary" id="pto-xlsx-map" style="display:none">
+  <strong>Сопоставление столбцов КС-2</strong><p class="pto-hint">Проверьте, где находятся номер позиции, описание, количество и единица измерения. Включаются только корректные строки.</p>
+  <div class="pto-grid" id="pto-mapping-controls"></div>
+  <pre id="pto-xlsx-preview" style="white-space:pre-wrap;max-height:180px;overflow:auto"></pre>
+  <button type="button" class="btn btn-primary btn-sm" id="pto-ks2-confirm">Применить сопоставление</button>
+  <button type="button" class="btn btn-secondary btn-sm" id="pto-ks2-cancel">Отмена</button>
+ </div>
+ <div class="pto-table"><table><thead><tr><th>ID позиции</th><th>Наименование КС-2</th><th>Количество</th><th>Ед.</th><th></th></tr></thead><tbody id="pto-ks2-rows"></tbody></table></div>
+</div>
+<div class="panel">
+ <h3>Результаты технической сверки</h3>
+ <div class="pto-summary" id="pto-results" aria-live="polite"></div>
+ <div class="pto-table"><table><thead><tr><th>Позиция КС-2</th><th>Описание</th><th>АОСР (сумма)</th><th>КС-2</th><th>Результат</th></tr></thead><tbody id="pto-groups"></tbody></table></div>
+ <ul id="pto-issues" class="pto-errors"></ul>
+ <p class="pto-hint">ОЖР, реальное исполнение, сроки действия сертификатов, подписи и актуальную форму документа необходимо проверять отдельно. Совпадение сумм — не заключение о соответствии требованиям законодательства.</p>
+</div>
+<div class="panel" id="pto-evidence-vault">
+ <h2>Локальные файлы исполнительной документации</h2>
+ <p class="pto-hint">Паспорта, сертификаты, исполнительные схемы, ОЖР и фотографии сохраняются <strong>в этом браузере</strong> (IndexedDB), а не в облаке. Контрольная сумма SHA-256 показывает совпадение байтов, но НЕ подлинность или юридическую силу. Только черновой архив.</p>
+ <div class="pto-actions">
+ <label for="pto-evidence-act">Акт:</label><select id="pto-evidence-act" aria-label="Привязать файл к акту"></select>
+ <label for="pto-evidence-kind">Документ:</label><select id="pto-evidence-kind" aria-label="Тип документа"></select>
+ <label class="btn btn-secondary btn-sm" for="pto-evidence-file">Добавить локальный файл</label><input id="pto-evidence-file" type="file" accept=".pdf,.png,.jpg,.jpeg,.docx,.xlsx,.xls,.xml,.ifc,.dwg,.dxf,.odt" style="display:none">
+ <button type="button" class="btn btn-secondary btn-sm" id="pto-evidence-backup">Резервная копия файлов (.json)</button>
+ <label class="btn btn-secondary btn-sm" for="pto-evidence-restore">Восстановить файлы (.json)</label><input id="pto-evidence-restore" type="file" accept=".json" style="display:none">
+ </div>
+ <p class="pto-hint">Обычные экспорты АОСР, JSON и XLSX содержат только метаданные: <strong>сами вложения</strong> копируйте отдельно кнопкой «Резервная копия файлов». Один файл до 20 МБ; общий резервный пакет до 40 МБ. Не используйте браузерную очистку данных без резервной копии.</p>
+ <div id="pto-evidence-summary" class="pto-summary" aria-live="polite"></div>
+ <div class="pto-table"><table><thead><tr><th>Акт</th><th>Тип</th><th>Файл / редакция</th><th>Размер</th><th>SHA-256</th><th>Действие</th></tr></thead><tbody id="pto-evidence-rows"></tbody></table></div>
+</div>
+<div class="panel" id="pto-field-registers">
+ <h2>Ежедневные документы инженера ПТО</h2>
+ <p class="pto-hint">Ниже — отдельные локальные реестры для сверки с первичными документами. Ввод сведений здесь не доказывает выполнение работ, наличие оригинала, подлинность сертификата или утверждение схемы. Связывайте строки по номеру акта.</p>
+ <details id="pto-ojr-import" style="margin:1rem 0">
+ <summary style="cursor:pointer;font-weight:600">Импорт записей ОЖР из CSV / XLSX (проверка дат АОСР)</summary>
+ <p class="pto-hint">Загрузите выгрузку из отдельно ведущегося ОЖР. Код работы должен точно соответствовать № заполненного акта, иначе запись отклоняется. Источник и сопоставление подтвердит инженер; импорт не создаёт официального ОЖР.</p>
+ <div class="pto-actions"><label class="btn btn-secondary btn-sm" for="pto-ojr-file">Выбрать файл ОЖР (.csv/.xlsx)</label><input type="file" id="pto-ojr-file" accept=".csv,.xlsx" style="display:none">
+ <button id="pto-ojr-template" type="button" class="btn btn-secondary btn-sm">Скачать образец CSV</button></div>
+ <div id="pto-ojr-map-panel" hidden>
+ <label for="pto-ojr-sheet">Лист источника</label><select id="pto-ojr-sheet" aria-label="Лист источника ОЖР"></select>
+ <div class="pto-grid" id="pto-ojr-map-controls"></div>
+ <pre id="pto-ojr-source-preview" style="white-space:pre-wrap;max-height:160px;overflow:auto"></pre>
+ <div class="pto-actions"><button id="pto-ojr-preview-btn" type="button" class="btn btn-secondary btn-sm">Проверить строки ОЖР</button></div>
+ <div id="pto-ojr-preview-summary" class="pto-summary" aria-live="polite"></div>
+ <label><input id="pto-ojr-fill-blanks" type="checkbox"> Предложить даты по ОЖР только в пустые поля начала и окончания актов (не перезаписывать существующие)</label>
+ <div class="pto-actions"><button id="pto-ojr-confirm" type="button" class="btn btn-primary btn-sm" disabled>Импортировать проверенные записи</button>
+ <button id="pto-ojr-cancel" type="button" class="btn btn-secondary btn-sm">Отмена</button></div>
+ </div></details>
+ <div id="pto-register-sections"></div>
+ <h3>Комплектность документов к актам</h3>
+ <div id="pto-readiness" class="pto-summary" aria-live="polite"></div>
+ <div class="pto-table"><table><thead><tr><th>Акт</th><th>Работа</th><th>ОЖР</th><th>Документы</th><th>Схемы</th><th>Файлы</th><th>Замечания</th></tr></thead><tbody id="pto-readiness-rows"></tbody></table></div>
+ <div class="pto-actions"><button type="button" class="btn btn-secondary btn-sm" id="pto-readiness-export">Скачать замечания (CSV)</button></div>
+</div>`;
+export function mountPtoWorkspace(app) {
+  const nav = document.querySelector('.tab-strip');
+  const main = document.querySelector('.main-content');
+  if (!nav || !main || document.getElementById('pto-tab')) return;
+  const navBtn = el('button', null, { type:'button', class:'nav-btn', 'data-tab':'pto' });
+  const label = el('span', 'АОСР · КС-2', { 'data-i18n':'nav_pto' });
+  navBtn.appendChild(label);
+  nav.insertBefore(navBtn, nav.querySelector('[data-tab="export"]'));
+  const section = el('section', null, { id:'pto-tab', class:'tab-content' });
+  section.innerHTML = UI;
+  main.appendChild(section);
+  navBtn.addEventListener('click', () => { app.switchTab('pto'); showProject(); refreshDiagnostics(); });
+  let data = safeWorkspace(app.ptoWorkspace || newWorkspace());
+  const byId = id => document.getElementById(id);
+  const persist = () => {
+    app.ptoWorkspace = data;
+    app.saveToLocalStorage();
+  };
+  const showProject = () => {
+    const p = app.project || {};
+    byId('pto-project-caption').textContent = `Объект: ${p.name || '[не заполнено]'}; заказчик: ${p.client || '[не заполнено]'}; адрес: ${[p.address,p.city].filter(Boolean).join(', ') || '[не заполнен]'}. Измените эти сведения на вкладке «Проект».`;
+  };
+  const headers = [
+    ['contractor','Подрядчик'],['designer','Проектировщик'],
+    ['projectCode','Шифр проекта'],['inspector','Инженер ПТО / стройконтроль'],
+    ['customerRepresentative','Представитель заказчика'],
+  ];
+  const renderHeader = () => {
+    const root = byId('pto-header'); root.replaceChildren();
+    headers.forEach(([key, title]) => {
+      const wrap = el('div'); const l = el('label', title, { for:`pto-h-${key}` });
+      const input = el('input', null, { id:`pto-h-${key}`, value:data.header[key], autocomplete:'off' });
+      input.addEventListener('input', () => { data.header[key] = input.value; persist(); });
+      wrap.append(l, input); root.appendChild(wrap);
+    });
+  };
+  const inputFor = (obj, field, type, aria, action) => {
+    const multiline = field === 'qualityDocs' || field === 'work';
+    const input = multiline ? el('textarea', null, { rows:field === 'qualityDocs'?'4':'3', 'aria-label':aria, 'data-col':field }) : el('input', null, { type, 'aria-label': aria, 'data-col': field });
+    input.value = obj[field] ?? '';
+    input.addEventListener('input', () => { obj[field] = input.value; persist(); refreshDiagnostics(); renderReadiness(); });
+    if (action) input.addEventListener('change', action);
+    return input;
+  };
+  const renderActs = () => {
+    const head = byId('pto-act-head'); head.replaceChildren();
+    FIELDS.forEach(([,title]) => head.appendChild(el('th',title)));
+    const body = byId('pto-act-rows'); body.replaceChildren();
+    data.acts.forEach((act,i) => {
+      const tr=el('tr');
+      FIELDS.forEach(([field,title,type]) => {
+        const td=el('td');
+        td.appendChild(inputFor(act,field,type,`Акт ${i+1}, ${title}`));
+        if(field==='schemeNo')td.appendChild(el('small',`Предложение: ИС-${String(i+1).padStart(2,'0')} (не подтверждено)`));
+        tr.appendChild(td);
+      });
+      body.appendChild(tr);
+    });
+  };
+  const quick = mountQuickEntry({root:byId('pto-quick-acts'),getActs:()=>data.acts,
+    onEdit:()=>{persist();refreshDiagnostics();renderReadiness();}});
+  let quickMode = true;
+  const setActMode = compact => {
+    quickMode = compact;
+    if(compact)quick.render();else renderActs();
+    byId('pto-quick-editor').hidden=!compact;
+    byId('pto-full-editor').hidden=compact;
+    byId('pto-quick-mode').setAttribute('aria-pressed',String(compact));
+    byId('pto-full-mode').setAttribute('aria-pressed',String(!compact));
+    byId('pto-mode-explanation').textContent=compact
+      ? 'Работа, даты, схема и паспорта. Номер схемы проверяется по оригиналу; объёмы и КС-2 — в подробном режиме.'
+      : 'Все графы АОСР. Изменения сохраняются в тех же 15 актах и попадают в Excel.';
+  };
+  byId('pto-quick-mode').addEventListener('click',()=>setActMode(true));
+  byId('pto-full-mode').addEventListener('click',()=>setActMode(false));
+  const renderKs2 = () => {
+    const body=byId('pto-ks2-rows'); body.replaceChildren();
+    data.ks2.forEach((line,i) => {
+      const tr=el('tr');
+      [['id','ID'],['description','Наименование'],['qty','Количество'],['unit','Ед.']].forEach(([field,title])=>{
+        const td=el('td'); td.appendChild(inputFor(line, field, 'text', `КС-2 ${i+1} ${title}`)); tr.appendChild(td);
+      });
+      const td=el('td'), button=el('button','Удалить',{type:'button',class:'btn btn-secondary btn-sm'});
+      button.addEventListener('click',()=>{data.ks2.splice(i,1);persist();renderKs2();refreshDiagnostics();});
+      td.appendChild(button);tr.appendChild(td);body.appendChild(tr);
+    });
+  };
+  const renderEvidence = () => {
+    const act=byId('pto-evidence-act'),selected=act.value;
+    act.replaceChildren();
+    data.acts.forEach((row,i)=>act.appendChild(el('option',row.actNo||('Акт '+(i+1)),{value:row.actNo||''})));
+    if([...act.options].some(option=>option.value===selected))act.value=selected;
+    const type=byId('pto-evidence-kind');
+    if(!type.options.length)Object.entries(EVIDENCE_KINDS).forEach(([key,title])=>type.appendChild(el('option',title,{value:key})));
+    const body=byId('pto-evidence-rows');body.replaceChildren();
+    data.evidence.forEach((record,i)=>{
+      const tr=el('tr');
+      [record.actNo,EVIDENCE_KINDS[record.kind],record.filename+' (ред. '+record.revision+')',
+        Math.ceil(record.size/1024)+' КБ',record.sha256.slice(0,16)+'…'].forEach(value=>tr.appendChild(el('td',value)));
+      const cell=el('td'),get=el('button','Скачать',{type:'button',class:'btn btn-secondary btn-sm'});
+      get.addEventListener('click',async()=>{
+        try{
+          const bytes=await getEvidence(record.id,record.sha256);
+          await download(record.filename,new Uint8Array(bytes),'application/octet-stream');
+        }catch(err){alert('Ошибка чтения вложения: '+err.message);}
+      });
+      const share=el('button','Привязать к акту',{type:'button',class:'btn btn-secondary btn-sm'});
+      share.addEventListener('click',()=>{
+        const target=byId('pto-evidence-act').value;
+        if(!target||target===record.actNo||data.evidence.some(x=>x.id===record.id&&x.actNo===target)){
+          alert('Выберите другой акт, к которому этот файл ещё не прикреплён.');return;
+        }
+        data.evidence.push({...record,actNo:target});persist();renderEvidence();renderReadiness();
+      });
+      const remove=el('button','Удалить',{type:'button',class:'btn btn-secondary btn-sm'});
+      remove.addEventListener('click',async()=>{
+        if(!confirm('Удалить связь с актом и, если она последняя, локальный файл?'))return;
+        try{
+          if(!data.evidence.some((x,j)=>j!==i&&x.id===record.id))await deleteEvidence(record.id);
+          data.evidence.splice(i,1);persist();renderEvidence();renderReadiness();}
+        catch(err){alert('Не удалось удалить: '+err.message);}
+      });
+      cell.append(get,share,remove);tr.appendChild(cell);body.appendChild(tr);
+    });
+    byId('pto-evidence-summary').textContent='Локальных файлов: '+data.evidence.length+
+      '. Файлы только записаны, без проверки оригинала и без юридически значимой подписи.';
+  };
+  const renderRecords = () => {
+    const sections=byId('pto-register-sections');sections.replaceChildren();
+    for(const [kind,schema] of Object.entries(RECORD_SCHEMAS)){
+      const area=el('section',null,{class:'pto-record-area'}),h=el('h3',schema.title);
+      const wrap=el('div',null,{class:'pto-table pto-record-table'});
+      const table=el('table'),thead=el('thead'),trh=el('tr'),tbody=el('tbody');
+      schema.columns.forEach(([,title])=>trh.appendChild(el('th',title)));
+      trh.appendChild(el('th','Действие'));thead.appendChild(trh);
+      data[kind].forEach((entry,index)=>{
+        const row=el('tr');
+        schema.columns.forEach(([field,title,type])=>{
+          const td=el('td'),control=type==='textarea'?el('textarea',null,{rows:'2'}):el('input',null,{type:type==='date'?'date':'text'});
+          control.setAttribute('aria-label',schema.title+' '+(index+1)+' '+title);
+          control.value=entry[field]??'';
+          control.addEventListener('input',()=>{entry[field]=control.value;persist();renderReadiness();});
+          td.appendChild(control);row.appendChild(td);
+        });
+        const action=el('td'),remove=el('button','Удалить',{type:'button',class:'btn btn-secondary btn-sm'});
+        remove.addEventListener('click',()=>{data[kind].splice(index,1);persist();renderRecords();renderReadiness();});
+        action.appendChild(remove);row.appendChild(action);tbody.appendChild(row);
+      });
+      table.append(thead,tbody);wrap.appendChild(table);area.append(h,wrap);
+      const add=el('button','Добавить запись',{type:'button',class:'btn btn-secondary btn-sm','data-record-add':kind});
+      add.addEventListener('click',()=>{
+        if(data[kind].length>=300){alert('Максимум 300 записей в реестре.');return;}
+        data[kind].push(emptyRecord(kind));persist();renderRecords();renderReadiness();
+      });
+      area.appendChild(add);sections.appendChild(area);
+    }
+  };
+  const renderReadiness = () => {
+    const checked=recordDiagnostics(data);
+    byId('pto-readiness').textContent='Актов с работами: '+checked.results.length+' · замечаний по реестрам: '+checked.issues.length+'. Это контроль связей, не подтверждение подлинности документов.';
+    const body=byId('pto-readiness-rows');body.replaceChildren();
+    checked.results.forEach(row=>{
+      const tr=el('tr');
+      [row.actNo,row.work,row.counts.journal,row.counts.documents,row.counts.schemes,data.evidence.filter(x=>x.actNo===row.actNo).length,row.flags.join('; ')||row.status]
+        .forEach(value=>tr.appendChild(el('td',String(value))));
+      body.appendChild(tr);
+    });
+  };
+  const refreshDiagnostics = () => {
+    const checked = validateWorkspace(data);
+    byId('pto-results').textContent = `Заполнено актов: ${checked.count} из 15 · ошибок: ${checked.errors} · предупреждений: ${checked.warnings}. Статус: ЧЕРНОВИК / требуется проверка инженера.`;
+    const groups=byId('pto-groups');groups.replaceChildren();
+    checked.groups.forEach(g=>{
+      const tr=el('tr');
+      [g.id,g.description,g.actual||'нет данных',`${g.expected} ${g.unit}`,{
+        quantity_correlates:'Количество совпадает (не юридическое заключение)',
+        difference:'Расхождение',unit_mismatch:'Разные единицы',unverified:'Недостаточно данных',
+      }[g.status]].forEach(x=>tr.appendChild(el('td',x)));
+      groups.appendChild(tr);
+    });
+    const list=byId('pto-issues');list.replaceChildren();
+    checked.issues.forEach(entry=>{
+      const location=entry.actIndex !== null ? `Акт ${entry.actIndex+1}. ` : '';
+      list.appendChild(el('li',location+entry.message,{class:`pto-${entry.severity}`}));
+    });
+  };
+  const rerender = () => {ojrImport.reset();renderHeader();renderActs();quick.render();setActMode(quickMode);renderKs2();renderRecords();renderEvidence();showProject();refreshDiagnostics();renderReadiness();};
+  byId('pto-evidence-file').addEventListener('change',async e=>{
+    const file=e.target.files?.[0];if(!file)return;
+    try{
+      const bytes=await file.arrayBuffer(),filename=checkEvidenceBytes(file.name,bytes);
+      const sha256=await sha256Hex(bytes),id=crypto.randomUUID();
+      const meta=newEvidenceMeta({id,actNo:byId('pto-evidence-act').value,
+        kind:byId('pto-evidence-kind').value,filename,bytes,sha256,previous:data.evidence});
+      if(data.evidence.length>=300)throw Error('Достигнут лимит 300 вложений.');
+      if(data.evidence.some(x=>x.sha256===meta.sha256&&x.actNo===meta.actNo&&x.kind===meta.kind)){
+        alert('Такой файл уже связан с этим актом (совпадает SHA-256).');return;
+      }
+      await putEvidence(id,bytes);data.evidence.push(meta);persist();renderEvidence();renderReadiness();
+    }catch(err){alert('Ошибка вложения: '+err.message);}
+    finally{e.target.value='';}
+  });
+  byId('pto-evidence-backup').addEventListener('click',async()=>{
+    try{
+      const archive=await evidenceBackup(data.evidence);
+      await download('pto_evidence_backup.json',JSON.stringify(archive),'application/json;charset=utf-8');
+    }catch(err){alert('Ошибка резервной копии: '+err.message);}
+  });
+  byId('pto-evidence-restore').addEventListener('change',async e=>{
+    const file=e.target.files?.[0];if(!file)return;
+    try{
+      if(file.size>60*1024*1024)throw Error('Архив превышает 60 МБ.');
+      if(!confirm('Восстановить локальные файлы? Прежде чем продолжить, убедитесь, что это ваш доверенный архив.'))return;
+      const bundle=JSON.parse(await file.text()),entries=await restoreEvidenceBackup(bundle,data.evidence);
+      const known=new Map(data.evidence.map(x=>[x.id,x.sha256]));
+      for(const record of entries){
+        if(known.has(record.id)&&known.get(record.id)!==record.sha256)
+          throw Error('Конфликт ID вложения: изменённая контрольная сумма.');
+      }
+      data.evidence=cleanEvidence([...data.evidence,...entries.filter(x=>!known.has(x.id))]);
+      persist();renderEvidence();renderReadiness();
+      alert('Восстановлено файлов: '+entries.length+'. Проверьте связь с актами.');
+    }catch(err){alert('Ошибка восстановления архива: '+err.message);}
+    finally{e.target.value='';}
+  });
+  byId('pto-readiness-export').addEventListener('click',async()=>{
+    const diagnostics=recordDiagnostics(data);
+    const rows=[['Акт','Замечание'],...diagnostics.issues.map(item=>[item.actNo||'',item.message])];
+    const quote=value=>{const source=String(value);const safe=/^[=+@-]/.test(source)?"'"+source:source;return '"'+safe.replaceAll('"','""')+'"';};
+    const csv='\ufeff'+rows.map(row=>row.map(quote).join(';')).join('\r\n')+'\r\n';
+    await download('pto_readiness.csv',csv,'text/csv;charset=utf-8');
+  });
+  byId('pto-add-ks2').addEventListener('click',()=>{
+    data.ks2.push({id:'',description:'',qty:'',unit:''});persist();renderKs2();refreshDiagnostics();
+  });
+  byId('pto-ks2-template').addEventListener('click',async()=>{
+    await download('ks2_sample.csv','\ufeffпозиция;наименование;количество;ед.изм.\r\nКС2-01;Пример условных кровельных работ;12,5;м²\r\n','text/csv;charset=utf-8');
+  });
+  let ks2Workbook=null;
+  const mappingFields=[['row','Строка заголовков'],['id','Колонка номера'],['description','Колонка наименования'],['qty','Колонка количества'],['unit','Колонка единицы']];
+  const configureMapping=async()=>{
+    const {suggestMapping}=await import('./xlsx.mjs');
+    const ws=ks2Workbook.getWorksheet(byId('pto-map-sheet').value);
+    const suggestion=suggestMapping(ws),root=byId('pto-mapping-controls');
+    root.querySelectorAll('[data-map-field]').forEach(x=>{x.value=suggestion[x.dataset.mapField]||1;});
+    byId('pto-xlsx-preview').textContent=Array.from({length:Math.min(ws.rowCount,12)},(_,i)=>{
+      return `Строка ${i+1}: `+Array.from({length:Math.min(ws.columnCount,14)},(_,j)=>{
+        const v=ws.getRow(i+1).getCell(j+1).value;
+        return `${j+1}=${String(typeof v==='object'?(v?.text??v?.result??''):v??'').slice(0,60)}`;
+      }).join(' | ');
+    }).join('\n');
+  };
+  byId('pto-ks2-file').addEventListener('change',async e=>{
+    const file=e.target.files?.[0];if(!file)return;
+    try{
+      if(file.size>20*1024*1024)throw Error('Максимальный размер импортируемого файла — 20 МБ.');
+      if(/\.xlsx$/i.test(file.name)){
+        const {readWorkbook}=await import('./xlsx.mjs');
+        ks2Workbook=await readWorkbook(await file.arrayBuffer());
+        const root=byId('pto-mapping-controls');root.replaceChildren();
+        const wrap=el('div'),selector=el('select',null,{id:'pto-map-sheet'});
+        ks2Workbook.worksheets.forEach(ws=>selector.appendChild(el('option',ws.name,{value:ws.name})));
+        wrap.appendChild(el('label','Лист КС-2'));wrap.appendChild(selector);root.appendChild(wrap);
+        mappingFields.forEach(([key,label])=>{
+          const box=el('div'),input=el('input',null,{type:'number',min:'1',max:'10000','data-map-field':key});
+          box.appendChild(el('label',label));box.appendChild(input);root.appendChild(box);
+        });
+        selector.addEventListener('change',configureMapping);
+        byId('pto-xlsx-map').style.display='block';await configureMapping();
+      }else{
+        const loaded=parseKs2Csv(await file.text());
+        if(data.ks2.length&&!confirm('Заменить текущие позиции КС-2 на позиции из CSV?'))return;
+        data.ks2=loaded;persist();renderKs2();refreshDiagnostics();
+      }
+    }catch(err){alert(`Ошибка импорта КС-2: ${err.message}`);}
+    finally{e.target.value='';}
+  });
+  byId('pto-ks2-cancel').addEventListener('click',()=>{ks2Workbook=null;byId('pto-xlsx-map').style.display='none';});
+  byId('pto-ks2-confirm').addEventListener('click',async()=>{
+    if(!ks2Workbook)return;
+    try{
+      const {extractKs2}=await import('./xlsx.mjs');
+      const mapping=Object.fromEntries([...byId('pto-mapping-controls').querySelectorAll('[data-map-field]')].map(x=>[x.dataset.mapField,x.value]));
+      const result=extractKs2(ks2Workbook.getWorksheet(byId('pto-map-sheet').value),mapping);
+      const warning=result.rejected.length?`\nПропущено строк: ${result.rejected.length}.\n${result.rejected.slice(0,12).join('\n')}`:'';
+      if(!confirm(`Импортировать ${result.items.length} позиций КС-2? Текущий список будет заменён.${warning}`))return;
+      data.ks2=result.items;persist();renderKs2();refreshDiagnostics();
+      ks2Workbook=null;byId('pto-xlsx-map').style.display='none';
+    }catch(err){alert(`Ошибка сопоставления: ${err.message}`);}
+  });
+  byId('pto-export-xlsx').addEventListener('click',async()=>{
+    try{
+      const {writeDraftXlsx}=await import('./xlsx.mjs');
+      const bytes=await writeDraftXlsx(data,app.project||{});
+      await download('aosr_ks2_drafts.xlsx',bytes,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    }catch(err){alert(`Ошибка экспорта Excel: ${err.message}`);}
+  });
+  byId('pto-print-xlsx').addEventListener('click',async()=>{
+    try{const {writePrintPackXlsx}=await import('./xlsx.mjs');
+      const bytes=await writePrintPackXlsx(data,app.project||{});
+      await download('aosr_print_drafts.xlsx',bytes,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    }catch(err){alert(`Ошибка формирования печатного комплекта: ${err.message}`);}
+  });
+  byId('pto-dossier-zip').addEventListener('click',async()=>{
+    const button=byId('pto-dossier-zip');
+    if(button.disabled)return;
+    button.disabled=true;
+    try{
+      const {dossierPlan,buildPtoDossier}=await import('./dossier.mjs');
+      const preflight=dossierPlan(data);
+      if(!confirm(`Собрать ЧЕРНОВИК ИД: ${preflight.active.length} актов, `+
+        `${preflight.attachments.length} ссылок на файлы, ${preflight.warnings.length} замечаний? `+
+        'Перед передачей заказчику проверить оригиналы, приложения и подписи.'))return;
+      button.textContent='Подготовка архива ИД…';
+      const {bytes}=await buildPtoDossier(data,app.project||{});
+      await download('komplekt_ID_CHERNOVIK.zip',bytes,'application/zip');
+    }catch(err){alert('Ошибка подготовки комплекта ИД: '+err.message);}
+    finally{button.disabled=false;button.textContent='Собрать комплект ИД с приложениями (.zip)';}
+  });
+  byId('pto-import-xlsx').addEventListener('change',async e=>{
+    const file=e.target.files?.[0];if(!file)return;
+    try{
+      if(file.size>20*1024*1024)throw Error('Максимальный размер импортируемого файла — 20 МБ.');
+      const {importDraftXlsx}=await import('./xlsx.mjs');
+      const incoming=await importDraftXlsx(await file.arrayBuffer());
+      if(!confirm('Заменить АОСР и КС-2 сведениями из этой книги?'))return;
+      data=incoming.data;
+      Object.assign(app.project,incoming.project);
+      app.loadProjectForm();persist();rerender();
+    }catch(err){alert(`Ошибка загрузки Excel: ${err.message}`);}
+    finally{e.target.value='';}
+  });
+  byId('pto-import-legacy').addEventListener('change',async e=>{
+    const file=e.target.files?.[0]; if(!file)return;
+    try {
+      if(!/\.xls$/i.test(file.name))throw Error('Выберите файл .xls (Excel 97–2003).');
+      if(file.size>20*1024*1024)throw Error('Максимальный размер файла — 20 МБ.');
+      const {importLegacyAosr}=await import('./legacy-xls.mjs');
+      const imported=await importLegacyAosr(await file.arrayBuffer());
+      const summary=`Найдено ${imported.count} актов на листах «Шапка» и «Табл».\n`+
+        `Существующие АОСР и данные КС-2 в этой вкладке будут заменены.\n\n`+
+        imported.warnings.join('\n')+`\n\nИмпортировать этот комплект как ЧЕРНОВИК?`;
+      if(!confirm(summary))return;
+      data=imported.data;
+      Object.assign(app.project, imported.project);
+      app.loadProjectForm();persist();rerender();
+      alert(`Импортировано актов: ${imported.count}. Уточните даты актов, номера схем, объёмы и КС-2.`);
+    }catch(err){alert(`Ошибка импорта исходного АОСР: ${err.message}`);}
+    finally{e.target.value='';}
+  });
+  byId('pto-sample').addEventListener('click',async()=>{
+    if(data.acts.some(x=>x.work)||data.ks2.length){if(!confirm('Заменить введённые данные вымышленным примером?'))return;}
+    try{const result=await fetch('/pto-demo.json');if(!result.ok)throw Error('example unavailable');
+      data=safeWorkspace(await result.json());
+      // Fill only missing project fields: never overwrite an existing client's details.
+      const demoProject={name:'Учебный объект (вымышленно)',number:'DEMO-2026',
+        address:'Учебная улица, дом 1',city:'Примерный город',client:'Учебный заказчик'};
+      for(const [k,v] of Object.entries(demoProject))if(!app.project[k])app.project[k]=v;
+      app.loadProjectForm();persist();rerender();
+    }catch(err){alert(`Не удалось загрузить пример: ${err.message}`);}
+  });
+  byId('pto-save-json').addEventListener('click',async()=>{
+    await download('pto-aosr-ks2-draft.json',JSON.stringify(data,null,2),'application/json;charset=utf-8');
+  });
+  byId('pto-load-json').addEventListener('change',async e=>{
+    const file=e.target.files?.[0];if(!file)return;
+    try{
+      const incoming=JSON.parse(await file.text());
+      if(incoming.version!==1||!Array.isArray(incoming.acts))throw Error('Ожидается файл экспорта АОСР версии 1.');
+      if(!confirm('Заменить текущую таблицу АОСР данными JSON?'))return;
+      data=safeWorkspace(incoming);persist();rerender();
+    }catch(err){alert(`Не удалось прочитать JSON: ${err.message}`);}
+    finally{e.target.value='';}
+  });
+  byId('pto-export').addEventListener('click',async()=>{
+    const html=generateDraftHtml(data,app.project);
+    await download('aosr-ks2-drafts.html',html,'text/html;charset=utf-8');
+  });
+  const ojrImport=mountOjrImport({getData:()=>data,persist,download,
+    afterCommit:()=>{renderRecords();renderActs();quick.render();renderReadiness();refreshDiagnostics();}});
+  rerender();
+  // The parent app imports / clears its own JSON. Re-read the module state after those actions.
+  window.addEventListener('pto-loaded', () => {
+    data = safeWorkspace(app.ptoWorkspace || newWorkspace());
+    rerender();
+  });
+  window.addEventListener('focus',showProject);
+}

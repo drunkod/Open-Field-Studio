@@ -368,3 +368,36 @@ CC BY-SA 4.0
 - **Repository**: https://github.com/OpenAEC-Foundation/Open-Field-Studio
 - **Issues**: https://github.com/OpenAEC-Foundation/Open-Field-Studio/issues
 - **Organization**: https://github.com/OpenAEC-Foundation
+
+## Experimental Russian AОСР / КС-2 module (fork)
+
+The `feature/ru-aosr-ks2-prototype` branch includes a Russian-language draft hidden-work inspection act workspace (15 acts, shared project header), CSV import of КС-2 quantity positions, grouped quantity/unit/date checks, JSON backup and printable **DRAFT** HTML documents. It is **not** a certified Russian regulatory checker or an approved AОСР template.
+
+See [implementation plan](docs/DEVELOPMENT_PLAN_RU.md) and [getting started](docs/PTO_MODULE_RU.md). The [MVP release guide](docs/MVP_RELEASE_NOTES_RU.md) covers XLSX/CSV import, 20-sheet Excel export, full RU translation, browser tests, security and remaining limits. Run `npm test`, `npm run build`, `npm run lint`. Only synthetic demo data ships.
+
+Legacy Russian construction AОСР `.xls` (`Шапка`/`Табл`) can now be imported via a dedicated local action. See [legacy workbook import guide](docs/LEGACY_XLS_IMPORT_RU.md). The original project workbook and any personal/company data are **not** committed to this repository.
+
+### Russian-first interface and original-layout AOSR drafts
+
+The fork defaults to Russian and translates the original UI plus 15 built-in inspection checklists. Upload a legacy AOSR `.xls` locally to generate 15 linked AOSR sheets using its 43-column text structure and a shared editable source-details sheet. **Original XLS formatting/merge/page-break fidelity is not guaranteed**; these are draft documents for human review. Full guidance: [RU layout delivery](docs/RU_LAYOUT_DELIVERY.md).
+
+### Print-only AOSR and Russian localisation audit (iteration 3)
+The fork includes a **sanitised style-only** AOSR spreadsheet template and a separate print-only workbook action that exports populated acts with standalone text values and a supporting-document register. All built-in locale catalogues have matching keys; Russian screens, 15 inspection templates, 273 questions and both HTML report types are covered by automated checks. See [the print and translation audit](docs/RU_TRANSLATION_AND_PRINT_ACCEPTANCE.md). Printouts remain **drafts requiring engineer/customer approval**.
+
+### Russian-market PTO evidence vault (pilot)
+The **АОСР · КС-2** tab now includes a private browser-local evidence vault for material passports, certificates, executive schemes and diary attachments (IndexedDB + SHA-256, act links, revisions and binary-inclusive JSON backup). No file uploads to a server; ordinary project JSON/XLSX backs up *metadata only*. All outputs remain drafts requiring professional review. See [Russian construction-market research](docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md) and [Russian implementation notes](docs/PTO_DAILY_MODULES_RU.md).
+
+### Russian PTO one-click dossier ZIP (draft)
+The Russian **АОСР · КС-2** screen now assembles populated draft acts and linked private local attachments into one ZIP, with a register, supporting-document inventory, warning CSV and SHA-256 manifest. Missing or corrupted local evidence blocks export. [Source-backed implementation plan](docs/research/RU_PTO_ONE_CLICK_DOSSIER_PLAN.md). This is not officially accepted executive documentation or a legally signed electronic document.
+
+### Russian OЖР → АОСР import and chronology preview
+The existing **АОСР · КС-2** screen now has an optional Russian OЖР CSV/XLSX import with explicit worksheet/column mapping, preview of rejected rows, strict dates and duplicate detection. Suggested act start/end dates are **never silently applied**; a separate checkbox fills only previously empty fields. Exports and the existing 15-act workbook are unchanged. [Research and acceptance plan](docs/research/RU_PTO_OJR_IMPORT_PLAN.md). This does not produce, authenticate or register a statutory general works journal.
+
+### Russian interface audit and staff demo runbook — 30 October 2026
+The [whole-system Russian UI audit](docs/audit/WHOLE_SYSTEM_RU_AUDIT.md) covers all 11 navigation sections with scope/limitations and regression evidence. The [source and research link register](docs/audit/SOURCE_REGISTER.md) indexes cited Russian regulations, vendors, communities, OpenConstructionERP code and OSS libraries. The [Documents/Demo Runbook](Documents/Demo%20Runbook/README.md) includes 34 real Chromium screenshots, a screen atlas, fictional CSV/JSON/PNG examples, and day-in-the-life instructions for Russian PTO/inspection/handover staff. These are synthetic demo artifacts; legal/signature compliance and actual customer acceptance are outstanding.
+
+### Russian address / integrations UI clarification (30 October 2026)
+In Russian mode the Project tab now hides the Netherlands-only BAG and EP-online buttons and offers a **manual** link to the Russian Federal Tax Service FIAS / State Address Register instead; the app does not query or verify addresses. The Integrations tab explains that original international connectors are not certified Russian 1C, Exon, or Grand Smeta integrations. See [source-backed rollout note](docs/audit/RU_MARKET_UI_REMEDIATION_2026-10-30.md) and updated [Russian demo screenshots](Documents/Demo%20Runbook/SCREEN_ATLAS.md).
+
+### PTO quick entry (Russian, 30 October 2026)
+A new compact 15-act editor is the default for the АОСР tab: three groups (work, dates, scheme/passports), with the original full 10-column table reachable via **Все графы**. Both views update the same act records, preserving KS-2 quantities, attachments and exported draft forms. [Source-backed implementation plan](docs/research/RU_PTO_QUICK_ENTRY_IMPLEMENTATION.md) · [staff demo screenshots](Documents/Demo%20Runbook/SCREEN_ATLAS.md).
