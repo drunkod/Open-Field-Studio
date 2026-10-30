@@ -4,7 +4,7 @@
 
 ## Distinguish sources from implementation
 
-- Employee interview / original Gurzuf AOSR: 15 acts, shared fields, dates, schemes, certificates, quantities, Excel-first ergonomics. PRIVATE source, no public URL.
+- Employee interview / original private AOSR example: 15 acts, shared fields, dates, schemes, certificates, quantities, Excel-first ergonomics. PRIVATE source, no public URL.
 - Regulations 344/пр (with 369/пр) and 1026/пр: documentary boundaries; not automatic legal certification.
 - Russian practitioners/vendors: qualitative workflow priority, not representative adoption statistics.
 - GitHub: design patterns versus actual imported libraries, differentiated below.
@@ -139,4 +139,4 @@ Each row shows where a source appears in the public research; presence does NOT 
 - OpenConstructionERP SHA-pinned links are source study, not portable APIs.
 - The app retains Dutch-market integration paths and its handwritten/drawn signatures are not Russian qualified electronic signatures.
 - URL availability was not live-checked in this documentation pass; additional unretained historical browsing cannot be reconstructed with certainty.
-\n## Original local clone research (11 additional references)\n\nThe [full repository-by-repository clone and licence inventory](OSS_CLONE_REFERENCES.md) preserves the original 11 source candidates, including an unlicensed GitVerse KS-2 analyzer, Apache-2.0 tools, and the unresolved original Open Field Studio licence. The separate OpenConstructionERP study is AGPL-3.0 and was never copied into JS.\n
+\n## Original local clone research (11 additional references)\n\nThe [full repository-by-repository clone and licence inventory](OSS_CLONE_REFERENCES.md) preserves the original 11 source candidates, including an unlicensed GitVerse KS-2 analyzer, Apache-2.0 tools, and the unresolved original Open Field Studio licence. The separate OpenConstructionERP study is AGPL-3.0 and was never copied into JS.\n\n## Additional historical research archive\n\nThe [historical public reference index](ARCHIVED_RESEARCH_REFERENCES.md) preserves further GitHub, GitVerse, Russian vendor and community sources from the original 12-tool comparison and international analogues. They were considered as options, not necessarily incorporated into our application.\n
