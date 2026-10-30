@@ -441,5 +441,8 @@
   "report_energy_label": "Energielabel",
   "report_bag_number": "BAG nummeraanduiding",
   "report_bag_property": "Pand",
-  "report_survey_record": "Opnamedatum"
+  "report_survey_record": "Opnamedatum",
+  "ru_fias_manual_link": "FIAS / Russisch adressenregister (handmatig)",
+  "ru_fias_manual_note": "Opent de officiële Russische belastingdienst. Adrescontrole is handmatig; deze app verifieert niets.",
+  "ru_connectors_advisory": "Let op: bestaande internationale koppelingen zijn niet geverifieerd als Russische integraties."
 }

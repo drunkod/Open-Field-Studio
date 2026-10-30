@@ -2,7 +2,7 @@
 
 **Audit date:** 30 October 2026. **Baseline commit:** `f22cc3ec5899e633104c7cfab2df5179e76cc17e` on `feature/ru-aosr-ks2-prototype`. **Mode:** local Vite, headless Chromium, 1512×960 desktop. **Locale:** `ru` explicitly set and confirmed by `<html lang="ru">`. **Fixture:** wholly synthetic roofing project (DEMO-PTO-2026-01), fictional plan, documents, OЖР, 3 populated acts and 12 empty slots.
 
-**Evidence:** [30 screenshots of the actual UI](../../Documents/Demo%20Runbook/SCREEN_ATLAS.md), [machine-readable capture manifest](../../Documents/Demo%20Runbook/SCREEN_CAPTURE_MANIFEST.json), [reproducible capture script](../../Documents/Demo%20Runbook/scripts/capture-russian-ui.mjs), full `npm run check:mvp` regression, translation tests and source-code review. Captures reported **0 browser JavaScript page errors**, but this is not proof that all functionality or external integrations work.
+**Evidence:** [32 screenshots of the actual UI](../../Documents/Demo%20Runbook/SCREEN_ATLAS.md), [machine-readable capture manifest](../../Documents/Demo%20Runbook/SCREEN_CAPTURE_MANIFEST.json), [reproducible capture script](../../Documents/Demo%20Runbook/scripts/capture-russian-ui.mjs), full `npm run check:mvp` regression, translation tests and source-code review. Captures reported **0 browser JavaScript page errors**, but this is not proof that all functionality or external integrations work.
 
 ## Method and scope
 
@@ -48,14 +48,14 @@
 
 | Priority | Finding | Evidence | Recommendation |
 |---|---|---|---|
-| **P1** | The Project screen contains **«Найти адрес (BAG Нидерланды)»**, a Dutch address registry | 01 | Hide/replace BAG in Russian-market mode; allow normal Russian address entry and optional approved FIAS/GAR adapter |
-| **P1** | Integrations and exports reference foreign systems, e.g. KYP Project / ERPNext / n8n and other original-market paths | 08, 09 | Clearly mark disabled/unconfigured, inventory data-transfer permissions; prioritise optional Russian interfaces only with legal API terms and test data |
+| **P1, mitigated 30.10.2026** | Previous screenshot showed **«Найти адрес (BAG Нидерланды)»** in Russian; UI now hides BAG/EP-online and shows an official manual ФИАС/ГАР link | 01, 31 | Manual lookup **is not automated API validation**; approved FIАS integration remains future work |
+| **P1, warning added 30.10.2026** | Integrations and exports reference foreign providers such as KYP Project / ERPNext / n8n | 08, 09, 32 | An explicit warning now labels these as inherited international connectors; domestic compatibility and data-transfer permissions still unverified |
 | **P1** | Inspection template catalog originates in mixed market standards (including European NEN vocabulary) | 22, 23 | Build a versioned Russian checklist catalog with engineer/quality-control approval; do not auto-map foreign standards into СП/ГОСТ |
 | **P1** | Some PTO flows display 10+ input columns and advanced functionality alongside everyday 3–4 fields | 11–13 | Provide basic/advanced mode and one-line-per-work editing for the actual PTO user |
 | **P0** | Drawn inspection/handover signatures and internal review labels are not qualified Russian electronic signatures | 27, 29 | Distinguish internal acknowledgement from legally valid signatures; defer formal ЭП/МЧД to a verified adapter |
 | **P0** | АОСР form and role mapping have not been formally accepted by customer against actual approved template | 11–18 and private source-layout audit | Require page-by-page printing and signatures/party-role check before declaring production readiness |
 
-**Specific observation:** the text BAG Netherlands was visibly present in the actual Russian Project screenshot, not merely in source code. Other vendor labels are proper names and need market-fit review rather than indiscriminate translation.
+**Change log:** the initial audit photographed the BAG Netherlands button in Russian. The follow-up branch now suppresses Dutch address/energy services only in Russian, supplies a manual link to the official ФИАС/ГАР site, and warns about inherited international connectors. No official address verification, domestic connector API or legally significant signature was added.
 
 ## Implementation & feature audit
 
@@ -108,9 +108,9 @@
 ## Executed automated checks (30 October 2026)
 
 - **36/36 Node unit tests passed**, including domain, OЖР parsing, XLSX import/reimport, ZIP dossier, evidence storage and 443-key Russian translation coverage.
-- **10/10 Chromium Playwright tests passed**, including Russian reports, checklist templates, the original-layout АОСР print workbook, ОЖР import, KS-2, and local evidence/ZIP exports.
+- **12/12 Chromium Playwright tests passed**, including Russian reports, checklist templates, the original-layout АОСР print workbook, ОЖР import, KS-2, and local evidence/ZIP exports.
 - ESLint and Vite production build passed; Vite reported large bundled chunks for IFC and XLSX, a performance follow-up rather than a test failure.
-- **30/30 screenshot captures** completed with locale RU and **zero page errors**. Test capture deliberately did not use production files or live external connectors.
+- **32/32 screenshot captures** completed with locale RU and **zero page errors**. Test capture deliberately did not use production files or live external connectors.
 - **Markdown path validation:** eight principal new documents checked; 0 broken relative references. Source link register contains public URLs indexed from retained project notes; external URL availability not live audited.
 - **npm advisory/security check:** no successful fresh dependency advisory result in this documentation work. This is not a security audit, penetration test or clearance to use real client data in unapproved services.
 
@@ -124,3 +124,7 @@
 ## Audit conclusion
 
 The fork is demonstrably a Russian-language **working technical prototype** spanning project management, drawings, issues, inspections, handover, dashboards and PTO. Its strongest validated daily flow is 15 draft АОСР, OЖР references, document/evidence registers, КС-2 warnings and an unsigned ZIP dossier. It is **not yet a fully localised Russian domestic construction-documentation product or an approved production replacement**. The priority is input efficiency, original-form acceptance, domestic domain adapters and legally/operationally safe data handling—not additional broad ERP modules.
+
+## Follow-up remediation — 30 October 2026
+
+The [Russian-market UI remediation plan](RU_MARKET_UI_REMEDIATION_2026-10-30.md) links to ФНС/ФИАС and documents new manual address guidance, inherited-connector warning, localisation keys and the regression tests. Screenshots 31–32 show the corrected UI. The earlier screenshot is retained as an audit provenance description, while screenshot files 01 and 09 have been refreshed. **No automatic FIАS lookup or domestic integration was implemented.**

@@ -140,3 +140,9 @@ Each row shows where a source appears in the public research; presence does NOT 
 - The app retains Dutch-market integration paths and its handwritten/drawn signatures are not Russian qualified electronic signatures.
 - URL availability was not live-checked in this documentation pass; additional unretained historical browsing cannot be reconstructed with certainty.
 \n## Original local clone research (11 additional references)\n\nThe [full repository-by-repository clone and licence inventory](OSS_CLONE_REFERENCES.md) preserves the original 11 source candidates, including an unlicensed GitVerse KS-2 analyzer, Apache-2.0 tools, and the unresolved original Open Field Studio licence. The separate OpenConstructionERP study is AGPL-3.0 and was never copied into JS.\n\n## Additional historical research archive\n\nThe [historical public reference index](ARCHIVED_RESEARCH_REFERENCES.md) preserves further GitHub, GitVerse, Russian vendor and community sources from the original 12-tool comparison and international analogues. They were considered as options, not necessarily incorporated into our application.\n
+## Additional follow-up sources (Russian market UI)
+
+- [ФНС: Федеральная информационная адресная система / ГАР](https://www.nalog.gov.ru/rn77/service/fias/) — official address resource context used to relabel Russian project address guidance.
+- [ФИАС official public search](https://fias-file.nalog.ru/) — **manual reference link** displayed in the Russian Project screen; not connected as an API.
+- [FIАS API guidance](https://www.consultant.ru/document/cons_doc_LAW_531681/ff850d27514bc742e55aa77db5c6ac1998f0a75e/) — reference for future adapter research only; not implemented.
+- [Specific remediation plan and test results](RU_MARKET_UI_REMEDIATION_2026-10-30.md).

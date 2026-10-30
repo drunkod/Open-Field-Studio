@@ -441,5 +441,8 @@
   "report_energy_label": "Energieeffizienzklasse",
   "report_bag_number": "BAG Adress-ID",
   "report_bag_property": "Gebäude",
-  "report_survey_record": "Aufnahmedatum"
+  "report_survey_record": "Aufnahmedatum",
+  "ru_fias_manual_link": "FIAS / russisches Adressregister (manuell)",
+  "ru_fias_manual_note": "Öffnet die offizielle russische Steuerbehörde. Manuelle Prüfung; die App überprüft keine Adresse.",
+  "ru_connectors_advisory": "Hinweis: vorhandene internationale Schnittstellen sind nicht als russische Integrationen verifiziert."
 }

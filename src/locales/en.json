@@ -441,5 +441,8 @@
   "report_energy_label": "Energy rating",
   "report_bag_number": "BAG address ID",
   "report_bag_property": "Property",
-  "report_survey_record": "Survey date"
+  "report_survey_record": "Survey date",
+  "ru_fias_manual_link": "Open FIAS / Russian address register (manual check)",
+  "ru_fias_manual_note": "Opens the official Russian tax authority portal. Address checking and copying are manual; the app does not verify it.",
+  "ru_connectors_advisory": "Note: these are inherited international connectors, not verified Russian 1C, Exon, or Grand Smeta integrations. Configure and transmit only to services approved by your organisation."
 }

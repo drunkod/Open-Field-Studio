@@ -45,6 +45,11 @@ for(const [n,id,title] of tabs){
  await snap(n+'-'+id,title,id==='pto'?'#pto-tab':null);
 }
 
+// Russian market remediation: capture the official manual registry guidance and the connector caveat.
+await page.locator('[data-tab="project"]').click();
+await snap('31-project-fias-ru','Российская проверка адреса: ручная справка ФИАС / ГАР','#project-tab');
+await page.locator('[data-tab="koppelingen"]').click();
+await snap('32-connectors-ru-warning','Российское предупреждение об иностранных интеграциях','#koppelingen-tab');
 await page.locator('[data-tab="pto"]').click();
 await snap('12-pto-acts','АОСР: 15 строк работ и даты','#pto-tab > .panel:nth-of-type(2)');
 await snap('13-pto-ks2','КС-2: позиции и количества','#pto-tab > .panel:nth-of-type(3)');

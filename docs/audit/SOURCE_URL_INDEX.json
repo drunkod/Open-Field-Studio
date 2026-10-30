@@ -150,6 +150,13 @@
     ]
   },
   {
+    "url": "https://fias-file.nalog.ru/",
+    "category": "RU address register official/technical",
+    "in_docs": [
+      "docs/audit/RU_MARKET_UI_REMEDIATION_2026-10-30.md"
+    ]
+  },
+  {
     "url": "https://forum.getodk.org",
     "category": "Historical background research",
     "in_docs": [
@@ -1197,6 +1204,13 @@
     ]
   },
   {
+    "url": "https://www.consultant.ru/document/cons_doc_LAW_531681/ff850d27514bc742e55aa77db5c6ac1998f0a75e/",
+    "category": "RU address register official/technical",
+    "in_docs": [
+      "docs/audit/RU_MARKET_UI_REMEDIATION_2026-10-30.md"
+    ]
+  },
+  {
     "url": "https://www.consultant.ru/law/podborki/ispolnitelnaya_dokumentaciya_v_stroitelstve",
     "category": "Historical background research",
     "in_docs": [
@@ -1215,6 +1229,13 @@
     "category": "Other technical references",
     "in_docs": [
       "README.md:202"
+    ]
+  },
+  {
+    "url": "https://www.nalog.gov.ru/rn77/service/fias/",
+    "category": "RU address register official/technical",
+    "in_docs": [
+      "docs/audit/RU_MARKET_UI_REMEDIATION_2026-10-30.md"
     ]
   },
   {

@@ -441,5 +441,8 @@
   "report_energy_label": "Classe énergétique",
   "report_bag_number": "Identifiant d’adresse BAG",
   "report_bag_property": "Bâtiment",
-  "report_survey_record": "Date du relevé"
+  "report_survey_record": "Date du relevé",
+  "ru_fias_manual_link": "FIAS / registre des adresses russe (manuel)",
+  "ru_fias_manual_note": "Ouvre le portail officiel russe. La vérification de l’adresse est manuelle ; l’application ne la valide pas.",
+  "ru_connectors_advisory": "Note : les connecteurs internationaux existants ne sont pas validés pour les logiciels russes."
 }

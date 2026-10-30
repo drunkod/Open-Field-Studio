@@ -138,6 +138,13 @@ class OpenFieldStudio {
         const help = document.getElementById('bag-key-help');
         if (help) help.textContent = this.t('bag_key_help');
         const apk = document.getElementById('bag-apikey-input'); if (apk) apk.placeholder = this.t('bag_apikey_placeholder');
+        // Keep market-specific address services separate: no claim of automatic FIAS validation.
+        const russian = this.lang === 'ru';
+        if (bagBtn) bagBtn.style.display = russian ? 'none' : '';
+        const fiasLink = document.getElementById('fias-manual-link');
+        if (fiasLink) fiasLink.style.display = russian ? 'inline-flex' : 'none';
+        const fiasNote = document.getElementById('ru-address-manual-note');
+        if (fiasNote) fiasNote.style.display = russian ? 'block' : 'none';
         this.refreshBagBadge();
 
         // Plattegrond tab
@@ -207,6 +214,8 @@ class OpenFieldStudio {
         this.refreshProjectImportBtn();
         const cIntro = document.getElementById('connectors-intro');
         if (cIntro) cIntro.textContent = this.t('connectors_intro');
+        const russianConnectorWarning = document.getElementById('ru-connector-advisory');
+        if (russianConnectorWarning) russianConnectorWarning.style.display = this.lang === 'ru' ? 'block' : 'none';
         // Re-render if the tab is visible
         if (document.getElementById('koppelingen-tab')?.classList.contains('active')) this.renderConnectorsList();
         setText('#save-json', 'btn_save_json');
@@ -976,7 +985,7 @@ class OpenFieldStudio {
         const text = document.getElementById('bag-verified-text');
         if (!badge) return;
         const b = this.project?.bagData;
-        if (b && b.nummeraanduidingId) {
+        if (this.lang !== 'ru' && b && b.nummeraanduidingId) {
             badge.style.display = 'inline-flex';
             text.textContent = this.tFormat('bag_verified_id', b.nummeraanduidingId);
             badge.title = `Pand: ${b.pandId || '?'} · Verblijfsobject: ${b.adresseerbaarObjectId || '?'}`;
@@ -985,7 +994,7 @@ class OpenFieldStudio {
         }
         // Show energy-label lookup button only when we have an addressable object ID to query with.
         const epolBtn = document.getElementById('epol-lookup-btn');
-        if (epolBtn) epolBtn.style.display = (b && b.adresseerbaarObjectId) ? 'inline-flex' : 'none';
+        if (epolBtn) epolBtn.style.display = (this.lang !== 'ru' && b && b.adresseerbaarObjectId) ? 'inline-flex' : 'none';
         this.refreshEnergyBadge();
     }
 
@@ -993,7 +1002,7 @@ class OpenFieldStudio {
         const el = document.getElementById('epol-badge');
         if (!el) return;
         const e = this.project?.energyLabel;
-        if (!e || !e.label) { el.style.display = 'none'; return; }
+        if (this.lang === 'ru' || !e || !e.label) { el.style.display = 'none'; return; }
         const colors = { 'A+++++':'#00A651','A++++':'#00A651','A+++':'#00A651','A++':'#00A651','A+':'#00A651',
                          'A':'#4CB847','B':'#84C441','C':'#E8DA00','D':'#FFCB00','E':'#FF9A00','F':'#F26522','G':'#EB1E1E' };
         el.style.display = 'inline-block';

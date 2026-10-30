@@ -1,0 +1,38 @@
+import {test,expect} from '@playwright/test';
+test('Russian market mode shows official manual FIAS reference, never claims BAG/EPOL validation',async({page})=>{
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.addInitScript(()=>localStorage.setItem('ofs_lang','ru'));
+  await page.goto('http://127.0.0.1:3042/');
+  await expect(page.locator('html')).toHaveAttribute('lang','ru');
+  await expect(page.locator('#bag-lookup-btn')).toBeHidden();
+  await expect(page.locator('#fias-manual-link')).toBeVisible();
+  await expect(page.locator('#fias-manual-link')).toContainText('ФИАС / ГАР');
+  await expect(page.locator('#fias-manual-link')).toHaveAttribute('href','https://fias-file.nalog.ru/');
+  await expect(page.locator('#fias-manual-link')).toHaveAttribute('target','_blank');
+  await expect(page.locator('#fias-manual-link')).toHaveAttribute('rel',/noopener/);
+  await expect(page.locator('#ru-address-manual-note')).toContainText('автоматической проверки нет');
+  await page.evaluate(()=>{window.app.project.bagData={nummeraanduidingId:'fake-id',adresseerbaarObjectId:'fake-address-id'};window.app.project.energyLabel={label:'A'};window.app.refreshBagBadge();});
+  await expect(page.locator('#bag-verified-badge')).toBeHidden();
+  await expect(page.locator('#epol-lookup-btn')).toBeHidden();
+  await expect(page.locator('#epol-badge')).toBeHidden();
+  await page.locator('[data-tab="koppelingen"]').click();
+  await expect(page.locator('#ru-connector-advisory')).toBeVisible();
+  await expect(page.locator('#ru-connector-advisory')).toContainText('1С');
+  await expect(page.locator('#connectors-list .handover-card').first()).toBeVisible();
+  expect(errors).toEqual([]);
+});
+test('Language switch restores Netherlands BAG and hides Russian-only manual FIAS warning',async({page})=>{
+  await page.addInitScript(()=>localStorage.setItem('ofs_lang','ru'));
+  await page.goto('http://127.0.0.1:3042/');
+  await expect(page.locator('#bag-lookup-btn')).toBeHidden();
+  await page.evaluate(()=>window.app.setLanguage('en'));
+  await expect(page.locator('#bag-lookup-btn')).toBeVisible();
+  await expect(page.locator('#fias-manual-link')).toBeHidden();
+  await page.locator('[data-tab="koppelingen"]').click();
+  await expect(page.locator('#ru-connector-advisory')).toBeHidden();
+  await page.evaluate(()=>window.app.setLanguage('ru'));
+  await expect(page.locator('#ru-connector-advisory')).toBeVisible();
+  await page.locator('[data-tab="project"]').click();
+  await expect(page.locator('#bag-lookup-btn')).toBeHidden();
+  await expect(page.locator('#fias-manual-link')).toBeVisible();
+});

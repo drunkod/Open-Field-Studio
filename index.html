@@ -169,6 +169,8 @@
                                 <svg viewBox="0 0 24 24" width="14" height="14" style="vertical-align:middle;"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/></svg>
                                 Zoek adres (BAG)
                             </button>
+                            <a id="fias-manual-link" href="https://fias-file.nalog.ru/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="display:none;padding:0.4rem 0.8rem;font-size:0.85rem;" data-i18n="ru_fias_manual_link">Проверить адрес в ФИАС / ГАР (вручную)</a>
+                            <small id="ru-address-manual-note" data-i18n="ru_fias_manual_note" style="display:none;max-width:780px;">Откроется официальный сайт ФНС. Адрес нужно сверить и перенести вручную; автоматической проверки нет.</small>
                             <span id="bag-verified-badge" style="display:none;font-size:0.8rem;color:var(--success,#059669);">
                                 <svg viewBox="0 0 24 24" width="14" height="14" style="vertical-align:middle;"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/></svg>
                                 <span id="bag-verified-text" data-i18n="bag_verified">BAG-geverifieerd</span>
@@ -636,6 +638,7 @@
                     <p id="connectors-intro" data-i18n="connectors_intro" style="font-size:0.9rem;color:var(--text-muted,#6b7280);margin-bottom:1rem;">
                         Configureer hier de externe systemen waar OFS opleveringen, dossiers of taken naartoe kan sturen — of waaruit klantgegevens en tekeningen opgehaald kunnen worden. Sleutels blijven lokaal op deze computer.
                     </p>
+                    <p id="ru-connector-advisory" data-i18n="ru_connectors_advisory" style="display:none;font-size:0.9rem;max-width:920px;margin-bottom:1rem;"></p>
                     <div id="connectors-list" class="handovers-list"></div>
                 </div>
             </section>
