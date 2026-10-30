@@ -68,6 +68,7 @@ const UI = `
    <button type="button" class="btn btn-primary btn-sm" id="pto-export">Печатные черновики (HTML)</button>
    <button type="button" class="btn btn-primary btn-sm" id="pto-export-xlsx">Экспорт АОСР в Excel (.xlsx)</button>
    <button type="button" class="btn btn-primary btn-sm" id="pto-print-xlsx">Комплект актов для печати (.xlsx)</button>
+   <button type="button" class="btn btn-primary btn-sm" id="pto-dossier-zip">Собрать комплект ИД с приложениями (.zip)</button>
    <label class="btn btn-secondary btn-sm" for="pto-import-xlsx">Загрузить книгу АОСР (.xlsx)</label><input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="pto-import-xlsx" style="display:none">
    <label class="btn btn-secondary btn-sm" for="pto-import-legacy">Импорт исходного АОСР (.xls)</label><input type="file" accept=".xls,application/vnd.ms-excel" id="pto-import-legacy" style="display:none">
  </div>
@@ -410,6 +411,22 @@ export function mountPtoWorkspace(app) {
       const bytes=await writePrintPackXlsx(data,app.project||{});
       await download('aosr_print_drafts.xlsx',bytes,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     }catch(err){alert(`Ошибка формирования печатного комплекта: ${err.message}`);}
+  });
+  byId('pto-dossier-zip').addEventListener('click',async()=>{
+    const button=byId('pto-dossier-zip');
+    if(button.disabled)return;
+    button.disabled=true;
+    try{
+      const {dossierPlan,buildPtoDossier}=await import('./dossier.mjs');
+      const preflight=dossierPlan(data);
+      if(!confirm(`Собрать ЧЕРНОВИК ИД: ${preflight.active.length} актов, `+
+        `${preflight.attachments.length} ссылок на файлы, ${preflight.warnings.length} замечаний? `+
+        'Перед передачей заказчику проверить оригиналы, приложения и подписи.'))return;
+      button.textContent='Подготовка архива ИД…';
+      const {bytes}=await buildPtoDossier(data,app.project||{});
+      await download('komplekt_ID_CHERNOVIK.zip',bytes,'application/zip');
+    }catch(err){alert('Ошибка подготовки комплекта ИД: '+err.message);}
+    finally{button.disabled=false;button.textContent='Собрать комплект ИД с приложениями (.zip)';}
   });
   byId('pto-import-xlsx').addEventListener('change',async e=>{
     const file=e.target.files?.[0];if(!file)return;

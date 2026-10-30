@@ -386,3 +386,6 @@ The fork includes a **sanitised style-only** AOSR spreadsheet template and a sep
 
 ### Russian-market PTO evidence vault (pilot)
 The **АОСР · КС-2** tab now includes a private browser-local evidence vault for material passports, certificates, executive schemes and diary attachments (IndexedDB + SHA-256, act links, revisions and binary-inclusive JSON backup). No file uploads to a server; ordinary project JSON/XLSX backs up *metadata only*. All outputs remain drafts requiring professional review. See [Russian construction-market research](docs/research/openconstructionerp/RUSSIAN_MARKET_ADAPTATION.md) and [Russian implementation notes](docs/PTO_DAILY_MODULES_RU.md).
+
+### Russian PTO one-click dossier ZIP (draft)
+The Russian **АОСР · КС-2** screen now assembles populated draft acts and linked private local attachments into one ZIP, with a register, supporting-document inventory, warning CSV and SHA-256 manifest. Missing or corrupted local evidence blocks export. [Source-backed implementation plan](docs/research/RU_PTO_ONE_CLICK_DOSSIER_PLAN.md). This is not officially accepted executive documentation or a legally signed electronic document.
